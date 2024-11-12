@@ -4,7 +4,9 @@ import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
+import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
+import { specialities } from "@/data/specialities";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa";
@@ -108,7 +110,7 @@ function EducationAndTraining() {
             {training ? (
               <>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                  <Dropdown title={"Training Type"} options={[]}/>
+                  <Dropdown title={"Training Type"} options={[]} />
                   <TextInput title={"Country"} />
                   <TextInput title={"State"} />
                   <TextInput title={"County"} />
@@ -119,33 +121,12 @@ function EducationAndTraining() {
                   <TextInput title={"End Date"} type="date" />
                   <TextInput title={"Type of Program"} />
                   <TextInput title={"Department"} />
-                  
-                  <div className="w-1/5">
-                    <label
-                      htmlFor="provider_title"
-                      className="block mb-2 text-sm font-medium text-black"
-                    >
-                      Speciality<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      name="provider_title"
-                      id="provider_title"
-                      className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-                    ></select>
-                  </div>
-                  <div className="w-1/5">
-                    <label
-                      htmlFor="provider_title"
-                      className="block mb-2 text-sm font-medium text-black"
-                    >
-                      Complete Training Program
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <div className="w-full flex flex-row justify-start items-center gap-4">
-                      <input type="radio" name="training" /> Yes
-                      <input type="radio" name="training" /> No
-                    </div>
-                  </div>
+
+                  <Dropdown title={"Speciality"} options={specialities} />
+                  <RadioButton
+                    title={"Complete Training Program"}
+                    options={["Yes", "No"]}
+                  />
                 </div>
                 <button className="w-40 px-4 py-3 bg-secondary text-white rounded-lg">
                   Add
