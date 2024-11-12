@@ -21,11 +21,13 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-1/5 bg-secondary text-white">
         <div className="flex flex-col gap-3">
-          <img
-            src="./assets/BCS Logo billingcaresolutions.com.svg"
-            alt=""
-            className="bg-white p-5 h-[7.2rem]"
-          />
+          <Link href={"/dashboard"}>
+            <img
+              src="./assets/BCS Logo billingcaresolutions.com.svg"
+              alt=""
+              className="bg-white p-5 h-[7.2rem]"
+            />
+          </Link>
           <div className="px-5">
             {sidenavLinks.map((item, index) => (
               <Link
@@ -55,13 +57,15 @@ export default function DashboardLayout({ children }) {
             <p>Let's take a look at your credentials today!</p>
           </div>
           <div className="flex flex-row justify-end items-center gap-4">
-            <input type="text" className="bg-white w-full rounded-full px-4 py-2 text-black" placeholder="Search Here..." />
+            <input
+              type="text"
+              className="bg-white w-full rounded-full px-4 py-2 text-black"
+              placeholder="Search Here..."
+            />
             <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
-            <CiSearch className="size-8"/>
+              <CiSearch className="size-8" />
             </div>
           </div>
-
-
         </header>
 
         {/* Main content area */}
