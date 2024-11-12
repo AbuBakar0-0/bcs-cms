@@ -1,6 +1,6 @@
 import React from "react";
 
-const Dropdown = ({ title, options, width = "w-[32%]", required = true }) => {
+const Dropdown = ({ title, options, width = "w-1/5", required = true }) => {
     return (
         <div className={`flex flex-col gap-2 ${width}`}>
             <label className="block text-sm font-medium text-black">

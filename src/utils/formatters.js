@@ -1,10 +1,13 @@
 export const formatSSN = (value) => {
-    value = value.replace(/\D/g, '');
-    if (value.length > 3 && value.length <= 5) {
-        return `${value.slice(0, 3)}-${value.slice(3)}`;
-    } else if (value.length > 5) {
-        return `${value.slice(0, 3)}-${value.slice(3, 5)}-${value.slice(5, 9)}`;
+    value = value.replace(/\D/g, ''); // Remove all non-numeric characters
+    const length = value.length;
+
+    // Hide all but the last 4 digits with *
+    if (length > 8) {
+        return `***-**-${value.slice(-4)}`;
     }
+
+    // If the length is less than or equal to 4, return the input as is
     return value;
 };
 

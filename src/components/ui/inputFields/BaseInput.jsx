@@ -3,7 +3,7 @@
 import { placeholder } from '@/utils/placeholders';
 import { useState } from 'react';
 
-const BaseInput = ({ title, required = true, readonly, type, formatInput, width = "w-[32.4%]" }) => {
+const BaseInput = ({ title, required = true, readonly, type, formatInput, width = "w-1/5" }) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (e) => {
