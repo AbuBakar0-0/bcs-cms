@@ -19,7 +19,7 @@ function Hero() {
                             <span className="uppercase">I’M A Provider</span>
                             <div className="bg-primary rounded-full size-8 flex justify-center items-center text-white">
                                 <IoIosArrowForward />
-                            </div>
+                            </div>   
                         </button>
                         </Link>
                         <button className="px-4 py-3 bg-secondary text-white rounded-lg flex flex-row justify-center items-center gap-5">
