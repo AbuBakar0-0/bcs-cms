@@ -21,7 +21,7 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <aside className="w-1/5 bg-secondary text-white">
         <div className="flex flex-col gap-3">
-          <Link href={"/dashboard"}>
+          <Link href={"/"}>
             <img
               src="./assets/BCS Logo billingcaresolutions.com.svg"
               alt=""
