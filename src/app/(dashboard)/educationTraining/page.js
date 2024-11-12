@@ -53,7 +53,7 @@ function EducationAndTraining() {
             {education ? (
               <>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                  <Dropdown title={"Education Type"} options={[]} />
+                  <Dropdown title={"Education Type"} options={["Internship",""]} />
                   <TextInput title={"Country"} />
                   <TextInput title={"State"} />
                   <TextInput title={"County"} />
