@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { IoIosArrowForward } from "react-icons/io"
 
 function Hero() {
@@ -13,12 +14,14 @@ function Hero() {
                         Premium, innovative solutions for credentialing and career management, expertly designed for healthcare providers, organizations, and telemedicine solutions.
                     </h2>
                     <div className="w-full flex flex-col lg:flex-row justify-start items-start lg:items-center gap-5 ">
+                        <Link href="/dashboard">
                         <button className="px-4 py-3 bg-secondary text-white rounded-lg flex flex-row justify-center items-center gap-5">
                             <span className="uppercase">I’M A Provider</span>
                             <div className="bg-primary rounded-full size-8 flex justify-center items-center text-white">
                                 <IoIosArrowForward />
                             </div>
                         </button>
+                        </Link>
                         <button className="px-4 py-3 bg-secondary text-white rounded-lg flex flex-row justify-center items-center gap-5">
                             <span className="uppercase">I’M An Owner</span>
                             <div className="bg-primary rounded-full size-8 flex justify-center items-center text-white">
