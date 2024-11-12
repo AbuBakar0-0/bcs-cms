@@ -1,6 +1,6 @@
+import HeadingLine from "@/components/ui/HeadingLine"
+import TextInput from "@/components/ui/inputFields/TextInput"
 
-import HeadingLine from './HeadingLine'
-import TextField from './TextField'
 
 function Specialities() {
 
@@ -34,26 +34,26 @@ function Specialities() {
                 </div>
 
                 <div className='w-full flex flex-wrap justify-start gap-4 items-start'>
-                    <TextField title={"Country"} label={"country"} />
-                    <TextField title={"State"} label={"state"} />
-                    <TextField title={"County"} label={"county"} />
+                    <TextInput title={"Country"} label={"country"} />
+                    <TextInput title={"State"} label={"state"} />
+                    <TextInput title={"County"} label={"county"} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Street Address 1"} label={"street_address"} />
-                    <TextField title={"Street Address 2"} label={"street_address_2"} required={false} />
+                    <TextInput title={"Street Address 1"} label={"street_address"} />
+                    <TextInput title={"Street Address 2"} label={"street_address_2"} required={false} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"City"} label={"city"} />
+                    <TextInput title={"City"} label={"city"} />
                     <div className="w-1/5">
                         <label htmlFor="state" className="block mb-2 text-sm font-medium text-black">State <span className="text-red-500">*</span></label>
                         <select name="state" id="state" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold">
                         </select>
                     </div>
-                    <TextField title={"Zip"} label={"zip"} />
+                    <TextInput title={"Zip"} label={"zip"} />
                 </div>
 
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Effective Date"} label={"Start_date"} type="date" />
+                    <TextInput title={"Effective Date"} label={"Start_date"} type="date" />
                     <div className="w-full">
                         <label htmlFor="provider_title" className="block mb-2 text-sm font-medium text-black">Does your board certification have an expiry Date?<span className="text-red-500">*</span></label>
                         <div className='w-full flex flex-row justify-start items-center gap-4'>
@@ -61,7 +61,7 @@ function Specialities() {
                             <input type="radio" name="training" /> No
                         </div>
                     </div>
-                    <TextField title={"Expiry Date"} label={"End_date"} type="date" />
+                    <TextInput title={"Expiry Date"} label={"End_date"} type="date" />
                 </div>
 
 
@@ -88,26 +88,26 @@ function Specialities() {
                 </div>
 
                 <div className='w-full flex flex-wrap justify-start gap-4 items-start'>
-                    <TextField title={"Country"} label={"country"} />
-                    <TextField title={"State"} label={"state"} />
-                    <TextField title={"County"} label={"county"} />
+                    <TextInput title={"Country"} label={"country"} />
+                    <TextInput title={"State"} label={"state"} />
+                    <TextInput title={"County"} label={"county"} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Street Address 1"} label={"street_address"} />
-                    <TextField title={"Street Address 2"} label={"street_address_2"} required={false} />
+                    <TextInput title={"Street Address 1"} label={"street_address"} />
+                    <TextInput title={"Street Address 2"} label={"street_address_2"} required={false} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"City"} label={"city"} />
+                    <TextInput title={"City"} label={"city"} />
                     <div className="w-1/5">
                         <label htmlFor="state" className="block mb-2 text-sm font-medium text-black">State <span className="text-red-500">*</span></label>
                         <select name="state" id="state" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold">
                         </select>
                     </div>
-                    <TextField title={"Zip"} label={"zip"} />
+                    <TextInput title={"Zip"} label={"zip"} />
                 </div>
 
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Effective Date"} label={"Start_date"} type="date" />
+                    <TextInput title={"Effective Date"} label={"Start_date"} type="date" />
                     <div className="w-full">
                         <label htmlFor="provider_title" className="block mb-2 text-sm font-medium text-black">Does your board certification have an expiry Date?<span className="text-red-500">*</span></label>
                         <div className='w-full flex flex-row justify-start items-center gap-4'>
@@ -115,7 +115,7 @@ function Specialities() {
                             <input type="radio" name="training" /> No
                         </div>
                     </div>
-                    <TextField title={"Expiry Date"} label={"End_date"} type="date" />
+                    <TextInput title={"Expiry Date"} label={"End_date"} type="date" />
                 </div>
 
 
@@ -143,26 +143,26 @@ function Specialities() {
                 </div>
 
                 <div className='w-full flex flex-wrap justify-start gap-4 items-start'>
-                    <TextField title={"Country"} label={"country"} />
-                    <TextField title={"State"} label={"state"} />
-                    <TextField title={"County"} label={"county"} />
+                    <TextInput title={"Country"} label={"country"} />
+                    <TextInput title={"State"} label={"state"} />
+                    <TextInput title={"County"} label={"county"} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Street Address 1"} label={"street_address"} />
-                    <TextField title={"Street Address 2"} label={"street_address_2"} required={false} />
+                    <TextInput title={"Street Address 1"} label={"street_address"} />
+                    <TextInput title={"Street Address 2"} label={"street_address_2"} required={false} />
                 </div>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"City"} label={"city"} />
+                    <TextInput title={"City"} label={"city"} />
                     <div className="w-1/5">
                         <label htmlFor="state" className="block mb-2 text-sm font-medium text-black">State <span className="text-red-500">*</span></label>
                         <select name="state" id="state" className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold">
                         </select>
                     </div>
-                    <TextField title={"Zip"} label={"zip"} />
+                    <TextInput title={"Zip"} label={"zip"} />
                 </div>
 
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                    <TextField title={"Effective Date"} label={"Start_date"} type="date" />
+                    <TextInput title={"Effective Date"} label={"Start_date"} type="date" />
                     <div className="w-full">
                         <label htmlFor="provider_title" className="block mb-2 text-sm font-medium text-black">Does your board certification have an expiry Date?<span className="text-red-500">*</span></label>
                         <div className='w-full flex flex-row justify-start items-center gap-4'>
@@ -170,7 +170,7 @@ function Specialities() {
                             <input type="radio" name="training" /> No
                         </div>
                     </div>
-                    <TextField title={"Expiry Date"} label={"End_date"} type="date" />
+                    <TextInput title={"Expiry Date"} label={"End_date"} type="date" />
                 </div>
 
                 <p className='w-full text-lg'>Certifications</p>
