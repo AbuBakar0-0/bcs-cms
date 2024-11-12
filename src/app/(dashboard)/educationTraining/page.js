@@ -114,12 +114,15 @@ function EducationAndTraining() {
                   <TextInput title={"Country"} />
                   <TextInput title={"State"} />
                   <TextInput title={"County"} />
-                  <TextInput title={"Institution / Hospital Name"} />
+                  <TextInput
+                    title={"Institution / Hospital Name"}
+                    width={"w-[32%]"}
+                  />
                   <TextInput title={"Affiliated University"} />
-                  
+
                   <EmailInput title={"Email"} />
-                  
-                  <DateInput title={"Start Date"} />
+
+                  <DateInput title={"Start Date"} width={"w-[32%]"} />
                   <DateInput title={"End Date"} />
                   <TextInput title={"Type of Program"} />
                   <TextInput title={"Department"} />
@@ -180,14 +183,8 @@ function EducationAndTraining() {
         </div>
 
         {/* Cultural Training */}
-        <div className="w-full flex flex-col justify-center items-start gap-4 mt-20">
-          <p>Have you completed Cultural Training?</p>
-          <div className="w-full flex flex-row justify-start items-center gap-3">
-            <input type="radio" name="cultural_training" /> Yes <br />
-          </div>
-          <div className="w-full flex flex-row justify-start items-center gap-3">
-            <input type="radio" name="cultural_training" /> No <br />
-          </div>
+        <div className="">
+
         </div>
 
         <div className="w-full flex flex-row justify-around items-center gap-4">
