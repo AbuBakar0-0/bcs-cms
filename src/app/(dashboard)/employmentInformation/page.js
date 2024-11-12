@@ -1,5 +1,6 @@
 import HeadingLine from "@/components/ui/HeadingLine"
 import TextInput from "@/components/ui/inputFields/TextInput"
+import { FaArrowCircleLeft, FaArrowCircleRight } from "react-icons/fa"
 
 
 function EmploymentInformation() {

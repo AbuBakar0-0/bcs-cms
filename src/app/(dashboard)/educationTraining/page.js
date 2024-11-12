@@ -3,6 +3,7 @@
 import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
+import EmailInput from "@/components/ui/inputFields/EmailInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
@@ -107,29 +108,18 @@ function EducationAndTraining() {
             {training ? (
               <>
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                  <div className="w-1/5">
-                    <label
-                      htmlFor="provider_title"
-                      className="block mb-2 text-sm font-medium text-black"
-                    >
-                      Training Type<span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      name="provider_title"
-                      id="provider_title"
-                      className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-                    ></select>
-                  </div>
+                  <Dropdown title={"Training Type"} options={[]}/>
                   <TextInput title={"Country"} />
                   <TextInput title={"State"} />
                   <TextInput title={"County"} />
                   <TextInput title={"Institution / Hospital Name"} />
                   <TextInput title={"Affiliated University"} />
-                  <TextInput title={"Email"} type={"email"} />
+                  <EmailInput title={"Email"} />
                   <TextInput title={"Start Date"} type="date" />
                   <TextInput title={"End Date"} type="date" />
                   <TextInput title={"Type of Program"} />
                   <TextInput title={"Department"} />
+                  
                   <div className="w-1/5">
                     <label
                       htmlFor="provider_title"
