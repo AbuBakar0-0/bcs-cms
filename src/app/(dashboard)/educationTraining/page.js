@@ -116,9 +116,11 @@ function EducationAndTraining() {
                   <TextInput title={"County"} />
                   <TextInput title={"Institution / Hospital Name"} />
                   <TextInput title={"Affiliated University"} />
+                  
                   <EmailInput title={"Email"} />
-                  <TextInput title={"Start Date"} type="date" />
-                  <TextInput title={"End Date"} type="date" />
+                  
+                  <DateInput title={"Start Date"} />
+                  <DateInput title={"End Date"} />
                   <TextInput title={"Type of Program"} />
                   <TextInput title={"Department"} />
 
