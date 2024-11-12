@@ -8,244 +8,131 @@ import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import { specialities } from "@/data/specialities";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
+import { useState } from "react";
+import { CiEdit } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 
 function Specialities() {
+  const [speciality, showSpeciality] = useState(false);
+  const [pSpeciality, showPSpeciality] = useState(false);
+  const [sSpeciality, showSSpeciality] = useState(false);
+
+  const handlePrimarySpeciality = () => {
+    showSpeciality(!speciality);
+    showPSpeciality(true);
+    showSSpeciality(false);
+  };
+  const handleSecondarySpeciality = () => {
+    showSSpeciality(true);
+    showPSpeciality(false);
+  };
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center gap-4">
-        <HeadingLine title={"Specialities"} />
-        <p className="w-full">
-          <span className="text-red-400">*</span>Required all fields are marked
-          with red asterik
-        </p>
+        <div className="w-full flex flex-row justify-between items-center">
+          <div>
+            <HeadingLine title={"Specialities"} />
+            <p className="w-full">
+              <span className="text-red-400">*</span>Required all fields are
+              marked with red asterik
+            </p>
+          </div>
 
-        <p className="w-full text-lg">Primary Speciality</p>
+         <div className="w-1/2 flex flex-row justify-end items-center gap-4">
+         <button
+            onClick={handlePrimarySpeciality}
+            className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+          >
+            <IoAddCircleOutline className="size-6" />
+            <p>Add Primary Speciality</p>
+          </button>
 
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <Dropdown
-            title={"Primary Speciality"}
-            options={specialities}
-            width="w-full"
-          />
-          <RadioButton
-            title={"Board Certified"}
-            options={["Yes", "No"]}
-            width="w-full"
-          />
-          <Dropdown
-            title={"Name of Certifying Board"}
-            options={[]}
-            width="w-full"
-          />
-
-          <TextInput title={"Country"} />
-          <TextInput title={"State"} />
-          <TextInput title={"County"} />
-          <TextInput title={"Street Address 1"} width={"w-[49.25%]"} />
-          <TextInput
-            title={"Street Address 2"}
-            width={"w-[49.25%]"}
-            required={false}
-          />
-          <TextInput title={"City"} />
-          <Dropdown title={"State"} options={stateAbbreviations} />
-          <ZipCodeInput title={"ZipCode"} />
+          <button
+            onClick={handleSecondarySpeciality}
+            className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+          >
+            <IoAddCircleOutline className="size-6" />
+            <p>Add Secondary Speciality</p>
+          </button>
+         </div>
         </div>
+        <div className="w-full flex flex-col justify-center items-center gap-4">
+          {speciality ? (
+            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
+              <div className="w-full flex flex-wrap justify-start gap-4 items-start">
+                <div className="w-full flex flex-wrap justify-start gap-4 items-end">
+                  {pSpeciality ? (
+                    <Dropdown
+                      title={"Primary Speciality"}
+                      options={specialities}
+                      width=""
+                    />
+                  ) : (
+                    <></>
+                  )}
+                  {sSpeciality ? (
+                    <Dropdown
+                      title={"Secondary Speciality"}
+                      options={specialities}
+                      width=""
+                    />
+                  ) : (
+                    <></>
+                  )}
 
+                  <RadioButton
+                    title={"Board Certified"}
+                    options={["Yes", "No"]}
+                    width=""
+                  />
+                  <Dropdown
+                    title={"Name of Certifying Board"}
+                    options={[]}
+                    width="w-1/2"
+                  />
 
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <DateInput title={"Effective Date"} />
-          <div className="w-full">
-            <label
-              htmlFor="provider_title"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Does your board certification have an expiry Date?
-              <span className="text-red-500">*</span>
-            </label>
-            <div className="w-full flex flex-row justify-start items-center gap-4">
-              <input type="radio" name="training" /> Yes
-              <input type="radio" name="training" /> No
+                  <div className="w-full flex flex-wrap justify-start gap-4 items-start">
+                    <TextInput title={"Street Address 1"} width="w-[35%]" />
+                    <TextInput
+                      title={"Street Address 2"}
+                      width={"w-[25%]"}
+                      required={false}
+                    />
+                    <TextInput title={"City"} width={"w-[10%]"} />
+                    <Dropdown
+                      title={"State"}
+                      options={stateAbbreviations}
+                      width="w-[8%]"
+                    />
+                    <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
+                  </div>
+                </div>
+
+                <div className="w-full flex flex-wrap justify-start gap-4 items-end">
+                  <DateInput title={"Effective Date"} />
+                  <DateInput title={"Expiry Date"} />
+                </div>
+              </div>
+              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
+                Add
+              </button>
+            </div>
+          ) : (
+            <></>
+          )}
+          <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+            <p>Allergy and Immunology</p>
+            <div className="flex flex-col justify-center items-start">
+              <p>Name of Board</p>
+              <p>June 2014 to June 2014</p>
+              <p>USA</p>
+            </div>
+            <div className="flex flex-row justify-center items-center gap-4">
+              <CiEdit className="size-6 text-primary" />
+              <MdDeleteOutline className="size-6 text-red-400" />
             </div>
           </div>
-          <TextInput title={"Expiry Date"} type="date" />
-        </div>
-
-        <p className="w-full text-lg">Primary Speciality</p>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <div className="w-1/2">
-            <label
-              htmlFor="state_issued"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Primary Speciality<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state_issued"
-              id="state_issued"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="provider_title"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Board Certifieds<span className="text-red-500">*</span>
-            </label>
-            <div className="w-full flex flex-row justify-start items-center gap-4">
-              <input type="radio" name="training" /> Yes
-              <input type="radio" name="training" /> No
-            </div>
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="state_issued"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Name of Certifying Board<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state_issued"
-              id="state_issued"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-        </div>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Country"} />
-          <TextInput title={"State"} />
-          <TextInput title={"County"} />
-        </div>
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Street Address 1"} />
-          <TextInput title={"Street Address 2"} required={false} />
-        </div>
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"City"} />
-          <div className="w-1/5">
-            <label
-              htmlFor="state"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              State <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state"
-              id="state"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-          <TextInput title={"Zip"} />
-        </div>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Effective Date"} type="date" />
-          <div className="w-full">
-            <label
-              htmlFor="provider_title"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Does your board certification have an expiry Date?
-              <span className="text-red-500">*</span>
-            </label>
-            <div className="w-full flex flex-row justify-start items-center gap-4">
-              <input type="radio" name="training" /> Yes
-              <input type="radio" name="training" /> No
-            </div>
-          </div>
-          <TextInput title={"Expiry Date"} type="date" />
-        </div>
-
-        <p className="w-full text-lg">Secondary Speciality</p>
-        <div className="w-full h-[2px] bg-secondary"></div>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <div className="w-1/2">
-            <label
-              htmlFor="state_issued"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Primary Speciality<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state_issued"
-              id="state_issued"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="provider_title"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Board Certifieds<span className="text-red-500">*</span>
-            </label>
-            <div className="w-full flex flex-row justify-start items-center gap-4">
-              <input type="radio" name="training" /> Yes
-              <input type="radio" name="training" /> No
-            </div>
-          </div>
-          <div className="w-1/2">
-            <label
-              htmlFor="state_issued"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Name of Certifying Board<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state_issued"
-              id="state_issued"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-        </div>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Country"} />
-          <TextInput title={"State"} />
-          <TextInput title={"County"} />
-        </div>
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Street Address 1"} />
-          <TextInput title={"Street Address 2"} required={false} />
-        </div>
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"City"} />
-          <div className="w-1/5">
-            <label
-              htmlFor="state"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              State <span className="text-red-500">*</span>
-            </label>
-            <select
-              name="state"
-              id="state"
-              className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-            ></select>
-          </div>
-          <TextInput title={"Zip"} />
-        </div>
-
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"Effective Date"} type="date" />
-          <div className="w-full">
-            <label
-              htmlFor="provider_title"
-              className="block mb-2 text-sm font-medium text-black"
-            >
-              Does your board certification have an expiry Date?
-              <span className="text-red-500">*</span>
-            </label>
-            <div className="w-full flex flex-row justify-start items-center gap-4">
-              <input type="radio" name="training" /> Yes
-              <input type="radio" name="training" /> No
-            </div>
-          </div>
-          <TextInput title={"Expiry Date"} type="date" />
         </div>
 
         <p className="w-full text-lg">Certifications</p>

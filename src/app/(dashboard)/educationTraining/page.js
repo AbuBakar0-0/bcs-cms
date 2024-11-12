@@ -174,7 +174,6 @@ function EducationAndTraining() {
               <MdDeleteOutline className="size-6 text-red-400" />
             </div>
           </div>
-
         </div>
 
         {/* Cultural Training */}

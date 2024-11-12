@@ -2,7 +2,7 @@ import React from "react";
 
 const RadioButton = ({ title, options, required = true }) => {
     return (
-        <div className="w-1/5">
+        <div className="w-1/6">
             <label htmlFor={title} className="block mb-2 text-sm font-medium text-black">
                 {title} {required ? <span className="text-red-500">*</span> : null}
             </label>
