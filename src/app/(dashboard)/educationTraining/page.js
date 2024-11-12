@@ -17,6 +17,33 @@ function EducationAndTraining() {
   const [education, showEducation] = useState(false);
   const [training, showTraining] = useState(false);
 
+  const degrees = [
+    "MD - Doctor of Medicine",
+    "DO - Doctor of Osteopathy",
+    "DDS - Doctor of Dental Surgery",
+    "DMD - Doctor of Dental Medicine",
+    "DPM - Doctor of Podiatric Medicine",
+    "DC - Doctor of Chiropractic",
+    "ND - Doctor of Naturopathic Medicine",
+    "OD - Doctor of Optometry",
+    "DPT - Doctor of Physical Therapy",
+    "DNP - Doctor of Nursing Practice",
+    "PhD - Doctor of Philosophy (in healthcare-related fields)",
+    "PsyD - Doctor of Psychology",
+    "MSN - Master of Science in Nursing",
+    "MPH - Master of Public Health",
+    "MSW - Master of Social Work",
+    "PA - Physician Assistant, Certified",
+    "FNP - Family Nurse Practitioner",
+    "NP - Nurse Practitioner",
+    "CRNA - Certified Registered Nurse Anesthetist",
+    "LCSW - Licensed Clinical Social Worker",
+    "LMFT - Licensed Marriage and Family Therapist",
+    "LPC - Licensed Professional Counselor",
+    "RD - Registered Dietitian",
+    "RPh - Registered Pharmacist",
+  ];
+
   const handleEducation = () => {
     showEducation(!education);
   };
@@ -37,56 +64,54 @@ function EducationAndTraining() {
         {/* Education */}
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Education</p>
+          <button
+            onClick={handleEducation}
+            className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+          >
+            <IoAddCircleOutline className="size-6" />
+            <p>Add Education</p>
+          </button>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
-          <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
-            <div className="w-full flex flex-col justify-center items-end">
-              <button
-                onClick={handleEducation}
-                className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-              >
-                <IoAddCircleOutline className="size-6" />
-                <p>Add Education</p>
+          {education ? (
+            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
+              <div className="w-full flex flex-wrap justify-start gap-4 items-start">
+                <Dropdown
+                  title={"Education Type"}
+                  options={[
+                    "Internship",
+                    "Residency",
+                    "Undergraduate",
+                    "Professional School",
+                    "Fifth Pathway",
+                  ]}
+                />
+                <TextInput title={"Country"} />
+                <TextInput title={"State"} />
+                <TextInput title={"County"} />
+                <TextInput title={"Professional School"} />
+                <Dropdown title={"Degree"} options={degrees} />
+
+                <DateInput title={"Start Date"} />
+                <DateInput title={"End Date"} />
+              </div>
+              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
+                Add
               </button>
             </div>
-
-            {education ? (
-              <>
-                <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                  <Dropdown title={"Education Type"} options={["Internship",""]} />
-                  <TextInput title={"Country"} />
-                  <TextInput title={"State"} />
-                  <TextInput title={"County"} />
-                  <TextInput title={"Professional School"} />
-                  <Dropdown title={"Degree"} options={[]} />
-
-                  <DateInput title={"Start Date"} />
-                  <DateInput title={"End Date"} />
-                </div>
-                <button className="w-40 px-4 py-3 bg-secondary text-white rounded-lg">
-                  Add
-                </button>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="w-full h-40 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+          ) : (
+            <></>
+          )}
+          <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
             <p>Doctor of Medicine (MD)</p>
             <div className="flex flex-col justify-center items-start">
               <p>University of Queenland</p>
               <p>June 2014 to June 2014</p>
               <p>USA</p>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4">
-              <button className="w-40 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <CiEdit className="size-6" />
-                <p>Edit</p>
-              </button>
-              <button className="w-40 bg-gray-400 px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <MdDeleteOutline className="size-6" />
-                <p>Delete</p>
-              </button>
+            <div className="flex flex-row justify-center items-center gap-4">
+              <CiEdit className="size-6 text-primary" />
+              <MdDeleteOutline className="size-6 text-red-400" />
             </div>
           </div>
         </div>
@@ -94,54 +119,49 @@ function EducationAndTraining() {
         {/* Professional Experience */}
         <div className="w-full flex flex-row justify-between items-center mt-20">
           <p className="w-full text-lg">Professional Training</p>
+          <button
+            onClick={handleTraining}
+            className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+          >
+            <IoAddCircleOutline className="size-6" />
+            <p>Add Training</p>
+          </button>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
-          <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
-            <div className="w-full flex flex-col justify-center items-end">
-              <button
-                onClick={handleTraining}
-                className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-              >
-                <IoAddCircleOutline className="size-6" />
-                <p>Add Training</p>
+          {training ? (
+            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
+              <div className="w-full flex flex-wrap justify-start gap-4 items-end">
+                <Dropdown title={"Training Type"} options={[]} />
+                <TextInput title={"Country"} />
+                <TextInput title={"State"} />
+                <TextInput title={"County"} />
+                <TextInput
+                  title={"Institution / Hospital Name"}
+                  width={"w-[32%]"}
+                />
+                <TextInput title={"Affiliated University"} />
+
+                <EmailInput title={"Email"} />
+
+                <DateInput title={"Start Date"} width={"w-[32%]"} />
+                <DateInput title={"End Date"} />
+                <TextInput title={"Type of Program"} />
+                <TextInput title={"Department"} />
+
+                <Dropdown title={"Speciality"} options={specialities} />
+                <RadioButton
+                  title={"Complete Training Program"}
+                  options={["Yes", "No"]}
+                />
+              </div>
+              <button className="w-40 px-4 py-3 bg-secondary text-white rounded-lg">
+                Add
               </button>
             </div>
-
-            {training ? (
-              <>
-                <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                  <Dropdown title={"Training Type"} options={[]} />
-                  <TextInput title={"Country"} />
-                  <TextInput title={"State"} />
-                  <TextInput title={"County"} />
-                  <TextInput
-                    title={"Institution / Hospital Name"}
-                    width={"w-[32%]"}
-                  />
-                  <TextInput title={"Affiliated University"} />
-
-                  <EmailInput title={"Email"} />
-
-                  <DateInput title={"Start Date"} width={"w-[32%]"} />
-                  <DateInput title={"End Date"} />
-                  <TextInput title={"Type of Program"} />
-                  <TextInput title={"Department"} />
-
-                  <Dropdown title={"Speciality"} options={specialities} />
-                  <RadioButton
-                    title={"Complete Training Program"}
-                    options={["Yes", "No"]}
-                  />
-                </div>
-                <button className="w-40 px-4 py-3 bg-secondary text-white rounded-lg">
-                  Add
-                </button>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-          <div className="w-full h-40 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+          ) : (
+            <></>
+          )}
+          <div className="w-full h-28 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
             <p>Residency</p>
             <div className="flex flex-col justify-center items-start">
               <p>St. Luke Hospital</p>
@@ -149,43 +169,16 @@ function EducationAndTraining() {
               <p>June 2020 to June 2022</p>
               <p>USA</p>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4">
-              <button className="w-40 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <CiEdit className="size-6" />
-                <p>Edit</p>
-              </button>
-              <button className="w-40 bg-gray-400 px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <MdDeleteOutline className="size-6" />
-                <p>Delete</p>
-              </button>
+            <div className="flex flex-row justify-center items-center gap-4">
+              <CiEdit className="size-6 text-primary" />
+              <MdDeleteOutline className="size-6 text-red-400" />
             </div>
           </div>
 
-          <div className="w-full h-40 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
-            <p>FellowShip</p>
-            <div className="flex flex-col justify-center items-start">
-              <p>St. Luke Hospital</p>
-              <p>Family Medicine</p>
-              <p>June 2020 to June 2022</p>
-              <p>USA</p>
-            </div>
-            <div className="flex flex-col justify-center items-center gap-4">
-              <button className="w-40 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <CiEdit className="size-6" />
-                <p>Edit</p>
-              </button>
-              <button className="w-40 bg-gray-400 px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-                <MdDeleteOutline className="size-6" />
-                <p>Delete</p>
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Cultural Training */}
-        <div className="">
-
-        </div>
+        <div className=""></div>
 
         <div className="w-full flex flex-row justify-around items-center gap-4">
           <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">

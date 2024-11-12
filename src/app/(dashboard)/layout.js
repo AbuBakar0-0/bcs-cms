@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }) {
           <img
             src="./assets/BCS Logo billingcaresolutions.com.svg"
             alt=""
-            className="bg-white p-5"
+            className="bg-white p-5 h-[7.2rem]"
           />
           <div className="px-5">
             {sidenavLinks.map((item, index) => (
