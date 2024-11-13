@@ -97,9 +97,6 @@ function ProvidersInformation() {
           <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
         </div>
 
-        {/* Home Address */}
-        
-        {/* Home Address */}
         <HeadingLine2 title={"Service Location Address"} />
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-center text-xs">

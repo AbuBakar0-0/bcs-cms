@@ -6,6 +6,7 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import PasswordInput from "@/components/ui/inputFields/PasswordInput";
 import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { CiLink } from "react-icons/ci";
 
@@ -21,7 +22,11 @@ function ProfessionalIds() {
             options={["Yes", "No"]}
             width="w-1/5"
           />
-          <TextInput title={"NPI 1 (if applicable)"} width={"w-[1/12]"} required={false} />
+          <TextInput
+            title={"NPI 1 (if applicable)"}
+            width={"w-[1/12]"}
+            required={false}
+          />
           <TextInput
             title={"NPI 2 (if applicable)"}
             width={"w-[1/12]"}
@@ -222,9 +227,7 @@ function ProfessionalIds() {
           <TextInput title={"Medicaid Username"} width={"w-[46.9%]"} />
           <PasswordInput title={"Medicaid Password"} width={"w-[46.9%]"} />
         </div>
-        <button className="px-4 py-3 rounded-lg bg-secondary text-white">
-          Save & Next
-        </button>
+        <NavBottom />
       </div>
     </>
   );

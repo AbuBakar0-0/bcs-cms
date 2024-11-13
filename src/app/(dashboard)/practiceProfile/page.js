@@ -7,6 +7,7 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import taxonomyCodes from "@/data/taxonomyCodes";
 import taxonomyCode from "@/data/taxonomyCodes";
@@ -61,14 +62,23 @@ function PracticeProfile() {
               "Location Add",
             ]}
           />
-            <TextInput title={"NPI 2"} width={"w-1/6"}/>
-            <TextInput title={"Tax ID"} width={"w-1/6"}/>
+          <TextInput title={"NPI 2"} width={"w-1/6"} />
+          <TextInput title={"Tax ID"} width={"w-1/6"} />
         </div>
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
           <TextInput title={"Legal Business Name "} width={"w-[49%]"} />
           <TextInput title={"Doing Business Name "} width={"w-[49%]"} />
-            <Dropdown title={"Taxonomy Code"} options={taxonomyCodes} width="w-[49%]"/> 
-          <Dropdown title={"Taxonomy Code 2 (if applicable)"} options={taxonomyCodes} required={false} width="w-[49%]"/> 
+          <Dropdown
+            title={"Taxonomy Code"}
+            options={taxonomyCodes}
+            width="w-[49%]"
+          />
+          <Dropdown
+            title={"Taxonomy Code 2 (if applicable)"}
+            options={taxonomyCodes}
+            required={false}
+            width="w-[49%]"
+          />
 
           <div className="w-full flex flex-wrap justify-start gap-4 items-start">
             <TextInput title={"Service Location Address 1"} width="w-[35%]" />
@@ -147,31 +157,34 @@ function PracticeProfile() {
           <div className="w-full flex flex-wrap justify-start items-center gap-5">
             <TextInput title={"PTAN/Medicare number"} />
             <TextInput title={"Medicaid number"} />
-            <DateInput title={"Practice Start Date"}/>
-            
-           
-            
+            <DateInput title={"Practice Start Date"} />
           </div>
-
-          
-          
         </div>
 
         {/* Emergency Contact Information */}
         <HeadingLine title={"Practice Contact Information"} />
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-            <Dropdown width="w-[14%]" title={"Practice Contact Person"} options={["CFO( Chief Financial Officer)", "CTO (Chief Technology Officer)", "CEO ( Chief Executive Officer)", "Owner", "Administrator", "Office Manager", "Contractor"]}/>
+          <Dropdown
+            width="w-[14%]"
+            title={"Practice Contact Person"}
+            options={[
+              "CFO( Chief Financial Officer)",
+              "CTO (Chief Technology Officer)",
+              "CEO ( Chief Executive Officer)",
+              "Owner",
+              "Administrator",
+              "Office Manager",
+              "Contractor",
+            ]}
+          />
           <TextInput title={"Practice Contact Name"} />
           <EmailInput title={"Work Email"} />
           <TextInput title={"Work Ph."} />
           <TextInput title={"Cell Ph."} />
         </div>
 
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start"></div>
-        <button className="px-4 py-3 rounded-lg bg-secondary text-white">
-          Save & Next
-        </button>
+        <NavBottom />
       </div>
     </>
   );

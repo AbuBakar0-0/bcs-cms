@@ -5,6 +5,7 @@ import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
@@ -50,7 +51,7 @@ function HospitalAffiliations() {
           {affiliation ? (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                <TextInput title={"Hospital Name"} width={"w-full"}/>
+                <TextInput title={"Hospital Name"} width={"w-full"} />
 
                 <TextInput title={"Address 1"} width="w-[35%]" />
                 <TextInput
@@ -106,7 +107,7 @@ function HospitalAffiliations() {
           {arrangements ? (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                <TextInput title={"Hospital Name"} width={"w-full"}/>
+                <TextInput title={"Hospital Name"} width={"w-full"} />
 
                 <TextInput title={"Address 1"} width="w-[35%]" />
                 <TextInput
@@ -142,23 +143,8 @@ function HospitalAffiliations() {
             <MdDeleteOutline className="size-6 text-red-400" />
           </div>
         </div>
-        
-        {/* Non Admitting Affiliations */}
-        
-        <div className="w-full flex flex-row justify-around items-center gap-4">
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <FaArrowCircleLeft />
-            <span> Save & Go Back</span>
-          </div>
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <span>Save</span>
-          </div>
 
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <span>Save & Continue</span>
-            <FaArrowCircleRight />
-          </div>
-        </div>
+        <NavBottom />
       </div>
     </>
   );

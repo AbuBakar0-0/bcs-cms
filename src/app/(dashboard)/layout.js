@@ -14,7 +14,7 @@ const sidenavLinks = [
   { title: "Credentialing Contracts", link: "/credentialingContracts" },
   { title: "Employment Information", link: "/employmentInformation" },
   { title: "Professional References", link: "/professionalReferences" },
-  { title: "Document", link: "/disclosures" },
+  { title: "Document", link: "/document" },
 ];
 
 export default function DashboardLayout({ children }) {

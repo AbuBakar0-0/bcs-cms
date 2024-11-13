@@ -1,9 +1,8 @@
 "use client";
-
-import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
-import RadioButton from "@/components/ui/inputFields/RadioButtons";
+import EmailInput from "@/components/ui/inputFields/EmailInput";
+import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
@@ -14,19 +13,19 @@ import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 
-function EmploymentInformation() {
-  const [employment, setEmployment] = useState(false);
-  const handleEmployment = () => {
-    setEmployment(!employment);
+function ProfessionalReferences() {
+  const [reference, setReference] = useState(false);
+  const handleReference = () => {
+    setReference(!reference);
   };
 
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center gap-4">
         <div className="w-full flex flex-row justify-between items-center">
-          <p className="w-full text-lg">Employment Information</p>
+          <p className="w-full text-lg">Professional References</p>
           <button
-            onClick={handleEmployment}
+            onClick={handleReference}
             className="w-28 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
           >
             <IoAddCircleOutline className="size-6" />
@@ -35,16 +34,26 @@ function EmploymentInformation() {
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
-          {employment ? (
+          {reference ? (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                <TextInput title={"Legal Employer Name "} width={"w-[35%]"} />
-                <TextInput title={"Doing Business Name "} width={"w-[35%]"} />
-                <Dropdown
-                  title={"Department / Speciality"}
-                  options={medicalTitles}
-                />
+                <Dropdown title={"Provider Type"} options={medicalTitles} />
 
+                <TextInput
+                  title={"First Name"}
+                  width={"w-1/3"}
+                  required={false}
+                />
+                <TextInput
+                  title={"Middle Initial"}
+                  required={false}
+                  width={"w-[8%]"}
+                />
+                <TextInput
+                  title={"Last Name"}
+                  width={"w-1/3"}
+                  required={false}
+                />
                 <div className="w-full flex flex-wrap justify-start gap-4 items-start">
                   <TextInput title={"Address Line 1"} width="w-[25%]" />
                   <TextInput
@@ -61,17 +70,10 @@ function EmploymentInformation() {
                   />
 
                   <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-                  <TextInput title={"Practice Ph."} />
-                  <TextInput title={"Fax No."} required={false} />
-                  <DateInput title={"Start Date"} />
-                  <DateInput title={"End Date"} />
+                  <PhoneInput title={"Cell Ph."} />
+                  <PhoneInput title={"Fax No."} />
+                  <EmailInput title={"Email Address"} />
                 </div>
-              </div>
-              <div className="w-full flex flex-col justify-center items-start gap-4 ">
-                <RadioButton
-                  title={"Is this your Current Employer?"}
-                  options={["Yes", "No"]}
-                />
               </div>
 
               <button className="px-4 py-3 bg-secondary text-white rounded-lg">
@@ -84,10 +86,10 @@ function EmploymentInformation() {
         </div>
 
         <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
-          <p>Doctor of Medicine (MD)</p>
+          <p>Adnan Qamar</p>
           <div className="flex flex-col justify-center items-start">
             <p>University of Queenland</p>
-            <p>June 2014 to June 2014</p>
+            <p>aqamar@billingcaresolutions.com</p>
             <p>USA</p>
           </div>
           <div className="flex flex-row justify-center items-center gap-4">
@@ -101,4 +103,4 @@ function EmploymentInformation() {
   );
 }
 
-export default EmploymentInformation;
+export default ProfessionalReferences;

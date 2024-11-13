@@ -6,6 +6,7 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { specialities } from "@/data/specialities";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { useState } from "react";
@@ -39,23 +40,23 @@ function Specialities() {
             </p>
           </div>
 
-         <div className="w-1/2 flex flex-row justify-end items-center gap-4">
-         <button
-            onClick={handlePrimarySpeciality}
-            className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add Primary Speciality</p>
-          </button>
+          <div className="w-1/2 flex flex-row justify-end items-center gap-4">
+            <button
+              onClick={handlePrimarySpeciality}
+              className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+            >
+              <IoAddCircleOutline className="size-6" />
+              <p>Add Primary Speciality</p>
+            </button>
 
-          <button
-            onClick={handleSecondarySpeciality}
-            className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add Secondary Speciality</p>
-          </button>
-         </div>
+            <button
+              onClick={handleSecondarySpeciality}
+              className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
+            >
+              <IoAddCircleOutline className="size-6" />
+              <p>Add Secondary Speciality</p>
+            </button>
+          </div>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
           {speciality ? (
@@ -341,6 +342,7 @@ function Specialities() {
           </div>
         </div>
       </div>
+      <NavBottom />
     </>
   );
 }

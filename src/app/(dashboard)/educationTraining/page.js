@@ -6,6 +6,7 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { specialities } from "@/data/specialities";
 import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
@@ -180,20 +181,7 @@ function EducationAndTraining() {
         {/* Cultural Training */}
         <div className=""></div>
 
-        <div className="w-full flex flex-row justify-around items-center gap-4">
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <FaArrowCircleLeft />
-            <span> Save & Go Back</span>
-          </div>
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <span>Save</span>
-          </div>
-
-          <div className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white">
-            <span>Save & Continue</span>
-            <FaArrowCircleRight />
-          </div>
-        </div>
+        <NavBottom />
       </div>
     </>
   );

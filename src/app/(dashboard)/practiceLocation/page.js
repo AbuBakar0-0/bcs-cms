@@ -12,6 +12,7 @@ import taxonomyCodes from "@/data/taxonomyCodes";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import NavBottom from "@/components/ui/NavBottom";
 
 function PracticeLocations() {
   const [readonly, setReadOnly] = useState(false);
@@ -201,10 +202,7 @@ function PracticeLocations() {
           </div>
         </div>
 
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start"></div>
-        <button className="px-4 py-3 rounded-lg bg-secondary text-white">
-          Save & Next
-        </button>
+        <NavBottom />
       </div>
     </>
   );

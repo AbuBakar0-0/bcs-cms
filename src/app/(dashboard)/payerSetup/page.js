@@ -10,6 +10,7 @@ import { useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import NavBottom from "@/components/ui/NavBottom";
 
 export default function PairSetup() {
   const [application, showApplication] = useState(false);
@@ -38,7 +39,21 @@ export default function PairSetup() {
               <div className="w-full flex flex-wrap justify-start gap-4 items-start">
                 <div className="w-full flex flex-wrap justify-start gap-4 items-end">
                   <Dropdown title={"State"} options={stateAbbreviations} />
-                  <Dropdown title={"Plan Type"} options={[]} />
+                  <Dropdown
+                    title={"Plan Type"}
+                    options={[
+                      "All",
+                      "EPO",
+                      "HMO",
+                      "PPO",
+                      "HMO/P/OS combined",
+                      "PPO/EPO combined",
+                      "HSA",
+                      "HDHP",
+                      "MCO",
+                      "Medigap",
+                    ]}
+                  />
                 </div>
                 <HeadingLine title={"Application Statuses"} />
                 <div className="w-full flex flex-wrap justify-start gap-4 items-end">
@@ -97,6 +112,8 @@ export default function PairSetup() {
             <MdDeleteOutline className="size-6 text-red-400" />
           </div>
         </div>
+
+        <NavBottom />
       </div>
     </>
   );
