@@ -102,17 +102,18 @@ function EducationAndTraining() {
           ) : (
             <></>
           )}
-          <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
-            <p>Doctor of Medicine (MD)</p>
-            <div className="flex flex-col justify-center items-start">
-              <p>University of Queenland</p>
-              <p>June 2014 to June 2014</p>
-              <p>USA</p>
-            </div>
-            <div className="flex flex-row justify-center items-center gap-4">
-              <CiEdit className="size-6 text-primary" />
-              <MdDeleteOutline className="size-6 text-red-400" />
-            </div>
+        </div>
+
+        <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+          <p>Doctor of Medicine (MD)</p>
+          <div className="flex flex-col justify-center items-start">
+            <p>University of Queenland</p>
+            <p>June 2014 to June 2014</p>
+            <p>USA</p>
+          </div>
+          <div className="flex flex-row justify-center items-center gap-4">
+            <CiEdit className="size-6 text-primary" />
+            <MdDeleteOutline className="size-6 text-red-400" />
           </div>
         </div>
 

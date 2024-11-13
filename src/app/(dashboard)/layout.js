@@ -10,6 +10,7 @@ const sidenavLinks = [
   { title: "Practice Profile", link: "/practiceProfile" },
   { title: "Practice Location", link: "/practiceLocation" },
   { title: "Hospital Affiliations", link: "/hospitalAffiliations" },
+  { title: "Payer Setup", link: "/payerSetup" },
   { title: "Credentialing Contracts", link: "/credentialingContracts" },
   { title: "Employment Information", link: "/employmentInformation" },
   { title: "Professional References", link: "/professionalReferences" },
