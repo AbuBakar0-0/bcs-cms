@@ -6,7 +6,7 @@ const Checkbox = ({ title, options }) => {
       <label htmlFor={title} className="block mb-2 text-sm font-medium text-black">
         {title}
       </label>
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-row gap-2">
         {options.map((option, index) => (
           <div key={index} className="flex items-center">
             <input

@@ -4,6 +4,7 @@ import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import PasswordInput from "@/components/ui/inputFields/PasswordInput";
+import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { CiLink } from "react-icons/ci";
@@ -15,7 +16,12 @@ function ProfessionalIds() {
         <HeadingLine title={"Professional Information"} />
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-end">
-          <TextInput title={"NPI 1"} width={"w-[1/12]"} />
+          <Dropdown
+            title={"Do you have an individual NPI #"}
+            options={["Yes", "No"]}
+            width="w-1/5"
+          />
+          <TextInput title={"NPI 1 (if applicable)"} width={"w-[1/12]"} required={false} />
           <TextInput
             title={"NPI 2 (if applicable)"}
             width={"w-[1/12]"}

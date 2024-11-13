@@ -2,18 +2,17 @@
 
 import HeadingLine from "@/components/ui/HeadingLine";
 import HeadingLine2 from "@/components/ui/HeadingLine2";
-import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { useState } from "react";
+import taxonomyCodes from "@/data/taxonomyCodes";
 
 function PracticeLocations() {
   const [readonly, setReadOnly] = useState(false);
-  const [providerTitle, setProviderTitle] = useState("");
-
+``
   const handleReadonly = () => {
     setReadOnly(!readonly);
   };
@@ -22,49 +21,15 @@ function PracticeLocations() {
     <>
       <div className="w-full flex flex-col justify-center items-center gap-4">
         {/* Personal Information */}
-        <HeadingLine title={"Practice Profile"} />
+        <HeadingLine title={"Practice Location"} />
 
-        <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <Dropdown
-            title={"PRACTICE TYPE"}
-            options={[
-              "Medical",
-              "Dental",
-              "Behavioural Health",
-              "Vision",
-              "Multi Speciality",
-            ]}
-          />
-          <Dropdown
-            title={"Type of Service Provided"}
-            options={[
-              "Solo Primary Care",
-              "Solo Speciality Care",
-              "Group Primary Care",
-              "Group Speciality Care",
-              "Group of Multi-Speciality",
-            ]}
-          />
-
-          <Dropdown
-            title={"Credentialing Type"}
-            options={[
-              "Initial Credentialing",
-              "Demographic Updates",
-              "Re Credentialing",
-              "Medical Licensure",
-              "Individual Practitioner",
-              "Group Practice Facility",
-              "Member as a Group",
-              "Location Add",
-            ]}
-          />
-        </div>
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
-          <TextInput title={"Legal Business Name "} width={"w-[49%]"} />
-          <TextInput title={"Doing Business Name "} width={"w-[49%]"} />
-          <TextInput title={"NPI 2"} />
-          <TextInput title={"Tax ID"} />
+          <TextInput title={"Legal Business Name "} width={"w-[49%]"} readonly={true}/>
+          <TextInput title={"Doing Business Name "} width={"w-[49%]"} readonly={true}/>
+          <TextInput title={"NPI 2 (if applicable"} required={false} />
+          <TextInput title={"Tax ID (if applicable)"} required={false} />
+          <Dropdown title={"Taxonomy Code (if applicable)"} options={taxonomyCodes} required={false} width="w-1/4"/> 
+          <Dropdown title={"Taxonomy Code 2 (if applicable)"} options={taxonomyCodes} required={false} width="w-1/4"/> 
 
           <div className="w-full flex flex-wrap justify-start gap-4 items-start">
             <TextInput title={"Service Location Address 1"} width="w-[35%]" />
@@ -80,10 +45,10 @@ function PracticeLocations() {
               width="w-[8%]"
             />
             <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-            <TextInput title={"Practice Ph."} />
-            <TextInput title={"Practice Appointment Ph."} />
-            <TextInput title={"Practice Fax"} />
-            <TextInput title={"Practice Email"} width={"w-[27.5%]"} />
+            <TextInput title={"Location Ph."} />
+            <TextInput title={"Location Appointment Ph."} />
+            <TextInput title={"Location Fax"} />
+            <TextInput title={"Location Email"} width={"w-[27.5%]"} />
           </div>
 
           <HeadingLine2 title={"Mailing Address"} />
@@ -108,9 +73,9 @@ function PracticeLocations() {
             />
 
             <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-            <TextInput title={"Practice Ph."} />
-            <TextInput title={"Practice Fax"} />
-            <TextInput title={"Practice Email"} width={"w-[27.5%]"} />
+            <TextInput title={"Location Ph."} />
+            <TextInput title={"Location Fax"} />
+            <TextInput title={"Location Email"} width={"w-[27.5%]"} />
           </div>
 
           <HeadingLine2 title={"Correspondance Address"} />
@@ -135,18 +100,14 @@ function PracticeLocations() {
             />
 
             <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-            <TextInput title={"Practice Ph."} />
-            <TextInput title={"Practice Fax"} />
-            <TextInput title={"Practice Email"} width={"w-[27.5%]"} />
+            <TextInput title={"Location Ph."} />
+            <TextInput title={"Location Fax"} />
+            <TextInput title={"Location Email"} width={"w-[27.5%]"} />
           </div>
 
           <div className="w-full flex flex-wrap justify-start items-center gap-5">
-            <TextInput title={"PTAN/Medicare number"} />
-            <TextInput title={"PTAN/Medicaid number"} />
-            <DateInput title={"Practice Start Date"}/>
-            
-           
-            
+            <TextInput title={"Location PTAN/Medicare number"} />
+            <TextInput title={"Medicaid number"} />            
           </div>
 
           
