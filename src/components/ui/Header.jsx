@@ -25,10 +25,10 @@ const Header = () => {
                             <span>(302) 244-0434</span>
                         </div>
 
-                        <div className='flex flex-row gap-4 items-center'>
+                        <Link href={'/adminDashboard'} className='flex flex-row gap-4 items-center'>
                             <PiSignIn />
                             <span>Sign in</span>
-                        </div>
+                        </Link>
 
                         <div className='flex flex-row gap-4 items-center'>
                             <FaRegUserCircle />

@@ -3,7 +3,7 @@
 import { placeholder } from '@/utils/placeholders';
 import { useState } from 'react';
 
-const BaseInput = ({ title, required = true, readonly, type, formatInput, width = "w-1/5" }) => {
+const BaseInput = ({ title, required = true, readonly, type, formatInput, width = "w-1/5", labelColor ="text-black"}) => {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (e) => {
@@ -14,7 +14,7 @@ const BaseInput = ({ title, required = true, readonly, type, formatInput, width 
 
     return (
         <div className={width}>
-            <label className="block mb-2 text-sm font-medium text-black">
+            <label className={`block mb-2 text-sm font-medium ${labelColor}`}>
                 {title} {required ? <span className="text-red-500">*</span> : null}
             </label>
             <input
