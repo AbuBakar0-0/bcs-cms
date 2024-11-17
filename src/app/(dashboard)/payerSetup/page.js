@@ -24,13 +24,7 @@ export default function PairSetup() {
       <div className="w-full flex flex-col justify-center items-center gap-4">
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Payers Setup</p>
-          <button
-            onClick={handleApplication}
-            className="w-40 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleApplication}/>
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -91,9 +85,7 @@ export default function PairSetup() {
                   <TextInput title={"Application Notes"} width={"w-full"} />
                 </div>
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
             </div>
           ) : (
             <></>

@@ -38,13 +38,7 @@ function HospitalAffiliations() {
         {/* Admitting Privilages */}
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Admitting Privilages</p>
-          <button
-            onClick={handleAffiliation}
-            className="w-36 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleAffiliation}/>
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -68,9 +62,7 @@ function HospitalAffiliations() {
 
                 <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
             </div>
           ) : (
             <></>
@@ -92,13 +84,7 @@ function HospitalAffiliations() {
         {/* Admitting Arrangements */}
         <div className="w-full flex flex-row justify-between items-center mt-10">
           <p className="w-full text-lg">Admitting Arrangements</p>
-          <button
-            onClick={handleshowArrangements}
-            className="w-36 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleshowArrangements}/>          
         </div>
 
         <div className="w-full h-[2px] bg-primary mt-10"></div>
@@ -124,9 +110,7 @@ function HospitalAffiliations() {
 
                 <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
             </div>
           ) : (
             <></>

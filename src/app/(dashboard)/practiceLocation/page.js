@@ -33,14 +33,7 @@ function PracticeLocations() {
         {/* Personal Information */}
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Practice Location</p>
-
-          <button
-            onClick={handleLocation}
-            className="w-28 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleLocation}/>
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -180,9 +173,8 @@ function PracticeLocations() {
                 <TextInput title={"Work Ph."} />
                 <TextInput title={"Cell Ph."} />
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
+
             </div>
           ) : (
             <></>

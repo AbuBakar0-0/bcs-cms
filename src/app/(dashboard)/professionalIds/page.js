@@ -44,12 +44,7 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
         </div>
 
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
@@ -61,12 +56,7 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
         </div>
 
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
@@ -78,12 +68,9 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
+
+         
         </div>
 
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
@@ -95,12 +82,9 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
+
+         
         </div>
 
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
@@ -112,12 +96,8 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
+
         </div>
 
         <div className="w-full flex flex-wrap justify-start items-end gap-4">
@@ -129,12 +109,8 @@ function ProfessionalIds() {
           />
           <DateInput title={"Effective Date"} width={"w-1/5"} />
           <DateInput title={"Expiry Date"} width={"w-1/5"} />
-          <button
-            type="button"
-            className="bg-blue-500 text-white rounded px-4 py-2 mb-[0.125rem]"
-          >
-            + ADD
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
+
         </div>
 
         <HeadingLine title={"Medical Malpractice Information"} />

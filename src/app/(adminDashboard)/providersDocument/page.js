@@ -4,6 +4,7 @@ import React from "react";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiCircleInfo } from "react-icons/ci";
+import Button from "@/components/ui/Button";
 
 export default function ProvidersDocument() {
   return (
@@ -56,10 +57,8 @@ export default function ProvidersDocument() {
         </div>
 
         <div className="w-2/3 flex flex-row justify-end items-center gap-4">
-          <button className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+        <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />}/>
+          
           <Link href={'/documentDetails'} className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
             <CiCircleInfo className="size-6" />
             <p>Details</p>

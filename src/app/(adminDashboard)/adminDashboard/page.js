@@ -1,3 +1,4 @@
+import Button from "@/components/ui/Button";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import Link from "next/link";
@@ -16,10 +17,7 @@ export default function page() {
           width="w-1/6"
           required={false}
         />
-        <button className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4">
-          <IoAddCircleOutline className="size-6" />
-          <p>Add Provider</p>
-        </button>
+        <Button title={"Add Provider"} icon={<IoAddCircleOutline className="size-6" />} />
       </div>
       <div className="w-full flex flex-row items-center justify-between gap-4 bg-secondary p-4 rounded-lg my-5">
         <TextInput

@@ -164,9 +164,8 @@ function ProvidersInformation() {
           <TextInput title={"Email"} type="email" />
         </div>
 
-        <button className="px-4 py-3 rounded-lg bg-secondary text-white">
-          Save & Next
-        </button>
+        <Button title={"Save & Next"}/>
+
       </div>
     </>
   );

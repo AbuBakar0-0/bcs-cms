@@ -1,4 +1,5 @@
 "use client";
+import Button from "@/components/ui/Button";
 import BaseInput from "@/components/ui/inputFields/BaseInput";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
@@ -41,21 +42,19 @@ function Document() {
     "Pharmacy Certificate (if applicable)",
     "BLC Certificate",
     "Accreditation (if applicable)",
-    "Background Screening (if applicable)"
-];
+    "Background Screening (if applicable)",
+  ];
 
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center gap-4">
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Document</p>
-          <button
+          <Button
+            title={"Add"}
+            icon={<IoAddCircleOutline className="size-6" />}
             onClick={handleReference}
-            className="w-28 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add</p>
-          </button>
+          />
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -87,15 +86,18 @@ function Document() {
                     "Requested Provider",
                   ]}
                 />
-                <DateInput title={"Issue Date (if applicable)"} required={false}/>
-                <DateInput title={"Expiration Date (if applicable)"} required={false}/>
+                <DateInput
+                  title={"Issue Date (if applicable)"}
+                  required={false}
+                />
+                <DateInput
+                  title={"Expiration Date (if applicable)"}
+                  required={false}
+                />
                 <BaseInput title={"Upload Document"} type={"file"} />
-
               </div>
 
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"} />
             </div>
           ) : (
             <></>

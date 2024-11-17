@@ -41,21 +41,8 @@ function Specialities() {
           </div>
 
           <div className="w-1/2 flex flex-row justify-end items-center gap-4">
-            <button
-              onClick={handlePrimarySpeciality}
-              className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-            >
-              <IoAddCircleOutline className="size-6" />
-              <p>Add Primary Speciality</p>
-            </button>
-
-            <button
-              onClick={handleSecondarySpeciality}
-              className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-            >
-              <IoAddCircleOutline className="size-6" />
-              <p>Add Secondary Speciality</p>
-            </button>
+          <Button title={"Add Primary Speciality"} icon={<IoAddCircleOutline className="size-6" />} onClick={handlePrimarySpeciality}/>
+          <Button title={"Add Secondary Speciality"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleSecondarySpeciality}/>
           </div>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -115,9 +102,7 @@ function Specialities() {
                   <DateInput title={"Expiry Date"} />
                 </div>
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
             </div>
           ) : (
             <></>

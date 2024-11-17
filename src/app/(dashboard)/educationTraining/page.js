@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
@@ -65,13 +66,7 @@ function EducationAndTraining() {
         {/* Education */}
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Education</p>
-          <button
-            onClick={handleEducation}
-            className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add Education</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleEducation}/>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
           {education ? (
@@ -96,9 +91,7 @@ function EducationAndTraining() {
                 <DateInput title={"Start Date"} />
                 <DateInput title={"End Date"} />
               </div>
-              <button className="px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"}/>
             </div>
           ) : (
             <></>
@@ -121,13 +114,7 @@ function EducationAndTraining() {
         {/* Professional Experience */}
         <div className="w-full flex flex-row justify-between items-center mt-20">
           <p className="w-full text-lg">Professional Training</p>
-          <button
-            onClick={handleTraining}
-            className="w-52 bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <IoAddCircleOutline className="size-6" />
-            <p>Add Training</p>
-          </button>
+          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleTraining}/>
         </div>
         <div className="w-full flex flex-col justify-center items-center gap-4">
           {training ? (
@@ -156,9 +143,7 @@ function EducationAndTraining() {
                   options={["Yes", "No"]}
                 />
               </div>
-              <button className="w-40 px-4 py-3 bg-secondary text-white rounded-lg">
-                Add
-              </button>
+              <Button title={"Add"} />
             </div>
           ) : (
             <></>
