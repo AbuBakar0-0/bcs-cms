@@ -9,6 +9,7 @@ import Hero from "@/components/credentialing/Hero";
 import ImportantFeatures from "@/components/home/ImportantFeatures";
 import Clients from "@/components/home/Clients";
 import Footer from "@/components/ui/Footer";
+import TextInput from "@/components/ui/inputFields/TextInput";
 
 function Credentialing() {
   const initialFormData = {

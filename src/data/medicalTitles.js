@@ -49,5 +49,6 @@ export const medicalTitles = [
     "RT",
     "HIM",
     "PH",
-    "CRC"
+    "CRC",
+    "Other"
 ];

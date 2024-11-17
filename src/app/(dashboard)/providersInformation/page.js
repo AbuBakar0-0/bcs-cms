@@ -12,17 +12,12 @@ import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import HeadingLine2 from "@/components/ui/HeadingLine2";
+import Button from "@/components/ui/Button";
 
 function ProvidersInformation() {
   const [readonly, setReadOnly] = useState(false);
-  const [providerTitle, setProviderTitle] = useState("");
-
   const handleReadonly = () => {
     setReadOnly(!readonly);
-  };
-
-  const handleProviderTitleChange = (event) => {
-    setProviderTitle(event.target.value);
   };
 
   return (
@@ -32,7 +27,7 @@ function ProvidersInformation() {
         <HeadingLine title={"Personal Information"} />
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-          <TextInput title={"First Name"} width={"w-1/3"} required={false}/>
+          <TextInput title={"First Name"} width={"w-1/3"} required={false} />
           <TextInput
             title={"Middle Initial"}
             required={false}
@@ -45,10 +40,6 @@ function ProvidersInformation() {
             options={medicalTitles}
             width="w-[16.5%]"
           />
-
-          {/* Conditionally rendered text field when "Other" is selected
-          {providerTitle === "Other" && <TextInput title={"Please Specify"} />} */}
-
         </div>
         <div className="w-full flex flex-wrap justify-start items-start gap-4">
           <SSNInput width={"w-[15%]"} />
@@ -57,8 +48,8 @@ function ProvidersInformation() {
             options={["Male", "Female", "Other"]}
             width="w-1/12"
           />
-          <DateInput title={"DOB"} width="w-[17%]"/>
-          <TextInput title={"Birth City"} width={"w-1/5"} required={false}/>
+          <DateInput title={"DOB"} width="w-[17%]" />
+          <TextInput title={"Birth City"} width={"w-1/5"} required={false} />
           <Dropdown
             title={"Birth State"}
             options={stateAbbreviations}
@@ -74,8 +65,8 @@ function ProvidersInformation() {
             options={stateAbbreviations}
             width="w-[16.5%]"
           />
-          <DateInput title={"Issued Date"} width="w-1/5"/>
-          <DateInput title={"Expiry Date"} width="w-1/5"/>
+          <DateInput title={"Issued Date"} width="w-1/5" />
+          <DateInput title={"Expiry Date"} width="w-1/5" />
         </div>
 
         {/* Home Address */}
@@ -122,8 +113,8 @@ function ProvidersInformation() {
         <HeadingLine2 title={"Mailing Address"} />
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-center text-xs">
-          <input type="checkbox" onClick={handleReadonly} /> Same as Service Location
-          Address
+          <input type="checkbox" onClick={handleReadonly} /> Same as Service
+          Location Address
         </div>
 
         <div className="w-full flex flex-wrap justify-start gap-4 items-start">
@@ -142,7 +133,6 @@ function ProvidersInformation() {
 
           <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
         </div>
-
 
         {/* Contact Information */}
         <HeadingLine title={"Contact Information"} />
@@ -164,8 +154,7 @@ function ProvidersInformation() {
           <TextInput title={"Email"} type="email" />
         </div>
 
-        <Button title={"Save & Next"}/>
-
+        <Button title={"Save & Next"} />
       </div>
     </>
   );

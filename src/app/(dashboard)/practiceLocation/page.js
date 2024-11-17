@@ -13,6 +13,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import NavBottom from "@/components/ui/NavBottom";
+import Button from "@/components/ui/Button";
 
 function PracticeLocations() {
   const [readonly, setReadOnly] = useState(false);
