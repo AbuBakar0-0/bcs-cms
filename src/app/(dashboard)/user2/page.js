@@ -1,6 +1,8 @@
+import Button from "@/components/ui/Button";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import React from "react";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 export default function User2() {
   return (
