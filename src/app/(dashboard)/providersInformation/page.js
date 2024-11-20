@@ -330,7 +330,7 @@ function ProvidersInformation() {
 						value={formData.emergencyContactRelation}
 						onChange={handleChange}
 					/>
-					<TextInput
+					<PhoneInput
 						title={"Cell Ph."}
 						name={"emergencyContactPhone"}
 						value={formData.emergencyContactPhone}
