@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 
 const sidenavLinks = [
   { title: "Admin Dashboard", link: "/adminDashboard" },
-  { title: "Providers Dashboard", link: "" },
+  { title: "Providers Dashboard", link: "/providersDashboard" },
   { title: "Organization Management", link: "" },
   { title: "Practice Location", link: "" },
   { title: "Document Center", link: "" },
