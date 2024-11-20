@@ -25,8 +25,8 @@ export default function AdminDashboardLayout({ children }) {
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
-              src="./assets/BCS Logo billingcaresolutions.com.svg"
-              alt=""
+              src="/assets/BCS Logo billingcaresolutions.com.svg"
+              alt="HELLO"
               className="bg-white p-5 h-[7.2rem]"
             />
           </Link>

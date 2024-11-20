@@ -6,7 +6,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { CiUser } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
+import { FaRegCircleUser } from "react-icons/fa6";
+import { LiaUserSlashSolid } from "react-icons/lia";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -33,6 +35,43 @@ export default function ProvidersDashboard() {
 
   return (
     <>
+      <div className="w-full flex flex-row justify-between items-center gap-4 py-4">
+        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+          <div className="w-full flex flex-row justify-between items-center gap-4">
+            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
+              <FaRegCircleUser className="size-16 text-gray-500" />
+              <p>Active Profiles</p>
+            </div>
+            <div>
+              <span className="text-6xl text-green-400">16</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+          <div className="w-full flex flex-row justify-between items-center gap-4">
+            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
+              <FiUserX className="size-16 text-gray-500" />
+              <p>Not Enabled</p>
+            </div>
+            <div>
+              <span className="text-6xl text-red-400">162</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+          <div className="w-full flex flex-row justify-between items-center gap-4">
+            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
+              <LiaUserSlashSolid className="size-16 text-gray-500" />
+              <p>Terminated Profiles</p>
+            </div>
+            <div>
+              <span className="text-6xl text-green-400">16</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="w-full flex flex-row justify-between items-center">
         <Dropdown
           title={"Filter"}
@@ -79,7 +118,7 @@ export default function ProvidersDashboard() {
             className="w-full flex flex-row items-center justify-between gap-4 p-4 border-b"
             key={provider.uuid}
           >
-            <Link href={"/providerDetail"} className="w-1/3">
+            <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3">
               <div className="w-full flex flex-row items-center gap-4">
                 <CiUser className="border-2 border-secondary rounded-full size-20 p-2" />
                 <div>
