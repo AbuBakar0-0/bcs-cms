@@ -1,13 +1,36 @@
+"use client";
 import Button from "@/components/ui/Button";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CiUser } from "react-icons/ci";
-import { CiCircleQuestion } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { FiEdit2, FiTrash2 } from "react-icons/fi";
 
-export default function page() {
+export default function Page() {
+  const [providers, setProviders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch providers function
+  const fetchProviders = async () => {
+    try {
+      const response = await fetch("/api/adminDashboard/get-providers");
+      if (!response.ok) throw new Error("Failed to fetch providers");
+
+      const data = await response.json();
+      setProviders(data.providers);
+    } catch (error) {
+      console.error("Error fetching providers:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProviders();
+  }, []);
+
   return (
     <>
       <div className="w-full flex flex-row justify-between items-center">
@@ -17,7 +40,12 @@ export default function page() {
           width="w-1/6"
           required={false}
         />
-        <Button title={"Add Provider"} icon={<IoAddCircleOutline className="size-6" />} />
+        <Link href={"/providersInformation"}>
+          <Button
+            title={"Add Provider"}
+            icon={<IoAddCircleOutline className="size-6" />}
+          />
+        </Link>
       </div>
       <div className="w-full flex flex-row items-center justify-between gap-4 bg-secondary p-4 rounded-lg my-5">
         <TextInput
@@ -39,51 +67,59 @@ export default function page() {
           labelColor={"text-white"}
         />
         <span className="w-1/5 flex flex-row justify-center items-center gap-4 text-white">
-          Actions <CiCircleQuestion className="size-6" />
+          Actions
         </span>
       </div>
 
-      <div className="w-full flex flex-row items-center justify-between gap-4 p-4 rounded-lg shadow-md rounded-b-md overflow-x-auto">
-        <Link href={"/providerDetail"} className="w-full">
-          <div className="w-full flex flex-row justify-between items-center gap-4 p-4 border-b">
-            <div className="w-1/3 flex flex-row items-center gap-4">
-              <CiUser className="border-2 border-secondary rounded-full size-20 p-2" />
-              <div>
-                <p className="font-bold text-lg">Anderson, Jay C - MD</p>
-                <p className="text-gray-500">Internal Medicine</p>
-                <p className="text-xs text-gray-400">NPI 1694933927</p>
+      {loading ? (
+        <p className="text-center text-gray-500">Loading providers...</p>
+      ) : providers.length > 0 ? (
+        providers.map((provider) => (
+          <div className="w-full flex flex-row items-center justify-between gap-4 p-4 border-b" key={provider.uuid}>
+            <Link href={"/providersInformation"} className="w-1/3">
+              <div className="w-full flex flex-row items-center gap-4">
+                <CiUser className="border-2 border-secondary rounded-full size-20 p-2" />
+                <div>
+                  <p className="font-bold text-lg">
+                    {provider.last_name}, {provider.first_name}{" "}
+                    {provider.middle_initial} - {provider.provider_title}
+                  </p>
+                  <p className="text-gray-500">
+                    {provider.speciality || "N/A"}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    NPI {provider.ssn || "Unknown"}
+                  </p>
+                </div>
               </div>
-            </div>
-
+            </Link>
             <div className="w-1/5 flex justify-center items-center">
-              Internal Medicine
+              {provider.license_id || "Unknown"}
             </div>
 
             <div className="w-1/6 flex justify-center items-center">
-              No alerts
+              {provider.compliance || "No alerts"}
             </div>
 
             <div className="w-1/5 flex flex-row justify-center items-center gap-2">
-              <button className="text-blue-500 hover:text-blue-700">✉️</button>
-              <button className="text-blue-500 hover:text-blue-700">👤</button>
-              <button className="text-blue-500 hover:text-blue-700">✏️</button>
-              <button className="text-yellow-500 hover:text-yellow-700">
-                ⚠️
+              <button className="text-blue-500 hover:text-blue-700">
+                <FiEdit2 />
               </button>
-              <button className="text-green-500 hover:text-green-700">
-                ✔️
+              <button className="text-red-500 hover:text-red-700">
+                <FiTrash2 />
               </button>
-              <button className="text-red-500 hover:text-red-700">🔄</button>
             </div>
           </div>
-        </Link>
-      </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-500">No providers found.</p>
+      )}
 
       <div className="flex justify-between items-center p-4 border-t bg-white">
         <button className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
           ❮
         </button>
-        <span>1 - 89 of 89 items</span>
+        <span>{providers.length} items</span>
         <button className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
           ❯
         </button>
