@@ -8,18 +8,18 @@ import Footer from "@/components/ui/Footer";
 import Header from "@/components/ui/Header";
 
 export default function HomeScreen() {
-  return (
-    <>
-      <Header />
-      <Hero />
-      <div className="container mx-auto flex flex-col justify-center items-center gap-5 p-10">
-        <Introducing />
-        <ImportantFeatures />
-        <WhyCMS />
-        <Software />
-        <Clients />
-      </div>
-      <Footer />
-    </>
-  );
+	return (
+		<>
+			<Header />
+			<Hero />
+			<div className="container mx-auto flex flex-col justify-center items-center gap-5 p-10">
+				<Introducing />
+				<ImportantFeatures />
+				<WhyCMS />
+				<Software />
+				<Clients />
+			</div>
+			<Footer />
+		</>
+	);
 }

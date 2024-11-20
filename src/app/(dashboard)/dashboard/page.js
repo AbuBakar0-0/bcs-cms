@@ -1,7 +1,5 @@
-import ProvidersInformation from '../providersInformation/page'
+import ProvidersInformation from "../providersInformation/page";
 
 export default function Dashboard() {
-  return (
-    <ProvidersInformation/>
-  )
+	return <ProvidersInformation />;
 }
