@@ -55,19 +55,32 @@ export async function POST(request) {
 
 		if (mailingAddressError) throw mailingAddressError;
 
-		// Inserting Emergency Contact
-		const { data: emergencyContact, error: contactError } = await supabase
+		const { data: contact, error: contactError } = await supabase
 			.from("contacts")
 			.insert({
-				name: formData.emergencyContactName,
-				relation: formData.emergencyContactRelation,
-				cell_phone: formData.emergencyContactPhone,
-				email: formData.emergencyContactEmail,
+				home_phone: formData.homePhone,
+				cell_phone: formData.cellPhone,
+				email: formData.personalEmail,
+				work_email: formData.workEmail,
 			})
 			.select("uuid")
 			.single();
-
 		if (contactError) throw contactError;
+
+		// Inserting Emergency Contact
+		const { data: emergencyContact, error: emergencyContactError } =
+			await supabase
+				.from("contacts")
+				.insert({
+					name: formData.emergencyContactName,
+					relation: formData.emergencyContactRelation,
+					cell_phone: formData.emergencyContactPhone,
+					email: formData.emergencyContactEmail,
+				})
+				.select("uuid")
+				.single();
+
+		if (emergencyContactError) throw emergencyContactError;
 
 		// Inserting Provider Information
 		const { data: provider, error: providerError } = await supabase
@@ -88,12 +101,13 @@ export async function POST(request) {
 				service_address_id: serviceAddress?.uuid,
 				mailing_address_id: mailingAddress?.uuid,
 				emergency_contact_id: emergencyContact?.uuid,
+				contact_id: contact?.uuid,
 			})
 			.select("uuid")
 			.single();
 
 		if (providerError) throw providerError;
-
+		console.log(provider);
 		return new Response(
 			JSON.stringify({
 				message: "Provider information saved successfully",
