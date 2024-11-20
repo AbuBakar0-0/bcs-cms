@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { requiredFields } from "./utilis";
 import toast from "react-hot-toast";
+import { medicalTitles } from "@/data/medicalTitles";
+import { stateAbbreviations } from "@/data/stateAbbreviations";
 
 export const useProviderForm = () => {
 	const [loading, setLoading] = useState(false);
@@ -9,15 +11,15 @@ export const useProviderForm = () => {
 		firstName: "",
 		middleInitial: "",
 		lastName: "",
-		providerTitle: "",
+		providerTitle: medicalTitles[0] || "0",
 		ssn: "",
-		gender: "",
+		gender: "male",
 		dob: "",
 		birthCity: "",
-		birthState: "",
+		birthState: stateAbbreviations[0] || "",
 		birthCountry: "",
 		licenseOrId: "",
-		licenseStateIssued: "",
+		licenseStateIssued: stateAbbreviations[0] || "",
 		licenseIssuedDate: "",
 		licenseExpiryDate: "",
 
@@ -25,21 +27,21 @@ export const useProviderForm = () => {
 		homeAddress1: "",
 		homeAddress2: "",
 		homeCity: "",
-		homeState: "",
+		homeState: stateAbbreviations[0],
 		homeZipCode: "",
 
 		// Service Location Address
 		serviceAddress1: "",
 		serviceAddress2: "",
 		serviceCity: "",
-		serviceState: "",
+		serviceState: stateAbbreviations[0],
 		serviceZipCode: "",
 
 		// Mailing Address
 		mailingAddress1: "",
 		mailingAddress2: "",
 		mailingCity: "",
-		mailingState: "",
+		mailingState: stateAbbreviations[0],
 		mailingZipCode: "",
 
 		// Contact Information

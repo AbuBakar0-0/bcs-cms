@@ -5,6 +5,8 @@ export const requiredFields = [
 	"gender",
 	"dob",
 	"licenseOrId",
+	"licenseIssuedDate",
+	"licenseExpiryDate",
 	"homeAddress1",
 	"homeCity",
 	"homeState",
