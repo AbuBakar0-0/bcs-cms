@@ -28,11 +28,13 @@ export const formatZip = (value) => {
 };
 
 export const formatPhoneNumber = (value) => {
-	value = value.replace(/\D/g, "");
-	if (value.length > 3 && value.length <= 6) {
-		return `(${value.slice(0, 3)}) ${value.slice(3)}`;
-	} else if (value.length > 6) {
-		return `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6, 10)}`;
-	}
-	return value;
+    value = value.replace(/\D/g, ""); // Remove non-digits
+    if (value.length > 10) value = value.slice(0, 10); // Limit to 10 digits
+
+    if (value.length > 3 && value.length <= 6) {
+        return `(${value.slice(0, 3)}) ${value.slice(3)}`;
+    } else if (value.length > 6) {
+        return `(${value.slice(0, 3)}) ${value.slice(3, 6)}-${value.slice(6)}`;
+    }
+    return value;
 };

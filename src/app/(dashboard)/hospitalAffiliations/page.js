@@ -7,15 +7,22 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
+import SubmitButton from "@/components/ui/SubmitButton";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import { useState } from "react";
+import submitForm from "@/hooks/postData";
+import { useEffect, useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
+import Spinner from "@/components/ui/spinner"; // Assuming this is the spinner component
 
 function HospitalAffiliations() {
+  const [loading, setLoading] = useState(true); // Start with loading state as true
+  const [hospitalData, setHospitalData] = useState([]);
   const [affiliation, showAffiliation] = useState(false);
   const [arrangements, showArrangements] = useState(false);
+  
+  const formRef = useRef();
 
   const handleAffiliation = () => {
     showAffiliation(!affiliation);
@@ -25,112 +32,144 @@ function HospitalAffiliations() {
     showArrangements(!arrangements);
   };
 
+  const fetchData = async () => {
+    setLoading(true); // Set loading to true when data is being fetched
+    try {
+      const response = await fetch("/api/hospital-affiliation"); // Assuming your API endpoint
+      const data = await response.json();
+      setHospitalData(data.result); // Assuming 'result' contains the fetched hospital data
+    } catch (error) {
+      console.error("Error fetching hospital data:", error);
+    } finally {
+      setLoading(false); // Set loading to false once data is fetched
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(formRef.current);
+    const data = Object.fromEntries(formData.entries());
+    const apiUrl = "/api/hospital-affiliation";
+
+    submitForm(data, formRef, fetchData, apiUrl);
+  };
+
+  const getHospitalsByType = (type) => {
+    return hospitalData.filter(hospital => hospital.type === type);
+  };
+
+  if (loading) {
+    return <Spinner />; // Show the spinner while loading
+  }
+
   return (
-    <>
-      <div className="w-full flex flex-col justify-center items-center gap-4">
-        {/* Hospital Affiliations */}
-        <HeadingLine title={"Hospital Affiliations"} />
-        <p className="w-full">
-          <span className="text-red-400">*</span>Required all fields are marked
-          with red asterik
-        </p>
+    <div className="w-full flex flex-col justify-center items-center gap-4">
+      {/* Hospital Affiliations */}
+      <HeadingLine title={"Hospital Affiliations"} />
+      <p className="w-full">
+        <span className="text-red-400">*</span> Required all fields are marked
+        with red asterisk
+      </p>
 
-        {/* Admitting Privilages */}
-        <div className="w-full flex flex-row justify-between items-center">
-          <p className="w-full text-lg">Admitting Privilages</p>
-          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleAffiliation}/>
-        </div>
-
-        <div className="w-full flex flex-col justify-center items-center gap-4">
-          {affiliation ? (
-            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
-              <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                <TextInput title={"Hospital Name"} width={"w-full"} />
-
-                <TextInput title={"Address 1"} width="w-[35%]" />
-                <TextInput
-                  title={"Address 2"}
-                  width={"w-[25%]"}
-                  required={false}
-                />
-                <TextInput title={"City"} width={"w-[10%]"} />
-                <Dropdown
-                  title={"State"}
-                  options={stateAbbreviations}
-                  width="w-[8%]"
-                />
-
-                <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-              </div>
-              <Button title={"Add"}/>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
-          <p>CHN Medical Support Systems</p>
-          <div className="flex flex-col justify-center items-start">
-            <p>Houston</p>
-            <p>USA</p>
-          </div>
-          <div className="flex flex-row justify-center items-center gap-4">
-            <CiEdit className="size-6 text-primary" />
-            <MdDeleteOutline className="size-6 text-red-400" />
-          </div>
-        </div>
-        <div className="w-full h-[2px] bg-primary mt-10"></div>
-
-        {/* Admitting Arrangements */}
-        <div className="w-full flex flex-row justify-between items-center mt-10">
-          <p className="w-full text-lg">Admitting Arrangements</p>
-          <Button title={"Add"} icon={<IoAddCircleOutline className="size-6" />} onClick={handleshowArrangements}/>          
-        </div>
-
-        <div className="w-full h-[2px] bg-primary mt-10"></div>
-
-        <div className="w-full flex flex-col justify-center items-center gap-4">
-          {arrangements ? (
-            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
-              <div className="w-full flex flex-wrap justify-start gap-4 items-start">
-                <TextInput title={"Hospital Name"} width={"w-full"} />
-
-                <TextInput title={"Address 1"} width="w-[35%]" />
-                <TextInput
-                  title={"Address 2"}
-                  width={"w-[25%]"}
-                  required={false}
-                />
-                <TextInput title={"City"} width={"w-[10%]"} />
-                <Dropdown
-                  title={"State"}
-                  options={stateAbbreviations}
-                  width="w-[8%]"
-                />
-
-                <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} />
-              </div>
-              <Button title={"Add"}/>
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
-        <div className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
-          <p>CHN Medical Support Systems</p>
-          <div className="flex flex-col justify-center items-start">
-            <p>Houston</p>
-            <p>USA</p>
-          </div>
-          <div className="flex flex-row justify-center items-center gap-4">
-            <CiEdit className="size-6 text-primary" />
-            <MdDeleteOutline className="size-6 text-red-400" />
-          </div>
-        </div>
-
-        <NavBottom />
+      {/* Admitting Privilages */}
+      <div className="w-full flex flex-row justify-between items-center">
+        <p className="w-full text-lg">Admitting Privilages</p>
+        <Button
+          title={"Add"}
+          icon={<IoAddCircleOutline className="size-6" />}
+          onClick={handleAffiliation}
+        />
       </div>
-    </>
+
+      {/* Display Admitting Privilages Form */}
+      <div className="w-full flex flex-col justify-center items-center gap-4">
+        {affiliation ? (
+          <form
+            onSubmit={handleSubmit}
+            ref={formRef}
+            className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10"
+          >
+            <div className="w-full flex flex-wrap justify-start gap-4 items-start">
+              <TextInput title={"Hospital Name"} width={"w-full"} name={"hospital_name"} />
+              <TextInput title={"Address 1"} width="w-[35%]" name={"address_line_1"} />
+              <TextInput title={"Address 2"} width={"w-[25%]"} required={false} name={"address_line_2"} />
+              <TextInput title={"City"} width={"w-[10%]"} name={"city"} />
+              <Dropdown title={"State"} options={stateAbbreviations} width="w-[8%]" name={"state"} />
+              <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} name={"zip_code"} />
+              <input type="hidden" value="Admitting Privilages" name={"type"} />
+            </div>
+            <SubmitButton />
+          </form>
+        ) : (
+          getHospitalsByType("Admitting Privilages").map(hospital => (
+            <div key={hospital.uuid} className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+              <p>{hospital.hospital_name}</p>
+              <div className="flex flex-col justify-center items-start">
+                <p>{hospital.address.address_line_1}</p>
+                <p>{hospital.address.city}, {hospital.address.state} {hospital.address.zip}</p>
+              </div>
+              <div className="flex flex-row justify-center items-center gap-4">
+                <CiEdit className="size-6 text-primary" />
+                <MdDeleteOutline className="size-6 text-red-400" />
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+      
+      {/* Admitting Arrangements */}
+      <div className="w-full flex flex-row justify-between items-center mt-10">
+        <p className="w-full text-lg">Admitting Arrangements</p>
+        <Button
+          title={"Add"}
+          icon={<IoAddCircleOutline className="size-6" />}
+          onClick={handleshowArrangements}
+        />
+      </div>
+
+      {/* Display Admitting Arrangements Form */}
+      <div className="w-full flex flex-col justify-center items-center gap-4">
+        {arrangements ? (
+          <form
+            onSubmit={handleSubmit}
+            ref={formRef}
+            className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10"
+          >
+            <div className="w-full flex flex-wrap justify-start gap-4 items-start">
+              <TextInput title={"Hospital Name"} width={"w-full"} name={"hospital_name"} />
+              <TextInput title={"Address 1"} width="w-[35%]" name={"address_line_1"} />
+              <TextInput title={"Address 2"} width={"w-[25%]"} required={false} name={"address_line_2"} />
+              <TextInput title={"City"} width={"w-[10%]"} name={"city"} />
+              <Dropdown title={"State"} options={stateAbbreviations} width="w-[8%]" name={"state"} />
+              <ZipCodeInput title={"ZipCode"} width={"w-[8%]"} name={"zip_code"} />
+              <input type="hidden" value="Admitting Arrangements" name={"type"} />
+            </div>
+            <SubmitButton />
+          </form>
+        ) : (
+          getHospitalsByType("Admitting Arrangements").map(hospital => (
+            <div key={hospital.uuid} className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
+              <p>{hospital.hospital_name}</p>
+              <div className="flex flex-col justify-center items-start">
+                <p>{hospital.address.address_line_1}</p>
+                <p>{hospital.address.city}, {hospital.address.state} {hospital.address.zip}</p>
+              </div>
+              <div className="flex flex-row justify-center items-center gap-4">
+                <CiEdit className="size-6 text-primary" />
+                <MdDeleteOutline className="size-6 text-red-400" />
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      <NavBottom />
+    </div>
   );
 }
 

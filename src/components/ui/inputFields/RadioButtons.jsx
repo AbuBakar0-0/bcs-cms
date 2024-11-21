@@ -1,9 +1,9 @@
 import React from "react";
 
-const RadioButton = ({ title, options, required = true }) => {
+const RadioButton = ({ title, options, required = true,name,width="w-1/6" }) => {
     return (
-        <div className="w-1/6">
-            <label htmlFor={title} className="block mb-2 text-sm font-medium text-black">
+        <div className={width}>
+            <label htmlFor={title} className="gap-2 flex flex-row mb-2 text-sm font-medium text-black">
                 {title} {required ? <span className="text-red-500">*</span> : null}
             </label>
             <div className="w-full flex flex-row justify-start items-center gap-4">
@@ -12,9 +12,10 @@ const RadioButton = ({ title, options, required = true }) => {
                         <input
                             type="radio"
                             id={option}
-                            name={title}
+                            name={name}
                             value={option}
                             className="mr-2"
+                            required={required}
                         />
                         <label htmlFor={title} className="text-sm">
                             {option}
