@@ -88,6 +88,7 @@ export const useProviderForm = () => {
 	const handleSubmit = async () => {
 		const missingFields = requiredFields.filter((field) => !formData[field]);
 
+		console.log(formData);
 		if (missingFields.length > 0) {
 			alert(`Please fill in the required fields: ${missingFields.join(", ")}`);
 			toast.error(`Please fill in the required fields.`);

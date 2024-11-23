@@ -37,8 +37,8 @@ const DateInput = ({
 			type="date"
 			placeholder="MM/DD/YYYY"
 			required={required}
-			value={formattedValueForInput}
-			onChange={handleChange}
+			value={onChange && formattedValueForInput}
+			onChange={onChange && handleChange}
 			width={width}
 			name={name}
 		/>

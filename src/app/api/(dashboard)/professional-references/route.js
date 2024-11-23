@@ -2,115 +2,143 @@ import { supabase } from "@/lib/supabase";
 import insertAddress from "../util";
 
 export async function POST(request) {
-  try {
-    const formData = await request.json();
+	try {
+		const formData = await request.json();
 
-    const homeAddress = await insertAddress(formData, "Location");
+		// Insert Address using utility function
+		const homeAddress = await insertAddress(formData, "Location");
 
-    const { data: contact, error: contactError } = await supabase
-      .from("contacts")
-      .insert({
-        cell_phone: formData.cell_phone,
-        fax: formData.fax,
-        email: formData.email,
-      })
-      .select("uuid")
-      .single();
-    if (contactError) throw contactError;
+		// Insert Contact
+		const { data: contact, error: contactError } = await supabase
+			.from("contacts")
+			.insert({
+				cell_phone: formData.cell_phone,
+				fax: formData.fax,
+				email: formData.email,
+			})
+			.select("uuid")
+			.single();
 
-    // Inserting Provider Information
-    const { data: professionalReference, error: referenceError } =
-      await supabase
-        .from("professional_references")
-        .insert({
-          provider_type: formData.provider_type,
-          first_name: formData.first_name,
-          middle_initial: formData.middle_initial,
-          last_name: formData.last_name,
-          address_id: homeAddress?.uuid,
-          contact_id: contact?.uuid,
-        })
-        .select("uuid")
-        .single();
+		if (contactError) throw contactError;
 
-    if (referenceError) throw referenceError;
-    return new Response(
-      JSON.stringify({
-        message: "Data saved successfully",
-        employment_id: professionalReference?.uuid,
-      }),
-      { status: 201 }
-    );
-  } catch (error) {
-    console.error("Error saving Data:", error);
-    return new Response(
-      JSON.stringify({
-        message: "Error Saving Data",
-      }),
-      { status: 500 }
-    );
-  }
+		// Create Professional Reference
+		const { data: professionalReference, error: referenceError } =
+			await supabase
+				.from("professional_references")
+				.insert({
+					provider_type: formData.provider_type,
+					first_name: formData.first_name,
+					middle_initial: formData.middle_initial,
+					last_name: formData.last_name,
+					address_id: homeAddress?.uuid,
+					contact_id: contact?.uuid,
+				})
+				.select("uuid")
+				.single();
+
+		if (referenceError) throw referenceError;
+
+		return new Response(
+			JSON.stringify({
+				message: "Reference created successfully",
+				reference_id: professionalReference?.uuid,
+			}),
+			{ status: 201 }
+		);
+	} catch (error) {
+		console.error("Error creating reference:", error);
+		return new Response(
+			JSON.stringify({
+				message: "Error creating reference",
+				error: error.message,
+			}),
+			{ status: 500 }
+		);
+	}
 }
 
 export async function GET(request) {
-  try {
-    // Fetch all professional references with their address and contact data
-    const { data: professionalReferences, error: referenceError } =
-      await supabase
-        .from("professional_references")
-        .select("uuid, provider_type, first_name, middle_initial, last_name, address_id, contact_id");
+	try {
+		// Get professional references
+		const { data: professionalReferences, error: referenceError } =
+			await supabase
+				.from("professional_references")
+				.select(
+					"uuid, provider_type, first_name, middle_initial, last_name, address_id, contact_id"
+				);
 
-    if (referenceError) throw referenceError;
+		if (referenceError) throw referenceError;
 
-    // If there are no professional references
-    if (!professionalReferences || professionalReferences.length === 0) {
-      return new Response(
-        JSON.stringify({ message: "No professional references found" }),
-        { status: 404 }
-      );
-    }
+		if (!professionalReferences || professionalReferences.length === 0) {
+			return new Response(
+				JSON.stringify({
+					message: "Success",
+					data: [],
+				}),
+				{ status: 200 }
+			);
+		}
 
-    // Fetch addresses and contacts for each professional reference
-    const addressPromises = professionalReferences.map((reference) =>
-      supabase
-        .from("addresses")
-        .select("uuid, street, city, state, zip")
-        .eq("uuid", reference.address_id)
-        .single()
-    );
+		const addressPromises = professionalReferences.map((reference) =>
+			supabase
+				.from("addresses")
+				.select("*")
+				.eq("uuid", reference.address_id)
+				.single()
+		);
 
-    const contactPromises = professionalReferences.map((reference) =>
-      supabase
-        .from("contacts")
-        .select("uuid, cell_phone, fax, email")
-        .eq("uuid", reference.contact_id)
-        .single()
-    );
+		const contactPromises = professionalReferences.map((reference) =>
+			supabase
+				.from("contacts")
+				.select("*")
+				.eq("uuid", reference.contact_id)
+				.single()
+		);
 
-    // Wait for all address and contact data to be fetched
-    const addressResponses = await Promise.all(addressPromises);
-    const contactResponses = await Promise.all(contactPromises);
+		const [addressResponses, contactResponses] = await Promise.all([
+			Promise.all(addressPromises),
+			Promise.all(contactPromises),
+		]);
 
-    // Map the addresses and contacts to the professional reference data
-    const responseData = professionalReferences.map((reference, index) => ({
-      professionalReference: reference,
-      address: addressResponses[index].data || null,
-      contact: contactResponses[index].data || null,
-    }));
+		const flattenedData = professionalReferences.map((reference, index) => {
+			const address = addressResponses[index].data || {};
+			const contact = contactResponses[index].data || {};
 
-    return new Response(
-      JSON.stringify({
-        message: "Data retrieved successfully",
-        data: responseData,
-      }),
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Error fetching Data:", error);
-    return new Response(
-      JSON.stringify({ message: "Error fetching Data" }),
-      { status: 500 }
-    );
-  }
+			return {
+				uuid: reference.uuid,
+				provider_type: reference.provider_type || "",
+				first_name: reference.first_name || "",
+				middle_initial: reference.middle_initial || "",
+				last_name: reference.last_name || "",
+				address_line_1: address.address_line_1 || "",
+				address_line_2: address.address_line_2 || "",
+				country: address.country || "USA",
+				city: address.city || "",
+				state: address.state || "",
+				zip_code: address.zip_code || "",
+				cell_phone: contact.cell_phone || "",
+				fax: contact.fax || "",
+				email: contact.email || "",
+				address_id: reference.address_id,
+				contact_id: reference.contact_id,
+			};
+		});
+
+		return new Response(
+			JSON.stringify({
+				message: "Data retrieved successfully",
+				data: flattenedData,
+			}),
+			{ status: 200 }
+		);
+	} catch (error) {
+		console.error("Error fetching references:", error);
+		return new Response(
+			JSON.stringify({
+				message: "Error fetching references",
+				error: error.message,
+			}),
+			{ status: 500 }
+		);
+	}
 }
-

@@ -9,7 +9,6 @@ import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import NavBottom from "@/components/ui/NavBottom";
 import { specialities } from "@/data/specialities";
-import { useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
