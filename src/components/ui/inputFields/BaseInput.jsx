@@ -14,17 +14,26 @@ const BaseInput = ({
 	name,
 }) => {
 	const handleInputChange = (e) => {
-		let inputValue = e.target.value;
-		if (formatInput) {
-			inputValue = formatInput(inputValue);
-		}
-		if (onChange) {
+		if (type === "file") {
 			onChange({
 				target: {
 					name: name || title.toLowerCase(),
-					value: inputValue,
+					value: e.target.files[0],
 				},
 			});
+		} else {
+			let inputValue = e.target.value;
+			if (formatInput) {
+				inputValue = formatInput(inputValue);
+			}
+			if (onChange) {
+				onChange({
+					target: {
+						name: name || title.toLowerCase(),
+						value: inputValue,
+					},
+				});
+			}
 		}
 	};
 

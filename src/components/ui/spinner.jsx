@@ -1,10 +1,8 @@
 import React from 'react'
 
-const Spinner = ({ color = "border-secondary" }) => {
+function Spinner() {
   return (
-    <div className='w-full flex justify-center items-center'>
-      <div className={`rounded-full size-10 border-t-4 border-x-4 animate-spin ${color}`}></div>
-    </div>
+    <div className='rounded-full size-10 border-t-4 border-x-4 animate-spin border-secondary'></div>
   )
 }
 
