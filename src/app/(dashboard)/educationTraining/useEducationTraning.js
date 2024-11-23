@@ -289,10 +289,23 @@ export const useEducationAndTraining = () => {
 	const editTrainingEntry = (uuid) => {
 		setEditTrainingId(uuid);
 		const entryToEdit = trainingEntries.find((entry) => entry.uuid === uuid);
+		console.log(entryToEdit);
 		setNewTrainingEntry({
 			...entryToEdit,
+			address_id: entryToEdit.address_id,
+			country: entryToEdit.country || "",
+			state: entryToEdit.state || "",
+			county: entryToEdit.county || "",
 			start_date: formatDate(entryToEdit.start_date),
 			end_date: formatDate(entryToEdit.end_date),
+			hospital_name: entryToEdit.hospital_name || "",
+			affiliated_university: entryToEdit.affiliated_university || "",
+			email: entryToEdit.email || "",
+			training_type: entryToEdit.training_type || "",
+			type_of_program: entryToEdit.type_of_program || "",
+			department: entryToEdit.department || "",
+			speciality: entryToEdit.speciality || "",
+			is_completed: entryToEdit.is_completed || "",
 		});
 		showTraining(true);
 	};

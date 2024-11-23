@@ -17,7 +17,7 @@ export default function ProvidersDashboard() {
   // Fetch providers function
   const fetchProviders = async () => {
     try {
-      const response = await fetch("/api/adminDashboard/get-providers");
+      const response = await fetch("/api/get-providers");
       if (!response.ok) throw new Error("Failed to fetch providers");
 
       const data = await response.json();

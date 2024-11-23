@@ -33,6 +33,7 @@ export async function GET() {
 			county: training.addresses?.county,
 			addresses: undefined,
 		}));
+		console.log(formattedData);
 
 		return new Response(JSON.stringify(formattedData), {
 			status: 200,
@@ -93,12 +94,37 @@ export async function POST(request) {
 				is_completed,
 				address_id: addressData.uuid,
 			})
-			.select()
-			.single();
+			.select().select(`
+                uuid,
+                training_type,
+                address_id,
+                hospital_name,
+                affiliated_university,
+                email,
+                start_date,
+                end_date,
+                type_of_program,
+                department,
+                speciality,
+                is_completed,
+                addresses (
+                    country,
+                    state,
+                    county
+                )
+            `);
 
 		if (error) throw error;
 
-		return new Response(JSON.stringify(data), { status: 201 });
+		const formattedResponse = {
+			...data,
+			country: data.addresses?.country,
+			state: data.addresses?.state,
+			county: data.addresses?.county,
+			addresses: undefined,
+		};
+
+		return new Response(JSON.stringify(formattedResponse), { status: 201 });
 	} catch (error) {
 		return new Response(JSON.stringify({ error: error.message }), {
 			status: 400,
@@ -125,6 +151,13 @@ export async function DELETE(request) {
 			);
 		}
 
+		const { error: deleteTrainingError } = await supabase
+			.from("professional_training")
+			.delete()
+			.eq("uuid", id);
+
+		if (deleteTrainingError) throw deleteTrainingError;
+
 		const { data: addressUsage, error: addressUsageError } = await supabase
 			.from("professional_training")
 			.select("uuid")
@@ -132,19 +165,22 @@ export async function DELETE(request) {
 
 		if (addressUsageError) throw addressUsageError;
 
-		const { error: addressDeleteError } = await supabase
-			.from("addresses")
-			.delete()
-			.eq("uuid", trainingData.address_id);
+		const { data: educationAddressUsage, error: educationAddressError } =
+			await supabase
+				.from("education")
+				.select("uuid")
+				.eq("address_id", trainingData.address_id);
 
-		if (addressDeleteError) throw addressDeleteError;
+		if (educationAddressError) throw educationAddressError;
 
-		const { error: deleteError } = await supabase
-			.from("professional_training")
-			.delete()
-			.eq("uuid", id);
+		if (addressUsage.length === 0 && educationAddressUsage.length === 0) {
+			const { error: addressDeleteError } = await supabase
+				.from("addresses")
+				.delete()
+				.eq("uuid", trainingData.address_id);
 
-		if (deleteError) throw deleteError;
+			if (addressDeleteError) throw addressDeleteError;
+		}
 
 		return new Response(
 			JSON.stringify({ message: "Training entry deleted successfully" }),
@@ -202,12 +238,40 @@ export async function PUT(request) {
 				address_id: addressData.uuid,
 			})
 			.eq("uuid", id)
-			.select()
+			.select(
+				`
+                uuid,
+                training_type,
+                address_id,
+                hospital_name,
+                affiliated_university,
+                email,
+                start_date,
+                end_date,
+                type_of_program,
+                department,
+                speciality,
+                is_completed,
+                addresses (
+                    country,
+                    state,
+                    county
+                )
+            `
+			)
 			.single();
 
 		if (error) throw error;
 
-		return new Response(JSON.stringify(data), { status: 200 });
+		const formattedResponse = {
+			...data,
+			country: data.addresses?.country,
+			state: data.addresses?.state,
+			county: data.addresses?.county,
+			addresses: undefined,
+		};
+
+		return new Response(JSON.stringify(formattedResponse), { status: 200 });
 	} catch (error) {
 		console.error("Error updating entry:", error);
 		return new Response(JSON.stringify({ error: error.message }), {

@@ -6,28 +6,28 @@ const sidenavLinks = [
   { title: "Admin Dashboard", link: "/adminDashboard" },
   { title: "Providers Dashboard", link: "/providersDashboard" },
   { title: "Organization Management", link: "" },
-  { title: "Practice Location", link: "" },
-  { title: "Document Center", link: "" },
-  { title: "Credentialing Status", link: "" },
-  { title: "Payer", link: "" },
-  { title: "User Management", link: "" },
-  { title: "HR Hiring", link: "" },
-  { title: "Reporting", link: "" },
-  { title: "Incident Reporting Configuration", link: "" },
-  { title: "Help Center", link: "" },
+  // { title: "Practice Location", link: "" },
+  // { title: "Document Center", link: "" },
+  // { title: "Credentialing Status", link: "" },
+  // { title: "Payer", link: "" },
+  // { title: "User Management", link: "" },
+  // { title: "HR Hiring", link: "" },
+  // { title: "Reporting", link: "" },
+  // { title: "Incident Reporting Configuration", link: "" },
+  // { title: "Help Center", link: "" },
 ];
 
-export default function AdminDashboardLayout({ children }) {
+export default function AdminDashboardLayout({ children ,barTitle}) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-1/5 bg-secondary text-white">
+      <aside className="w-1/5  text-white bg-secondary">
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
               src="/assets/BCS Logo billingcaresolutions.com.svg"
               alt="HELLO"
-              className="bg-white p-5 h-[7.2rem]"
+              className="bg-white p-5 h-[7.2rem] w-full"
             />
           </Link>
           <div className="px-5">
@@ -53,9 +53,11 @@ export default function AdminDashboardLayout({ children }) {
       {/* Main content area with top bar */}
       <div className="flex flex-col flex-1">
         {/* Top Bar */}
-        <header className="w-full h-[7.2rem] bg-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
+        <header className="w-full h-[7.2rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
           <div className="flex flex-col justify-center items-start gap-2">
-            <h1 className="text-xl font-semibold">Welcome to BCS-CMS Dashboard</h1>
+            <h1 className="text-xl font-semibold">
+              {barTitle!=""?barTitle:"Welcome to BCS-CMS Dashboard"}
+            </h1>
             <p>Let's take a look at your credentials today!</p>
           </div>
           <div className="flex flex-row justify-end items-center gap-4">
