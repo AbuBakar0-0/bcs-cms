@@ -9,6 +9,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LiaUserSlashSolid } from "react-icons/lia";
+import AdminDashboardLayout from "../adminLayout";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -34,7 +35,7 @@ export default function ProvidersDashboard() {
   }, []);
 
   return (
-    <>
+    <AdminDashboardLayout barTitle={"Provider Dashboard"}>
       <div className="w-full flex flex-row justify-between items-center gap-4 py-4">
         <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
           <div className="w-full flex flex-row justify-between items-center gap-4">
@@ -120,7 +121,6 @@ export default function ProvidersDashboard() {
           >
             <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3">
               <div className="w-full flex flex-row items-center gap-4">
-                <CiUser className="border-2 border-secondary rounded-full size-20 p-2" />
                 <div>
                   <p className="font-bold text-lg">
                     {provider.last_name}, {provider.first_name}{" "}
@@ -166,6 +166,6 @@ export default function ProvidersDashboard() {
           ❯
         </button>
       </div>
-    </>
+    </AdminDashboardLayout>
   );
 }
