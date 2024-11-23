@@ -1,64 +1,57 @@
 "use client";
-
-import ProvidersNavbar from "@/components/adminDashboard/ProvidersNavbar";
 import React, { useEffect, useState } from "react";
-import { CiUser } from "react-icons/ci";
+import { CiEdit } from "react-icons/ci";
 import { useParams } from "next/navigation";
+import AdminDashboardLayout from "../../adminLayout";
+import Spinner from "@/components/ui/spinner";
+import DocumentChart from "../../adminDashboard/DocumentsChart";
+import VerifiedChart from "../../adminDashboard/VerifiedChart";
+import PieChart from "../../adminDashboard/pieChart";
+import { IoAddCircleOutline } from "react-icons/io5";
+import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
 
 const ProviderDetail = () => {
-	const { id } = useParams(); // Get the provider ID from route params
-	const [provider, setProvider] = useState(null);
-	const [loading, setLoading] = useState(true);
-	const [error, setError] = useState(null);
+  const { id } = useParams(); // Get the provider ID from route params
+  
+  
 
-	useEffect(() => {
-		// Fetch provider details when the component mounts
-		const fetchProviderDetails = async () => {
-			try {
-				const response = await fetch(`/api/providers/${id}`);
-				if (!response.ok) throw new Error("Failed to fetch provider details");
+  return (
+    <AdminDashboardLayout>
+      <>
+        <ProvidersCard />
 
-				const data = await response.json();
-				setProvider(data.provider);
-			} catch (err) {
-				setError(err.message);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		if (id) fetchProviderDetails();
-	}, [id]);
-
-	if (loading) return <p>Loading...</p>;
-	if (error) return <p>Error: {error}</p>;
-
-	return (
-		<div className="">
-			<div className="flex space-x-4 p-4 bg-secondary rounded-lg text-white">
-				<div className="w-[12.5%] flex flex-col items-center">
-					<CiUser className="border-2 border-white rounded-full size-20 p-2" />
-					<h2 className="text-lg font-semibold text-center">
-						{provider?.first_name} {provider?.middle_initial || ""} {provider?.last_name}
-					</h2>
-					<p className="text-sm">Provider type: {provider?.provider_title || "-"}</p>
-					<p className="text-sm">Gender: {provider?.gender || "-"}</p>
-				</div>
-
-				<div className="flex-grow">
-					<h3 className="font-semibold">Provider Information</h3>
-					<p>Date of Birth: {provider?.dob || "-"}</p>
-					<p>SSN: {provider?.ssn || "-"}</p>
-					<p>License ID: {provider?.license_id || "-"}</p>
-					<p>State Issued: {provider?.state_issued || "-"}</p>
-					<p>Issue Date: {provider?.issue_date || "-"}</p>
-					<p>Expiry Date: {provider?.expiry_date || "-"}</p>
-				</div>
-			</div>
-
-			<ProvidersNavbar />
-		</div>
-	);
+        <div className="w-full flex flex-col justify-start items-start gap-4  mt-4">
+          <div className="w-full flex flex-row justify-end items-center gap-4">
+            <button className="flex flex-row gap-2 justify-center items-center border-4 border-primary rounded-lg px-6 py-2">
+              <IoAddCircleOutline />
+              <span>Add Provider</span>
+            </button>
+            <button className="flex flex-row gap-2 justify-center items-center border-4 border-primary rounded-lg px-6 py-2">
+              <CiEdit />
+              <span>Edit Provider</span>
+            </button>
+          </div>
+          <div className="w-full flex flex-row justify-between items-start gap-4">
+            <div className="w-[48%] flex flex-col justify-start items-start gap-4">
+              <div className="w-full h-auto border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
+                <span className="text-lg font-semibold">Documents</span>
+                <DocumentChart />
+              </div>
+              <div className="w-full border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
+                <span className="text-lg font-semibold">Verifications</span>
+                <VerifiedChart />
+              </div>
+            </div>
+            <div className="w-[48%] flex flex-col justify-start items-center gap-4">
+              <div className="w-full h-96 border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
+                <PieChart />
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    </AdminDashboardLayout>
+  );
 };
 
 export default ProviderDetail;
