@@ -2,18 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import ProvidersNavbar from './ProvidersNavbar';
-import Spinner from './../ui/spinner';
+import Spinner from '../ui/Spinner';
 
-const ProvidersCard = ({ id = "4ce7a991-6177-4c30-a32c-8ab9447cbac4" }) => {  // Accept id as a prop
+const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  // Accept id as a prop
     const [provider, setProvider] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
+    const uid = localStorage.getItem('userId')
     useEffect(() => {
         // Fetch provider details when the component mounts
         const fetchProviderDetails = async () => {
             try {
-                const response = await fetch(`/api/providers/${id}`);
+                const response = await fetch(`/api/providers/${uid}`);
                 if (!response.ok) throw new Error("Failed to fetch provider details");
 
                 const data = await response.json();

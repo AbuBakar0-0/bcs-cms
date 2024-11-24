@@ -4,13 +4,12 @@ import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { CiUser } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LiaUserSlashSolid } from "react-icons/lia";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -34,6 +33,11 @@ export default function ProvidersDashboard() {
   useEffect(() => {
     fetchProviders();
   }, []);
+
+
+  const handleClick = (id) => {
+    localStorage.setItem('userId', id);
+  };
 
   return (
     <AdminDashboardLayout barTitle={"Provider Dashboard"}>
@@ -120,7 +124,7 @@ export default function ProvidersDashboard() {
             className="w-full flex flex-row items-center justify-between gap-4 p-4 border-b"
             key={provider.uuid}
           >
-            <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3">
+            <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3" onClick={(e) => {handleClick(provider.uuid);}}>
               <div className="w-full flex flex-row items-center gap-4">
                 <div>
                   <p className="font-bold text-lg">

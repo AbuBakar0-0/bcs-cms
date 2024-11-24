@@ -14,7 +14,7 @@ import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
 import { formatDate } from "../educationTraining/useEducationTraning";
 

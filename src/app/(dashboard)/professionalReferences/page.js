@@ -7,7 +7,7 @@ import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
@@ -267,14 +267,14 @@ function ProfessionalReferences() {
 										value={formData.address_line_2}
 										onChange={handleInputChange}
 									/>
-									<Dropdown
+									{/* <Dropdown
 										title="Country"
 										options={["USA"]}
 										width="w-[13%]"
 										name="country"
 										value={formData.country}
 										onChange={handleInputChange}
-									/>
+									/> */}
 									<TextInput
 										title="City"
 										width="w-[10%]"

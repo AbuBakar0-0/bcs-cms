@@ -21,13 +21,13 @@ export default function DashboardLayout({ children }) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-1/5 bg-secondary text-white">
+      <aside className="w-1/6 bg-secondary text-white">
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
               src="./assets/BCS Logo billingcaresolutions.com.svg"
               alt=""
-              className="bg-white p-5 h-[7.2rem]"
+              className="bg-white p-5 h-[7.2rem] w-full"
             />
           </Link>
           <div className="px-5">

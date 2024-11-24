@@ -11,7 +11,7 @@ import { useState, useEffect } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 import { toast } from "react-hot-toast";
 
 const initialFormState = {

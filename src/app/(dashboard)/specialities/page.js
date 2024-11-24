@@ -8,7 +8,7 @@ import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { certifyingBoards } from "@/data/certifiyingBoard";
 import { specialities } from "@/data/specialities";

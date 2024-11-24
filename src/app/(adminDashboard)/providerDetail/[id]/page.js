@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { useParams } from "next/navigation";
 import AdminDashboardLayout from "../../adminLayout";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/Spinner";
 import DocumentChart from "../../adminDashboard/DocumentsChart";
 import VerifiedChart from "../../adminDashboard/VerifiedChart";
 import PieChart from "../../adminDashboard/pieChart";

@@ -324,7 +324,8 @@ function ProvidersInformation() {
 						value={formData.emergencyContactName}
 						onChange={handleChange}
 					/>
-					<TextInput
+					<Dropdown
+						options={["Son","Daughter","Husband","Spouse","Father","Mother"]}
 						title={"Relation"}
 						name={"emergencyContactRelation"}
 						value={formData.emergencyContactRelation}

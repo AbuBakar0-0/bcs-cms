@@ -21,7 +21,7 @@ export default function AdminDashboardLayout({ children ,barTitle}) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-1/5  text-white bg-secondary">
+      <aside className="w-1/6  text-white bg-secondary">
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
