@@ -8,18 +8,17 @@ import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
-import Spinner from "@/components/ui/Spinner";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { certifyingBoards } from "@/data/certifiyingBoard";
 import { specialities } from "@/data/specialities";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import submitForm from "@/hooks/postData";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { defaultFormData } from "../../payerSetup/[id]/utilis";
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
+import { defaultFormData } from "../../payerSetup/[id]/utilis";
+import Spinner from "@/components/ui/Spinner";
 const defaultState = {
 	speciality: specialities[0],
 	type: "",

@@ -7,7 +7,6 @@ import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
-import Spinner from "@/components/ui/Spinner";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
@@ -17,6 +16,7 @@ import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast";
+import Spinner from "@/components/ui/Spinner";
 
 function ProfessionalReferences() {
 	const [reference, setReference] = useState(false);
