@@ -16,7 +16,7 @@ import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast";
-import Spinner from "@/components/ui/Spinner";
+import { ClipLoader } from "react-spinners";
 
 function ProfessionalReferences() {
 	const [reference, setReference] = useState(false);
@@ -327,7 +327,7 @@ function ProfessionalReferences() {
 
 				{loading && !reference ? (
 					<div className="w-full flex justify-center items-center my-10">
-						<Spinner />
+						<ClipLoader />
 					</div>
 				) : references.length === 0 ? (
 					<div className="w-full text-center py-8">

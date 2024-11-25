@@ -16,7 +16,7 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
-import Spinner from "@/components/ui/Spinner";
+import { ClipLoader } from "react-spinners";
 
 function EmploymentInformation() {
 	const [loading, setLoading] = useState(false);
@@ -306,14 +306,14 @@ function EmploymentInformation() {
 						disabled={loading}
 						className="border-4 border-primary rounded-lg px-6 py-2 font-semibold disabled:opacity-50"
 					>
-						{loading ? <Spinner /> : editingId ? "Update" : "Submit"}
+						{loading ? <ClipLoader /> : editingId ? "Update" : "Submit"}
 					</button>
 				</form>
 			)}
 
 			{loading && !showForm ? (
 				<div className="flex justify-center items-center py-6">
-					<Spinner />
+					<ClipLoader />
 				</div>
 			) : (
 				<div className="w-full space-y-4">

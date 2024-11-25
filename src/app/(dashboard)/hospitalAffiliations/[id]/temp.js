@@ -14,7 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import Spinner from "@/components/ui/Spinner"; // Assuming this is the spinner component
+import { ClipLoader } from "react-spinners";
 
 function HospitalAffiliations() {
 	const [loading, setLoading] = useState(true); // Start with loading state as true
@@ -64,7 +64,7 @@ function HospitalAffiliations() {
 	};
 
 	if (loading) {
-		return <Spinner />; // Show the spinner while loading
+		return <ClipLoader />; // Show the spinner while loading
 	}
 
 	return (

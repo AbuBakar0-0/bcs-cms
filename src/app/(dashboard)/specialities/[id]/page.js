@@ -18,7 +18,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import { defaultFormData } from "../../payerSetup/[id]/utilis";
-import Spinner from "@/components/ui/Spinner";
+import { ClipLoader } from "react-spinners";
 const defaultState = {
 	speciality: specialities[0],
 	type: "",
@@ -191,7 +191,7 @@ function Specialities() {
 
 				{loading ? (
 					<div className="w-full flex justify-center items-center">
-						<Spinner />
+						<ClipLoader />
 					</div>
 				) : (
 					<div className="w-full flex flex-col justify-center items-center gap-4">
@@ -301,7 +301,7 @@ function Specialities() {
 							</div>
 						)}
 
-						<div className="w-full">
+						<div className="w-full flex flex-col gap-4 my-4">
 							{specialitiesData?.map((speciality, index) => (
 								<div
 									key={index}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import ProvidersNavbar from './ProvidersNavbar';
-import Spinner from '../ui/Spinner';
+import  { ClipLoader } from "react-spinners";
 
 const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  // Accept id as a prop
     const [provider, setProvider] = useState(null);
@@ -30,7 +30,7 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
     }, [id]);
 
     if (loading) {
-        return <Spinner />; // Show loading spinner while fetching
+        return <ClipLoader />; // Show loading spinner while fetching
     }
 
     if (error) {

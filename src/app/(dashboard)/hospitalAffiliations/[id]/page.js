@@ -12,7 +12,7 @@ import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast";
-import Spinner from "@/components/ui/Spinner";
+import { ClipLoader } from "react-spinners";
 
 const initialFormState = {
 	hospital_name: "",
@@ -207,7 +207,7 @@ function HospitalAffiliations() {
 	};
 
 	if (loading) {
-		return <Spinner />;
+		return <ClipLoader />;
 	}
 
 	const renderForm = (type, formData, onChange) => (

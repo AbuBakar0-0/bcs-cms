@@ -9,7 +9,7 @@ import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { LiaUserSlashSolid } from "react-icons/lia";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
-import Spinner from "@/components/ui/Spinner";
+import { ClipLoader } from "react-spinners";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -113,7 +113,7 @@ export default function ProvidersDashboard() {
       </div>
 
       {loading ? (
-        <Spinner/>
+        <ClipLoader />
       ) : providers.length > 0 ? (
         providers.map((provider) => (
           <div
