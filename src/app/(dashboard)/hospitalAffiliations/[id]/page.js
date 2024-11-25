@@ -13,6 +13,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
+import { useParams } from "next/navigation";
 
 const initialFormState = {
 	hospital_name: "",
@@ -32,10 +33,13 @@ function HospitalAffiliations() {
 	const [arrangementsForm, setArrangementsForm] = useState(initialFormState);
 	const [editingId, setEditingId] = useState(null);
 
+	const { id: provider_id } = useParams();
+
+
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch("/api/hospital-affiliation");
+			const response = await fetch(`/api/hospital-affiliation?provider_id=${provider_id}`);
 			const data = await response.json();
 			setHospitalData(data.result);
 		} catch (error) {

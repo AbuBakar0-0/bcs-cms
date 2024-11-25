@@ -1,4 +1,5 @@
 export const specialities = [
+  "Select Speciality",
   "Allergy and Immunology",
   "Anesthesiology",
   "Behavioral Health",

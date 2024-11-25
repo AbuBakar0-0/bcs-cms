@@ -19,6 +19,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import { defaultFormData } from "../../payerSetup/[id]/utilis";
 import { ClipLoader } from "react-spinners";
+import { useParams } from "next/navigation";
 const defaultState = {
 	speciality: specialities[0],
 	type: "",
@@ -41,6 +42,8 @@ function Specialities() {
 	const [formData, setFormData] = useState(defaultState);
 	const [isEditing, setIsEditing] = useState(false);
 	const [editingId, setEditingId] = useState(null);
+
+	const { id: provider_id } = useParams();
 
 	const handleInputChange = (e) => {
 		const { name, value } = e.target;
@@ -71,7 +74,7 @@ function Specialities() {
 	const fetchSpecialities = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch("/api/specialities");
+			const response = await fetch(`/api/specialities?provider_id=${provider_id}`);
 			const data = await response.json();
 			setSpecialitiesData(data.data);
 		} catch (error) {
@@ -84,6 +87,7 @@ function Specialities() {
 	useEffect(() => {
 		fetchSpecialities();
 	}, []);
+
 	const handleEdit = (speciality) => {
 		setIsEditing(true);
 		setEditingId(speciality.id);
@@ -105,6 +109,7 @@ function Specialities() {
 			expiry_date: formatDate(speciality.expiryDate),
 		});
 	};
+	
 	const handleDelete = async (id) => {
 		if (window.confirm("Are you sure you want to delete this speciality?")) {
 			try {

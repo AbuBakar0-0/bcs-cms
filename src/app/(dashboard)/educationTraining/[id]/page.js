@@ -17,7 +17,6 @@ import { useEducationAndTraining } from "./useEducationTraning";
 import { degrees, eduOptions } from "./utilis";
 
 function EducationAndTraining() {
-	const { id } = useParams();
 
 	const {
 		education,
@@ -38,7 +37,7 @@ function EducationAndTraining() {
 		deleteTrainingEntry,
 		editTrainingEntry,
 		editEducationEntry,
-	} = useEducationAndTraining(id);
+	} = useEducationAndTraining();
 
 	return (
 		<>

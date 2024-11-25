@@ -40,10 +40,14 @@ export async function POST(request) {
 
 export async function GET(request) {
 	try {
+
+		const { searchParams } = new URL(request.url);
+
+		const provider_id = searchParams.get("provider_id");
 		// Fetching all hospital affiliations without filtering by type
 		const { data: hospitalAffiliations, error: hospitalError } = await supabase
 			.from("hospital_affiliations")
-			.select("uuid, hospital_name, address_id, type");
+			.select("uuid, hospital_name, address_id, type").eq("provider_id", provider_id);
 
 		if (hospitalError) throw hospitalError;
 

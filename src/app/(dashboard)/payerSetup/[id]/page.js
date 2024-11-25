@@ -127,12 +127,14 @@ export default function PairSetup() {
 							key={setup.uuid}
 							className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
 						>
-							<p>{setup.provider}</p>
-							<div className="flex flex-col justify-center items-start">
-								<p>{setup.payer_name}</p>
-								<p>{setup.status}</p>
+							<p className="w-1/4">{setup.provider}</p>
+							<div className="w-1/3 flex flex-col justify-center items-start">
+								<p className="">{setup.payer_name}</p>
+								<p className="">{setup.status}</p>
 								<p>{new Date(setup.date).toLocaleDateString()}</p>
 							</div>
+							<p className="w-1/4">{setup.status}</p>
+							<p className="w-1/3 truncate">{setup.notes}</p>
 							<div className="flex flex-row justify-center items-center gap-4">
 								<CiEdit
 									className="size-6 text-primary cursor-pointer"

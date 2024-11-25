@@ -103,6 +103,7 @@ function PracticeProfile() {
 						name="type"
 						title="PRACTICE TYPE"
 						options={[
+							"Select Practice Type",
 							"Medical",
 							"Dental",
 							"Behavioural Health",
@@ -114,6 +115,7 @@ function PracticeProfile() {
 						name="type_of_service_provided"
 						title="Type of Service Provided"
 						options={[
+							"Select Type of service",
 							"Solo Primary Care",
 							"Solo Speciality Care",
 							"Solo SPE / PCP",
@@ -126,6 +128,7 @@ function PracticeProfile() {
 						name="credentialing_type"
 						title="Credentialing Type"
 						options={[
+							"Select Credentialing Type",
 							"Initial Credentialing",
 							"Demographic Updates",
 							"Re Credentialing",

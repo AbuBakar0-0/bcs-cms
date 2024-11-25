@@ -1,4 +1,5 @@
 export const certifyingBoards = [
+	"Select Board",
 	"American Board of Medical Specialties (ABMS)",
 	"American Board of Internal Medicine (ABIM)",
 	"American Board of Family Medicine (ABFM)",

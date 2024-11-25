@@ -4,44 +4,45 @@ export async function GET(request) {
   try {
     const { searchParams } = new URL(request.url);
 
-    const providerId = searchParams.get("userId");
+    const provider_id = searchParams.get("provider_id");
 
-    // Validate providerId
-    if (!providerId) {
-      throw new Error("User ID is required.");
-    }
+    console.log("PROVIDER ID DII DIDIID", provider_id);
 
-    const { data: educationData, error: educationError } = await supabase
+	const { data: educationData, error: educationError } = await supabase
       .from("education")
       .select(
         `
-        uuid,
-        type,
-        professional_school,
-        degree,
-        start_date,
-        end_date,
-        address_id,
-        addresses (
-          country,
-          state,
-          county
-        )
-        `
-      )
-      .eq("provider_id", providerId);
+				uuid,
+				type,
+				professional_school,
+				degree,
+				start_date,
+				end_date,
+				address_id,
+				addresses (
+					country,
+					state,
+					county
+				)
+				`
+      ).eq("provider_id", provider_id);
 
+    // Handle any errors from the Supabase query
     if (educationError) throw educationError;
 
-    // Format the data
+    // Format the fetched data to include country, state, and county directly
     const formattedData = educationData.map((education) => ({
       ...education,
       country: education.addresses?.country,
       state: education.addresses?.state,
       county: education.addresses?.county,
+      addresses: undefined, // Remove the nested addresses object
     }));
 
-    // Return the response
+    // Log formatted data for debugging
+    console.log(formattedData);
+
+    // Return the formatted data as a JSON response
     return new Response(JSON.stringify(formattedData), {
       status: 200,
       headers: {
@@ -49,7 +50,10 @@ export async function GET(request) {
       },
     });
   } catch (error) {
-    // Only return the error message once
+    // Log the error for debugging
+    console.error("Error fetching education data:", error);
+
+    // Return the error message as a JSON response
     return new Response(JSON.stringify({ error: error.message }), {
       status: 400,
       headers: {
@@ -58,7 +62,6 @@ export async function GET(request) {
     });
   }
 }
-
 export async function POST(request) {
   try {
     const body = await request.json();

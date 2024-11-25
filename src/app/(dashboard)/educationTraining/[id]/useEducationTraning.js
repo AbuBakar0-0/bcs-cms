@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DEFAULT_EDUCATION, DEFAULT_TRAINING, degrees } from "./utilis";
 import { format, parse } from "date-fns";
+import { useParams } from "next/navigation";
 
 export function formatDate(date) {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
@@ -8,7 +9,9 @@ export function formatDate(date) {
   const formattedValue = format(parsedDate, "MM/dd/yyyy");
   return formattedValue;
 }
-export const useEducationAndTraining = (id) => {
+export const useEducationAndTraining = () => {
+  const { id: provider_id } = useParams();
+
   const [education, showEducation] = useState(false);
   const [training, showTraining] = useState(false);
 
@@ -24,35 +27,35 @@ export const useEducationAndTraining = (id) => {
   useEffect(() => {
     const fetchEducationEntries = async () => {
       try {
-        const url = `/api/education?userId=${id}`;
-        const response = await fetch(url);
-        console.log(response.json());
+        const response = await fetch(`/api/education?provider_id=${provider_id}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch education data");
+          throw new Error(`Failed to fetch training data: ${response.statusText}`);
         }
-
+    
         const data = await response.json();
         setEducationEntries(data);
       } catch (error) {
-        console.error("Error:", error);
-        alert("Failed to load education entries. Please try again.");
+        console.error("Error fetching training entries:", error);
+        alert("Failed to load training entries. Please try again later.");
       }
     };
+
 
     const fetchTrainingEntries = async () => {
       try {
-        const response = await fetch("/api/professional-training");
+        const response = await fetch(`/api/professional-training?provider_id=${provider_id}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch training data");
+          throw new Error(`Failed to fetch training data: ${response.statusText}`);
         }
-
+    
         const data = await response.json();
-        setTrainingEntries(data);
+        setTrainingEntries(data); // Update your state or UI with the fetched data
       } catch (error) {
-        console.error("Error:", error);
-        alert("Failed to load training entries. Please try again.");
+        console.error("Error fetching training entries:", error);
+        alert("Failed to load training entries. Please try again later.");
       }
     };
+    
 
     fetchEducationEntries();
     fetchTrainingEntries();

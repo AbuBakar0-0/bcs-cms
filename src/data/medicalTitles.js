@@ -1,4 +1,5 @@
 export const medicalTitles = [
+    "Select Title",
     "MD",
     "DO",
     "DDS",
