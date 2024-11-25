@@ -5,14 +5,14 @@ import HeadingLine from "@/components/ui/HeadingLine";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import SSNInput from "../../../../components/ui/inputFields/SSNInput";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import HeadingLine2 from "@/components/ui/HeadingLine2";
 import Button from "@/components/ui/Button";
-import { useProviderForm } from "./useProviderForm";
+import { useProviderForm } from "./[id]/useProviderForm";
+import SSNInput from "@/components/ui/inputFields/SSNInput";
 
 function ProvidersInformation() {
 	const { formData, handleChange, handleReadonly, handleSubmit } =
@@ -293,24 +293,38 @@ function ProvidersInformation() {
 						name={"homePhone"}
 						value={formData.homePhone}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
 					<PhoneInput
 						title={"Cell Ph."}
 						name={"cellPhone"}
 						value={formData.cellPhone}
 						onChange={handleChange}
+                        width={"w-1/6"}
+
+					/>
+                    <PhoneInput
+						title={"Fax"}
+						name={"fax"}
+						value={formData.cellPhone}
+						onChange={handleChange}
+                        width={"w-1/6"}
+
 					/>
 					<EmailInput
 						title={"Personal Email"}
 						name={"personalEmail"}
 						value={formData.personalEmail}
 						onChange={handleChange}
+                        width={"w-1/6"}
+
 					/>
 					<EmailInput
 						title={"Work Email"}
 						name={"workEmail"}
 						value={formData.workEmail}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
 				</div>
 
@@ -323,6 +337,7 @@ function ProvidersInformation() {
 						name={"emergencyContactName"}
 						value={formData.emergencyContactName}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
 					<Dropdown
 						options={["Son","Daughter","Husband","Spouse","Father","Mother"]}
@@ -330,20 +345,30 @@ function ProvidersInformation() {
 						name={"emergencyContactRelation"}
 						value={formData.emergencyContactRelation}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
 					<PhoneInput
 						title={"Cell Ph."}
 						name={"emergencyContactPhone"}
 						value={formData.emergencyContactPhone}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
-					
+                    <PhoneInput
+						title={"Fax"}
+						name={"fax"}
+						value={formData.cellPhone}
+						onChange={handleChange}
+                        width={"w-1/6"}
+
+					/>
 					<TextInput
 						title={"Email"}
 						type="email"
 						name={"emergencyContactEmail"}
 						value={formData.emergencyContactEmail}
 						onChange={handleChange}
+                        width={"w-1/6"}
 					/>
 				</div>
 

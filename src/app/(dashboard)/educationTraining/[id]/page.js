@@ -9,6 +9,7 @@ import RadioButton from "@/components/ui/inputFields/RadioButtons";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import NavBottom from "@/components/ui/NavBottom";
 import { specialities } from "@/data/specialities";
+import { useParams } from "next/navigation";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -16,6 +17,8 @@ import { useEducationAndTraining } from "./useEducationTraning";
 import { degrees, eduOptions } from "./utilis";
 
 function EducationAndTraining() {
+	const { id } = useParams();
+
 	const {
 		education,
 		training,
@@ -35,7 +38,7 @@ function EducationAndTraining() {
 		deleteTrainingEntry,
 		editTrainingEntry,
 		editEducationEntry,
-	} = useEducationAndTraining();
+	} = useEducationAndTraining(id);
 
 	return (
 		<>
@@ -68,10 +71,11 @@ function EducationAndTraining() {
 									onChange={handleEducationChange}
 								/>
 								<TextInput
-									title={"Country"}
-									name="country"
-									value={newEducationEntry.country}
+									title={"Professional School"}
+									name="professional_school"
+									value={newEducationEntry.professional_school}
 									onChange={handleEducationChange}
+									width={"w-1/4"}
 								/>
 								<TextInput
 									title={"State"}
@@ -80,17 +84,19 @@ function EducationAndTraining() {
 									onChange={handleEducationChange}
 								/>
 								<TextInput
+									title={"Country"}
+									name="country"
+									value={newEducationEntry.country}
+									onChange={handleEducationChange}
+								/>
+								
+								{/* <TextInput
 									title={"County"}
 									name="county"
 									value={newEducationEntry.county}
 									onChange={handleEducationChange}
-								/>
-								<TextInput
-									title={"Professional School"}
-									name="professional_school"
-									value={newEducationEntry.professional_school}
-									onChange={handleEducationChange}
-								/>
+								/> */}
+								
 								<Dropdown
 									title={"Degree"}
 									options={degrees}

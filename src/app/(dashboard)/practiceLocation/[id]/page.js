@@ -248,7 +248,12 @@ function PracticeLocations() {
 									name="doing_business_name"
 								/>
 								<TextInput
-									title={"NPI 2 (if applicable"}
+									title={"Location Name "}
+									width={"w-full"}
+									name="doing_business_name"
+								/>
+								<TextInput
+									title={"NPI 2 (if applicable)"}
 									required={false}
 									name="npi_2"
 								/>
@@ -423,12 +428,12 @@ function PracticeLocations() {
 							</div>
 
 							{/* Emergency Contact Information */}
-							<HeadingLine title={"Practice Contact Information"} />
+							<HeadingLine title={"Locationx Contact Information"} />
 
 							<div className="w-full flex flex-wrap justify-start gap-4 items-start">
 								<Dropdown
 									width="w-[14%]"
-									title={"Practice Contact Person"}
+									title={"Location Contact Title"}
 									options={[
 										"CFO( Chief Financial Officer)",
 										"CTO (Chief Technology Officer)",
@@ -441,7 +446,7 @@ function PracticeLocations() {
 									name="practice_contact_type"
 								/>
 								<TextInput
-									title={"Practice Contact Name"}
+									title={"Location Contact Name"}
 									name="practice_contact_name"
 								/>
 								<EmailInput
