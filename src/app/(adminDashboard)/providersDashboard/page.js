@@ -35,10 +35,6 @@ export default function ProvidersDashboard() {
   }, []);
 
 
-  const handleClick = (id) => {
-    localStorage.setItem('userId', id);
-  };
-
   return (
     <AdminDashboardLayout barTitle={"Provider Dashboard"}>
       <div className="w-full flex flex-row justify-between items-center gap-4 py-4">

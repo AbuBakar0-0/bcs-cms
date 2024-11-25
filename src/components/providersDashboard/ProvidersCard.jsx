@@ -10,12 +10,11 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
     const [error, setError] = useState(null);
 
 
-    const uid = localStorage.getItem('userId')
     useEffect(() => {
         // Fetch provider details when the component mounts
         const fetchProviderDetails = async () => {
             try {
-                const response = await fetch(`/api/providers/${uid}`);
+                const response = await fetch(`/api/providers/${id}`);
                 if (!response.ok) throw new Error("Failed to fetch provider details");
 
                 const data = await response.json();
@@ -62,7 +61,7 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
                     <p>Expiry Date: {provider?.expiry_date || "-"}</p>
                 </div>
             </div>
-            <ProvidersNavbar />
+            <ProvidersNavbar id={id}/>
         </div>
     );
 };

@@ -5,7 +5,7 @@ import HeadingLine from "@/components/ui/HeadingLine";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import SSNInput from "./../../../components/ui/inputFields/SSNInput";
+import SSNInput from "../../../../components/ui/inputFields/SSNInput";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import PhoneInput from "@/components/ui/inputFields/PhoneInput";

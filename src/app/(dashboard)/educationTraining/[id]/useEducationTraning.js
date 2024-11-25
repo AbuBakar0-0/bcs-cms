@@ -26,6 +26,7 @@ export const useEducationAndTraining = () => {
 		const fetchEducationEntries = async () => {
 			try {
 				const response = await fetch("/api/education");
+				console.log(response.json());
 				if (!response.ok) {
 					throw new Error("Failed to fetch education data");
 				}

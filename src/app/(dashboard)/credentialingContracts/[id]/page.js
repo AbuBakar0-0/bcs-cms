@@ -1,6 +1,7 @@
 
 export default function CredentialingContracts() {
-  return (
-    <div>page</div>
-  )
-}
+    return (
+      <div>page</div>
+    )
+  }
+  

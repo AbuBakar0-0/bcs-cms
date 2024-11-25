@@ -11,7 +11,7 @@ import { CiEdit } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { formatDate } from "../educationTraining/useEducationTraning";
+import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import {
 	documentsList,
 	initialFormData,

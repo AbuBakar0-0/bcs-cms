@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
+import { useParams } from "next/navigation";
 
 const sidenavLinks = [
   { title: "Providers Information", link: "/providersInformation" },
@@ -11,13 +14,15 @@ const sidenavLinks = [
   { title: "Practice Location", link: "/practiceLocation" },
   { title: "Hospital Affiliations", link: "/hospitalAffiliations" },
   { title: "Payer Setup", link: "/payerSetup" },
-  { title: "Credentialing Contracts", link: "/credentialingContracts" },
+  { title: "Credentialing Contacts", link: "/credentialingContracts" },
   { title: "Employment Information", link: "/employmentInformation" },
   { title: "Professional References", link: "/professionalReferences" },
   { title: "Document", link: "/document" },
 ];
 
 export default function DashboardLayout({ children }) {
+
+  const { id } = useParams();
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -25,7 +30,7 @@ export default function DashboardLayout({ children }) {
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
-              src="./assets/BCS Logo billingcaresolutions.com.svg"
+              src="/assets/BCS Logo billingcaresolutions.com.svg"
               alt=""
               className="bg-white p-5 h-[7.2rem] w-full"
             />
@@ -33,7 +38,7 @@ export default function DashboardLayout({ children }) {
           <div className="px-5">
             {sidenavLinks.map((item, index) => (
               <Link
-                href={item.link}
+                href={`${item.link}/${id}`}
                 key={index}
                 className="flex flex-row justify-start items-center gap-4"
               >

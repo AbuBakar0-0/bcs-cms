@@ -2,39 +2,42 @@ import { supabase } from "@/lib/supabase";
 
 export async function GET() {
 	try {
-		const { data: trainingData, error: trainingError } = await supabase.from(
-			"professional_training"
-		).select(`
-		  uuid,
-		  training_type,
-		  address_id,
-		  hospital_name,
-		  affiliated_university,
-		  email,
-		  start_date,
-		  end_date,
-		  type_of_program,
-		  department,
-		  speciality,
-		  is_completed,
-		  addresses (
-			country,
-			state,
-			county
-		  )
-		`);
+		// Fetch education data from the Supabase table
+		const { data: educationData, error: educationError } = await supabase
+			.from("education")
+			.select(
+				`
+				uuid,
+				type,
+				professional_school,
+				degree,
+				start_date,
+				end_date,
+				address_id,
+				addresses (
+					country,
+					state,
+					county
+				)
+				`
+			);
 
-		if (trainingError) throw trainingError;
+		// Handle any errors from the Supabase query
+		if (educationError) throw educationError;
 
-		const formattedData = trainingData.map((training) => ({
-			...training,
-			country: training.addresses?.country,
-			state: training.addresses?.state,
-			county: training.addresses?.county,
-			addresses: undefined,
+		// Format the fetched data to include country, state, and county directly
+		const formattedData = educationData.map((education) => ({
+			...education,
+			country: education.addresses?.country,
+			state: education.addresses?.state,
+			county: education.addresses?.county,
+			addresses: undefined, // Remove the nested addresses object
 		}));
+
+		// Log formatted data for debugging
 		console.log(formattedData);
 
+		// Return the formatted data as a JSON response
 		return new Response(JSON.stringify(formattedData), {
 			status: 200,
 			headers: {
@@ -42,7 +45,10 @@ export async function GET() {
 			},
 		});
 	} catch (error) {
-		console.error("Error fetching professional training:", error);
+		// Log the error for debugging
+		console.error("Error fetching education data:", error);
+
+		// Return the error message as a JSON response
 		return new Response(JSON.stringify({ error: error.message }), {
 			status: 400,
 			headers: {
@@ -51,6 +57,7 @@ export async function GET() {
 		});
 	}
 }
+
 
 export async function POST(request) {
 	try {

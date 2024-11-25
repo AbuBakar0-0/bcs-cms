@@ -18,8 +18,8 @@ import { useEffect, useRef, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { defaultFormData } from "../payerSetup/utilis";
-import { formatDate } from "../educationTraining/useEducationTraning";
+import { defaultFormData } from "../../payerSetup/[id]/utilis";
+import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 const defaultState = {
 	speciality: specialities[0],
 	type: "",

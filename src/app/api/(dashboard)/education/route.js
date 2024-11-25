@@ -1,46 +1,60 @@
 import { supabase } from "@/lib/supabase";
 
-export async function GET() {
-	try {
-		const { data: educationData, error: educationError } = await supabase.from(
-			"education"
-		).select(`
-		  uuid,
-		  type,
-		  professional_school,
-		  degree,
-		  start_date,
-		  end_date,
-		  address_id,
-		  addresses (
-			country,
-			state,
-			county
-		  )
-		`);
+export async function GET(request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("userId");
 
-		if (educationError) throw educationError;
+    // Validate that userId is available
+    if (!userId) {
+      throw new Error("User ID not provided.");
+    } 
 
-		const formattedData = educationData.map((education) => ({
-			...education,
-			country: education.addresses?.country,
-			state: education.addresses?.state,
-			county: education.addresses?.county,
-			addresses: undefined,
-		}));
+    const { data: educationData, error: educationError } = await supabase
+      .from("education")
+      .select(
+        `
+        uuid,
+        type,
+        professional_school,
+        degree,
+        start_date,
+        end_date,
+        address_id,
+        addresses (
+          country,
+          state,
+          county
+        )
+        `
+      )
+      .eq("provider_id", userId); // Add WHERE condition
 
-		return new Response(JSON.stringify(formattedData), {
-			status: 200,
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-	} catch (error) {
-		return new Response(JSON.stringify({ error: error.message }), {
-			status: 400,
-		});
-	}
+    if (educationError) throw educationError;
+
+    // Format the data
+    const formattedData = educationData.map((education) => ({
+      ...education,
+      country: education.addresses?.country,
+      state: education.addresses?.state,
+      county: education.addresses?.county,
+      addresses: undefined,
+    }));
+
+    // Return the response
+    return new Response(JSON.stringify(formattedData), {
+      status: 200,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+    });
+  }
 }
+
 
 export async function POST(request) {
 	try {

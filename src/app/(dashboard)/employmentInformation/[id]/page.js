@@ -16,7 +16,7 @@ import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import Spinner from "@/components/ui/Spinner";
 import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
-import { formatDate } from "../educationTraining/useEducationTraning";
+import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 
 function EmploymentInformation() {
 	const [loading, setLoading] = useState(false);
