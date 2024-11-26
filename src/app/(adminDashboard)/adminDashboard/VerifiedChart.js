@@ -1,72 +1,34 @@
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+"use client";
+import React from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from "recharts";
 
-// Register required Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const data = [
+  { name: "Not Verified", value: 12, fill: "#ff3131" }, // Red for Not Verified
+  { name: "Verified", value: 19, fill: "#00be62" },     // Green for Verified
+];
 
 const VerifiedChart = () => {
-  const data = {
-    labels: ["Not Verified", "Verified"],
-    datasets: [
-      {
-        label: "Monthly Sales",
-        data: [12, 19], // Data points for Not Verified and Verified
-        backgroundColor: [
-          "#ff3131", // Red for Not Verified
-          "#00be62", // Green for Verified
-        ],
-        barThickness: 30, // Set the thickness of the bars (in pixels)
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    indexAxis: "y", // This makes the chart horizontal
-    plugins: {
-      legend: {
-        position: "top",
-        display: false, // Hides the legend
-      },
-    },
-    scales: {
-      x: {
-        grid: {
-          display: false, // Hides grid lines on the x-axis
-        },
-        beginAtZero: true,
-      },
-      y: {
-        grid: {
-          display: false, // Hides grid lines on the y-axis
-        },
-        // These properties control the gap between bars
-        ticks: {
-          beginAtZero: true,
-        },
-        // Adjust category spacing and bar width
-        barPercentage: 0.8, // This still reduces the gap but isn't the only key property for horizontal charts
-        categoryPercentage: 0.9, // This helps in reducing space between categories
-      },
-    },
-  };
-
-  return <Bar data={data} options={options} />;
+  return (
+    <BarChart
+      width={400}
+      height={150}
+      data={data}
+      layout="vertical" // Makes it horizontal
+      barSize={20} // Controls bar thickness
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis type="number" hide />
+      <YAxis dataKey="name" type="category" />
+      <Tooltip />
+      <Legend />
+      {/* Dynamically set the bar color using the fill property in the data */}
+      <Bar dataKey="value" name="Verifications">
+        {data.map((entry, index) => (
+          <cell key={`cell-${index}`} fill={entry.fill} />
+        ))}
+      </Bar>
+    </BarChart>
+  );
 };
 
 export default VerifiedChart;

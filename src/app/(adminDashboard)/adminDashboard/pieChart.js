@@ -1,37 +1,34 @@
-// components/PieChart.js
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+"use client";
+import React from "react";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
-// Register required Chart.js components
-ChartJS.register(ArcElement, Tooltip, Legend);
+const data = [
+  { name: "Pending", value: 12, color: "rgb(255, 189, 88)" },
+  { name: "Accepted", value: 19, color: "rgb(0, 190, 98)" },
+  { name: "Rejected", value: 3, color: "rgb(255, 49, 49)" },
+  { name: "Terminated", value: 5, color: "rgb(115, 115, 115)" },
+];
 
-const PieChart = () => {
-  const data = {
-    labels: ['Rending', 'Accepted', 'Rejected', 'Terminated'],
-    datasets: [
-      {
-        label: 'Votes',
-        data: [12, 19, 3, 5],
-        backgroundColor: [
-          'rgb(255, 189, 88)',
-          'rgb(0, 190, 98)',
-          'rgb(255, 49, 49)',
-          'rgb(115, 115, 115)',
-          
-        ],
-        borderColor: [
-          'rgb(255, 189, 88)',
-          'rgb(0, 190, 98)',
-          'rgb(255, 49, 49)',
-          'rgb(115, 115, 115)',
-          
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  return <Pie data={data} width={350} height={350}/>;
+const CustomPieChart = () => {
+  return (
+    <PieChart width={400} height={350}>
+      <Pie
+        data={data}
+        dataKey="value"
+        nameKey="name"
+        cx="50%"
+        cy="50%"
+        outerRadius={120}
+        fill="#8884d8"
+      >
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={entry.color} />
+        ))}
+      </Pie>
+      <Tooltip />
+      <Legend />
+    </PieChart>
+  );
 };
 
-export default PieChart;
+export default CustomPieChart;

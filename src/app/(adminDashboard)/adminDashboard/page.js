@@ -1,11 +1,21 @@
 "use client";
 import { IoAddCircleOutline } from "react-icons/io5";
-import DocumentChart from "./DocumentsChart";
-import PieChart from "./pieChart";
-import VerifiedChart from "./VerifiedChart";
 import AdminDashboardLayout from "../adminLayout";
+import dynamic from "next/dynamic";
 
 export default function AdminDashboard() {
+  // Dynamically import the VerifiedChart with SSR disabled
+  const VerifiedChart = dynamic(() => import("./VerifiedChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
+  const DocumentChart = dynamic(() => import("./DocumentsChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
+  const PieChart = dynamic(() => import("./pieChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
 
   return (
     <>

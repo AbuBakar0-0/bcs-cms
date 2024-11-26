@@ -1,14 +1,16 @@
 import ProvidersNavbar from "@/components/providersDashboard/ProvidersNavbar";
 import Link from "next/link";
 import React from "react";
-import { CiSearch, CiUser } from "react-icons/ci";
+import { CiEdit, CiSearch, CiUser } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiCircleInfo } from "react-icons/ci";
 import Button from "@/components/ui/Button";
-import AdminDashboardLayout from "../adminLayout";
 import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
+import AdminDashboardLayout from "../../adminLayout";
+import { FaEye } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
 
-export default function ProvidersDocument() {
+export default function LocationSetup() {
   return (
     <AdminDashboardLayout>
       <ProvidersCard />
@@ -29,37 +31,45 @@ export default function ProvidersDocument() {
             title={"Add"}
             icon={<IoAddCircleOutline className="size-6" />}
           />
-
-          <Link
-            href={"/documentDetails"}
-            className="bg-secondary px-4 py-3 rounded-lg text-white flex flex-row justify-center items-center gap-4"
-          >
-            <CiCircleInfo className="size-6" />
-            <p>Details</p>
-          </Link>
         </div>
       </div>
-      <div className="min-h-screen flex flex-col md:flex-row">
+
+      <div className="flex flex-col md:flex-row">
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full table-auto">
                 <thead className="bg-gray-200 text-left">
                   <tr>
-                    <th className="p-3">Document Type</th>
-                    <th className="p-3">Alias</th>
-                    <th className="p-3">Expiration Date</th>
-                    <th className="p-3">Status</th>
+                    <th className="p-3">Location Name</th>
+                    <th className="p-3">Address</th>
+                    <th className="p-3">City</th>
+                    <th className="p-3">State</th>
                     <th className="p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b">
-                    <td className="p-3">Appointment Application</td>
-                    <td className="p-3">-</td>
-                    <td className="p-3">09/29/2023</td>
-                    <td className="p-3 text-red-500">Expired 159 Days Ago</td>
-                    <td className="p-3">...</td>
+                    <td className="p-3">CHN</td>
+                    <td className="p-3">10851 SCARSDALE BLVD STE 200</td>
+                    <td className="p-3">Houston</td>
+                    <td className="p-3">TX</td>
+                    <td className="p-3 flex flex-row justify-start items-center gap-2">
+                      <FaEye className="text-secondary" /> /
+                      <CiEdit className="text-primary" /> /
+                      <MdDeleteOutline className="text-red-400" />
+                    </td>
+                  </tr>
+                  <tr className="border-b">
+                    <td className="p-3">BCS</td>
+                    <td className="p-3">30 N GOULD, ST, STE R</td>
+                    <td className="p-3">Sheridan</td>
+                    <td className="p-3">WY</td>
+                    <td className="p-3 flex flex-row justify-start items-center gap-2">
+                      <FaEye className="text-secondary" /> /
+                      <CiEdit className="text-primary" /> /
+                      <MdDeleteOutline className="text-red-400" />
+                    </td>
                   </tr>
                 </tbody>
               </table>

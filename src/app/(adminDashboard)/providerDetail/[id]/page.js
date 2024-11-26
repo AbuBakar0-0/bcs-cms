@@ -2,13 +2,24 @@
 import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
 import { useParams } from "next/navigation";
 import { CiEdit } from "react-icons/ci";
-import DocumentChart from "../../adminDashboard/DocumentsChart";
-import VerifiedChart from "../../adminDashboard/VerifiedChart";
-import PieChart from "../../adminDashboard/pieChart";
 import AdminDashboardLayout from "../../adminLayout";
+import dynamic from "next/dynamic";
 
 const ProviderDetail = () => {
   const { id } = useParams(); // Get the provider ID from route params
+
+  const VerifiedChart = dynamic(() => import("../../adminDashboard/VerifiedChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
+  const DocumentChart = dynamic(() => import("../../adminDashboard/DocumentsChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
+  const PieChart = dynamic(() => import("../../adminDashboard/pieChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
   
   return (
     <AdminDashboardLayout>

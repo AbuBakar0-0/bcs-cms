@@ -1,57 +1,34 @@
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+"use client";
+import React from "react";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid, Cell } from "recharts";
 
-// Register required Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+const data = [
+  { name: "Expired", value: 12, color: "#ff3131" },
+  { name: "Expiring", value: 19, color: "#eb5345" },
+  { name: "Missing", value: 3, color: "#ffbd58" },
+  { name: "Active", value: 5, color: "#00be62" },
+  { name: "On File", value: 2, color: "#004aac" },
+];
 
 const DocumentChart = () => {
-  const data = {
-    labels: ["Expired", "Expiring", "Missing", "Active", "On FIle"],
-    datasets: [
-      {
-        data: [12, 19, 3, 5, 2, 8],
-        backgroundColor: [
-          "#ff3131",
-          "#eb5345",
-          "#ffbd58",
-          "#00be62",
-          "#004aac"
-        ],
-      },
-    ],
-  };
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-        display:false,
-      },
-    },
-    scales: {
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
-
-  return <Bar data={data} options={options} />;
+  return (
+    <BarChart
+      width={500}
+      height={300}
+      data={data}
+      barSize={30} // Controls the thickness of the bars
+    >
+      <CartesianGrid strokeDasharray="3 3" />
+      <XAxis dataKey="name" />
+      <YAxis />
+      <Tooltip />
+      <Bar dataKey="value" name="Documents">
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={entry.color} />
+        ))}
+      </Bar>
+    </BarChart>
+  );
 };
 
 export default DocumentChart;

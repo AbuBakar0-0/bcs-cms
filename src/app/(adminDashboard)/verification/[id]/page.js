@@ -1,5 +1,5 @@
-import AdminDashboardLayout from "../adminLayout";
 import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
+import AdminDashboardLayout from "../../adminLayout";
 
 export default function Verification() {
   return (

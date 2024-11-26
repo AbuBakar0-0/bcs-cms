@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import ProvidersNavbar from './ProvidersNavbar';
-import  { ClipLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 
 const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  // Accept id as a prop
     const [provider, setProvider] = useState(null);
@@ -48,20 +48,24 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
                     <p className="text-sm">
                         Provider type: {provider?.provider_title || "-"}
                     </p>
-                    <p className="text-sm">Gender: {provider?.gender || "-"}</p>
+                    <p className="text-sm">Gender: {provider?.gender || "Female"}</p>
                 </div>
                 <div className="w-1/4 flex flex-col justify-start items-start gap-2">
+                    <p>NPI-1: 1902948326</p>
+                    <p>Cell #: 281-727-0701</p>
+                    <p>Email: Lttran@sfachc.org</p>
                     <p>Date of Birth: {provider?.dob || "-"}</p>
                     <p>SSN: {provider?.ssn || "-"}</p>
-                    <p>License ID: {provider?.license_id || "-"}</p>
                 </div>
                 <div className="w-1/4 flex flex-col justify-start items-start gap-2">
+                    <p>Address: 6809 Adella Court</p>
+                    <p>License ID: {provider?.license_id || "-"}</p>
                     <p>State Issued: {provider?.state_issued || "-"}</p>
                     <p>Issue Date: {provider?.issue_date || "-"}</p>
                     <p>Expiry Date: {provider?.expiry_date || "-"}</p>
                 </div>
             </div>
-            <ProvidersNavbar id={id}/>
+            <ProvidersNavbar id={id} />
         </div>
     );
 };

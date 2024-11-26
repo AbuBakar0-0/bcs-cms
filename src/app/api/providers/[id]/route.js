@@ -15,7 +15,6 @@ export async function GET(req, { params }) {
                 last_name, 
                 provider_title, 
                 ssn, 
-                
                 gender, 
                 dob, 
                 license_id, 

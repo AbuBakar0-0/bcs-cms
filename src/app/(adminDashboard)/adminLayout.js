@@ -5,7 +5,7 @@ import { CiSearch } from "react-icons/ci";
 const sidenavLinks = [
   { title: "Admin Dashboard", link: "/adminDashboard" },
   { title: "Providers Dashboard", link: "/providersDashboard" },
-  { title: "Organization Management", link: "" },
+  { title: "Organization Management", link: "/organizationManagement" },
   { title: "Practice Location", link: "" },
   { title: "Document Center", link: "" },
   { title: "Credentialing Status", link: "" },
@@ -17,7 +17,7 @@ const sidenavLinks = [
   { title: "Help Center", link: "" },
 ];
 
-export default function AdminDashboardLayout({ children ,barTitle}) {
+export default function AdminDashboardLayout({ children ,barTitle="Providers Dashboard"}) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}

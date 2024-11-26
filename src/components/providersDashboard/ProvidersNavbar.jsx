@@ -10,10 +10,10 @@ const ProvidersNavbar = ({ id }) => {
         { title: "Enrollment", link: "/enrollment/" },
         { title: "Information", link: "/providersInformation" },
         { title: "Verification", link: "/verification" },
-        { title: "Exclusions", link: "/exclusion" },
+        { title: "Exclusions", link: "/exclusions" },
         { title: "Documents", link: "/providersDocument" },
-        { title: "Privilege Declineation", link: "/" },
-        { title: "Location Setup", link: "/" },
+        { title: "Privilege Declineation", link: "/privilege" },
+        { title: "Location Setup", link: "/locationSetup" },
     ];
 
     return (

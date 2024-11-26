@@ -3,17 +3,18 @@ import Button from "@/components/ui/Button";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
+import { useEffect, useState } from "react";
 import { FaRegCircleUser } from "react-icons/fa6";
+import { FiEdit2, FiTrash2, FiUserX } from "react-icons/fi";
+import { IoAddCircleOutline } from "react-icons/io5";
 import { LiaUserSlashSolid } from "react-icons/lia";
-import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
 import { ClipLoader } from "react-spinners";
+import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
+
 
   // Fetch providers function
   const fetchProviders = async () => {
