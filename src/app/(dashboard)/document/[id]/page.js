@@ -11,141 +11,29 @@ import { CiEdit } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import {
 	documentsList,
 	initialFormData,
 	providerOptions,
 	statusOptions,
 } from "./utilis";
+import { useDocuments } from "./useDocument";
 
 export default function DocumentPage() {
-	const [showForm, setShowForm] = useState(false);
-	const [documents, setDocuments] = useState([]);
-	const [formData, setFormData] = useState(initialFormData);
-	const [isEditing, setIsEditing] = useState(false);
-	const [loading, setLoading] = useState(false);
-
-	useEffect(() => {
-		fetchDocuments();
-	}, []);
-
-	const fetchDocuments = async () => {
-		setLoading(true);
-		try {
-			const response = await fetch("/api/documents");
-			if (!response.ok) throw new Error("Failed to fetch documents");
-			const data = await response.json();
-			setDocuments(data);
-		} catch (error) {
-			console.error("Error fetching documents:", error);
-			toast.error("Failed to fetch documents");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const resetForm = () => {
-		setFormData(initialFormData);
-		setIsEditing(false);
-	};
-
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		if (!formData.title || !formData.provider || !formData.status) {
-			toast.error("Please fill in all required fields");
-			return;
-		}
-
-		setLoading(true);
-		try {
-			const formDataToSend = new FormData();
-			Object.entries(formData).forEach(([key, value]) => {
-				if (value !== null && value !== "") {
-					formDataToSend.append(key, value);
-				}
-			});
-
-			const response = await fetch("/api/documents", {
-				method: isEditing ? "PUT" : "POST",
-				body: formDataToSend,
-			});
-
-			if (!response.ok) throw new Error("Failed to save document");
-
-			await fetchDocuments();
-			setShowForm(false);
-			resetForm();
-			toast.success(
-				`Document ${isEditing ? "updated" : "created"} successfully`
-			);
-		} catch (error) {
-			console.error("Error saving document:", error);
-			toast.error("Failed to save document");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleEdit = (doc) => {
-		setFormData({
-			title: doc.title,
-			provider: doc.provider,
-			status: doc.status,
-			effective_date: formatDate(doc.effective_date) || "",
-			expiry_date: formatDate(doc.expiry_date) || "",
-			file: doc.url || null,
-			existing_url: doc.url || "",
-			existing_file_public_id: doc.file_public_id || "",
-			uuid: doc.uuid,
-		});
-		setIsEditing(true);
-		setShowForm(true);
-	};
-
-	const handleDelete = async (doc) => {
-		if (!window.confirm("Are you sure you want to delete this document?")) {
-			return;
-		}
-
-		setLoading(true);
-		try {
-			const response = await fetch("/api/documents", {
-				method: "DELETE",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					uuid: doc.uuid,
-					file_public_id: doc.file_public_id,
-				}),
-			});
-
-			if (!response.ok) throw new Error("Failed to delete document");
-
-			await fetchDocuments();
-			toast.success("Document deleted successfully");
-		} catch (error) {
-			console.error("Error deleting document:", error);
-			toast.error("Failed to delete document");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleView = (doc) => {
-		if (doc.url) {
-			window.open(doc.url, "_blank");
-		} else {
-			toast.error("No document file available");
-		}
-	};
+	const {
+		showForm,
+		documents,
+		formData,
+		isEditing,
+		loading,
+		handleChange,
+		handleSubmit,
+		handleEdit,
+		handleDelete,
+		handleView,
+		toggleForm,
+		resetForm,
+	} = useDocuments();
 
 	return (
 		<div className="w-full flex flex-col justify-center items-center gap-4 p-4">
@@ -154,7 +42,7 @@ export default function DocumentPage() {
 				<Button
 					title="Add Document"
 					icon={<IoAddCircleOutline className="size-6" />}
-					onClick={() => setShowForm(true)}
+					onClick={() => toggleForm(true)}
 					disabled={loading}
 				/>
 			</div>

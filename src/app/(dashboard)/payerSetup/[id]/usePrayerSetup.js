@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { format, parse } from "date-fns";
 import { defaultFormData } from "./utilis";
 import toast from "react-hot-toast";
+import { useParams } from "next/navigation";
 
 export const usePayerSetup = () => {
 	const [application, setShowApplication] = useState(false);
@@ -11,7 +12,7 @@ export const usePayerSetup = () => {
 	const [editingId, setEditingId] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
-
+	const { id: provider_id } = useParams();
 	useEffect(() => {
 		fetchPayerSetups();
 	}, []);
@@ -32,6 +33,16 @@ export const usePayerSetup = () => {
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
+		if (
+			[
+				"Select State",
+				"Select Status",
+				"Select Business",
+				"Select Plan",
+				"Select Provider",
+			].includes(value)
+		)
+			return;
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
@@ -47,6 +58,7 @@ export const usePayerSetup = () => {
 			toast.error(
 				`Please fill in all required fields: ${missingFields.join(", ")}`
 			);
+			return false;
 		}
 		return true;
 	};
@@ -55,7 +67,9 @@ export const usePayerSetup = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			const response = await fetch("/api/payer-setup");
+			const response = await fetch(
+				`/api/payer-setup?provider_id=${provider_id}`
+			);
 			if (!response.ok) {
 				throw new Error(
 					`Failed to fetch payer setups. Status: ${response.status}`
@@ -75,7 +89,7 @@ export const usePayerSetup = () => {
 		setLoading(true);
 		setError(null);
 		try {
-			validateForm();
+			if (!validateForm()) return;
 
 			const url = isEditing
 				? `/api/payer-setup/${editingId}`
@@ -87,7 +101,7 @@ export const usePayerSetup = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(formData),
+				body: JSON.stringify({ ...formData, provider_id }),
 			});
 
 			if (!response.ok) {

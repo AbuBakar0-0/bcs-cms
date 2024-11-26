@@ -7,13 +7,13 @@ export async function POST(request) {
 
 		const homeAddress = await insertAddress(formData, "Location");
 
-		// Inserting Provider Information
 		const { data: hospitalAffiliation, error: hospitalError } = await supabase
 			.from("hospital_affiliations")
 			.insert({
 				hospital_name: formData.hospital_name,
 				address_id: homeAddress?.uuid,
 				type: formData.type,
+				provider_id: formData.provider_id,
 			})
 			.select("uuid")
 			.single();
@@ -40,18 +40,16 @@ export async function POST(request) {
 
 export async function GET(request) {
 	try {
-
-		const { searchParams } = new URL(request.url);
-
+		const searchParams = request.nextUrl.searchParams;
 		const provider_id = searchParams.get("provider_id");
-		// Fetching all hospital affiliations without filtering by type
+
 		const { data: hospitalAffiliations, error: hospitalError } = await supabase
 			.from("hospital_affiliations")
-			.select("uuid, hospital_name, address_id, type").eq("provider_id", provider_id);
+			.select("uuid, hospital_name, address_id, type")
+			.eq("provider_id", provider_id);
 
 		if (hospitalError) throw hospitalError;
 
-		// If no hospital affiliations found, return an empty result
 		if (!hospitalAffiliations.length) {
 			return new Response(
 				JSON.stringify({
@@ -62,27 +60,24 @@ export async function GET(request) {
 			);
 		}
 
-		// Fetch the addresses associated with each hospital affiliation
 		const addressIds = hospitalAffiliations.map((h) => h.address_id);
 		const { data: addresses, error: addressError } = await supabase
 			.from("addresses")
 			.select("*")
-			.in("uuid", addressIds); // Fetch addresses where the uuid matches the address_id
+			.in("uuid", addressIds);
 
 		if (addressError) throw addressError;
 
-		// Combine the hospital affiliation and address data
 		const result = hospitalAffiliations.map((hospital) => {
 			const address = addresses.find(
 				(addr) => addr.uuid === hospital.address_id
 			);
 			return {
 				...hospital,
-				address: address || null, // If address exists, include it, otherwise null
+				address: address || null,
 			};
 		});
 
-		// Return the combined data
 		return new Response(
 			JSON.stringify({
 				message: "Data fetched successfully",

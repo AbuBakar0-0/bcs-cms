@@ -6,6 +6,9 @@ const convertToDate = (dateString) => {
 export async function POST(request) {
 	try {
 		const formData = await request.json();
+		const { provider_id } = formData;
+		console.log(provider_id);
+		return;
 		// Inserting Medicare, Medicaid, State License, CLIA, DEA, CDS information
 		const insertArrayField = async (fieldName, data) => {
 			// console.log(data, "--------", fieldName);

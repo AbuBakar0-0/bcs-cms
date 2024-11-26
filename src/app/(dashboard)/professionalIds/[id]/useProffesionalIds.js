@@ -2,6 +2,7 @@ import { useState } from "react";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import toast from "react-hot-toast";
 import { validateForm } from "./utilis";
+import { useParams } from "next/navigation";
 export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const useProfessionalIdsForm = () => {
@@ -16,7 +17,7 @@ export const useProfessionalIdsForm = () => {
 		medicare: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasMedicare: "No",
@@ -25,7 +26,7 @@ export const useProfessionalIdsForm = () => {
 		medicaid: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasMedica: "No",
@@ -34,7 +35,7 @@ export const useProfessionalIdsForm = () => {
 		stateLicense: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasStateLicense: "No",
@@ -43,7 +44,7 @@ export const useProfessionalIdsForm = () => {
 		clia: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasClia: "No",
@@ -52,7 +53,7 @@ export const useProfessionalIdsForm = () => {
 		dea: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasDea: "No",
@@ -61,7 +62,7 @@ export const useProfessionalIdsForm = () => {
 		cds: [
 			{
 				number: "",
-				state: stateAbbreviations[0] || "",
+				state: "",
 				effectiveDate: "",
 				expiryDate: "",
 				hasCds: "No",
@@ -99,7 +100,7 @@ export const useProfessionalIdsForm = () => {
 		medicaidUsername: "",
 		medicaidPassword: "",
 	});
-
+	const { id: provider_id } = useParams();
 	const arrayFields = [
 		"medicare",
 		"medicaid",
@@ -111,7 +112,7 @@ export const useProfessionalIdsForm = () => {
 
 	const handleChange = (e, index, field) => {
 		const { name, value } = e.target;
-		console.log(name, value);
+		if (["Select State", "Select Aggregate"].includes(name)) return;
 		if (arrayFields.includes(field)) {
 			setFormData((prev) => {
 				const updatedField = [...prev[field]];
@@ -171,7 +172,7 @@ export const useProfessionalIdsForm = () => {
 			const response = await fetch("/api/professional-ids", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(formData),
+				body: JSON.stringify({ ...formData, provider_id }),
 			});
 
 			if (!response.ok) {

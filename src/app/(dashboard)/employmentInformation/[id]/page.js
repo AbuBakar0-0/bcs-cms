@@ -17,6 +17,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import { ClipLoader } from "react-spinners";
+import { useParams } from "next/navigation";
 
 function EmploymentInformation() {
 	const [loading, setLoading] = useState(false);
@@ -39,11 +40,13 @@ function EmploymentInformation() {
 		end_date: "",
 		current_employer: "No",
 	});
-
+	const { id: provider_id } = useParams();
 	const fetchEmploymentData = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch("/api/employment-information");
+			const response = await fetch(
+				`/api/employment-information?provider_id=${provider_id}`
+			);
 			const result = await response.json();
 			if (result.data) {
 				setEmploymentData(result.data);
@@ -102,7 +105,7 @@ function EmploymentInformation() {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify(formData),
+				body: JSON.stringify({ ...formData, provider_id: provider_id }),
 			});
 
 			const result = await response.json();

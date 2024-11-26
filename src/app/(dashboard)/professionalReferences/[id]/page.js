@@ -10,159 +10,25 @@ import NavBottom from "@/components/ui/NavBottom";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import getData from "@/hooks/getData";
-import { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { toast } from "react-hot-toast";
-import { ClipLoader } from "react-spinners";
+import { useProfessionalReferences } from "./useProfessionalRef";
+import { BarLoader } from "react-spinners";
 
 function ProfessionalReferences() {
-	const [reference, setReference] = useState(false);
-	const [references, setReferences] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const [editingId, setEditingId] = useState(null);
-
-	// Form state
-	const initialFormState = {
-		provider_type: "",
-		first_name: "",
-		middle_initial: "",
-		last_name: "",
-		address_line_1: "",
-		address_line_2: "",
-		country: "USA",
-		city: "",
-		state: stateAbbreviations[0],
-		zip_code: "",
-		cell_phone: "",
-		fax: "",
-		email: "",
-	};
-
-	const [formData, setFormData] = useState(initialFormState);
-
-	const handleReference = () => {
-		setReference(!reference);
-		if (!reference) {
-			setFormData(initialFormState);
-			setEditingId(null);
-		}
-	};
-
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const fetchData = async () => {
-		setLoading(true);
-		try {
-			const response = await getData("/api/professional-references");
-			if (response.data) {
-				setReferences(response.data);
-			}
-		} catch (error) {
-			toast.error("Error fetching references");
-			console.error("Error:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchData();
-	}, []);
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setLoading(true);
-
-		try {
-			const url = editingId
-				? `/api/professional-references/${editingId}`
-				: "/api/professional-references";
-
-			const response = await fetch(url, {
-				method: editingId ? "PUT" : "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-
-			const result = await response.json();
-
-			if (response.ok) {
-				toast.success(
-					editingId
-						? "Reference updated successfully"
-						: "Reference added successfully"
-				);
-				setFormData(initialFormState);
-				setReference(false);
-				setEditingId(null);
-				fetchData();
-			} else {
-				throw new Error(result.message || "Error saving data");
-			}
-		} catch (error) {
-			toast.error(error.message || "Error saving reference");
-			console.error("Error:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleEdit = (ref) => {
-		setFormData({
-			provider_type: ref.provider_type || "",
-			first_name: ref.first_name || "",
-			middle_initial: ref.middle_initial || "",
-			last_name: ref.last_name || "",
-			address_line_1: ref.address_line_1 || "",
-			address_line_2: ref.address_line_2 || "",
-			country: ref.country || "USA",
-			city: ref.city || "",
-			state: ref.state || "",
-			zip_code: ref.zip_code || "",
-			cell_phone: ref.cell_phone || "",
-			fax: ref.fax || "",
-			email: ref.email || "",
-		});
-		setEditingId(ref.uuid);
-		setReference(true);
-	};
-
-	const handleDelete = async (uuid) => {
-		if (!confirm("Are you sure you want to delete this reference?")) {
-			return;
-		}
-
-		setLoading(true);
-		try {
-			const response = await fetch(`/api/professional-references/${uuid}`, {
-				method: "DELETE",
-			});
-
-			if (response.ok) {
-				toast.success("Reference deleted successfully");
-				fetchData();
-			} else {
-				const error = await response.json();
-				throw new Error(error.message || "Error deleting reference");
-			}
-		} catch (error) {
-			toast.error(error.message || "Error deleting reference");
-			console.error("Error:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
+	const {
+		reference,
+		references,
+		loading,
+		formData,
+		editingId,
+		handleReference,
+		handleInputChange,
+		handleSubmit,
+		handleEdit,
+		handleDelete,
+	} = useProfessionalReferences();
 
 	const ReferenceCard = ({ ref }) => (
 		<div className="w-full shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-6">
@@ -327,7 +193,7 @@ function ProfessionalReferences() {
 
 				{loading && !reference ? (
 					<div className="w-full flex justify-center items-center my-10">
-						<ClipLoader />
+						<BarLoader />
 					</div>
 				) : references.length === 0 ? (
 					<div className="w-full text-center py-8">

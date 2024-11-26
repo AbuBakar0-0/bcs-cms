@@ -19,154 +19,36 @@ import { MdDeleteOutline } from "react-icons/md";
 import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
 import { defaultFormData } from "../../payerSetup/[id]/utilis";
 import { ClipLoader } from "react-spinners";
-import { useParams } from "next/navigation";
+import { useSpecialities } from "./useSpeciality";
 const defaultState = {
-	speciality: specialities[0],
+	speciality: "",
 	type: "",
 	is_board_certified: "",
-	name_of_board: certifyingBoards[0],
+	name_of_board: "",
 	address_line_1: "",
 	address_line_2: "",
 	country: "USA",
 	city: "",
-	state: stateAbbreviations[0],
+	state: "",
 	zip_code: "",
 	effective_date: "",
 	expiry_date: "",
 };
 function Specialities() {
-	const [loading, setLoading] = useState(false);
-	const [specialitiesData, setSpecialitiesData] = useState([]);
-	const [showForm, setShowForm] = useState(false);
-	const [specialityType, setSpecialityType] = useState("");
-	const [formData, setFormData] = useState(defaultState);
-	const [isEditing, setIsEditing] = useState(false);
-	const [editingId, setEditingId] = useState(null);
-
-	const { id: provider_id } = useParams();
-
-	const handleInputChange = (e) => {
-		const { name, value } = e.target;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
-
-	const handlePrimarySpeciality = () => {
-		setShowForm(true);
-		setSpecialityType("primary");
-		setFormData((prev) => ({
-			...prev,
-			type: "primary",
-		}));
-	};
-
-	const handleSecondarySpeciality = () => {
-		setShowForm(true);
-		setSpecialityType("secondary");
-		setFormData((prev) => ({
-			...prev,
-			type: "secondary",
-		}));
-	};
-
-	const fetchSpecialities = async () => {
-		setLoading(true);
-		try {
-			const response = await fetch(`/api/specialities?provider_id=${provider_id}`);
-			const data = await response.json();
-			setSpecialitiesData(data.data);
-		} catch (error) {
-			console.error("Error fetching specialities:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	useEffect(() => {
-		fetchSpecialities();
-	}, []);
-
-	const handleEdit = (speciality) => {
-		setIsEditing(true);
-		setEditingId(speciality.id);
-		setShowForm(true);
-		setSpecialityType(speciality.type);
-
-		setFormData({
-			speciality: speciality.name,
-			type: speciality.type,
-			is_board_certified: speciality.isBoardCertified,
-			name_of_board: speciality.boardName,
-			address_line_1: speciality.address?.addressLine1 || "",
-			address_line_2: speciality.address?.addressLine2 || "",
-			country: speciality.address?.country || "USA",
-			city: speciality.address?.city || "",
-			state: speciality.address?.state || stateAbbreviations[0],
-			zip_code: speciality.address?.zipCode || "",
-			effective_date: formatDate(speciality.effectiveDate),
-			expiry_date: formatDate(speciality.expiryDate),
-		});
-	};
-	
-	const handleDelete = async (id) => {
-		if (window.confirm("Are you sure you want to delete this speciality?")) {
-			try {
-				const response = await fetch(`/api/specialities/${id}`, {
-					method: "DELETE",
-				});
-
-				if (response.ok) {
-					if (editingId === id) {
-						setEditingId(null);
-						setFormData(defaultFormData);
-					}
-					setSpecialitiesData((prev) =>
-						prev.filter((speciality) => speciality.id !== id)
-					);
-				} else {
-					console.error("Failed to delete speciality");
-				}
-			} catch (error) {
-				console.error("Error deleting speciality:", error);
-			}
-		}
-	};
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		try {
-			const url = isEditing
-				? `/api/specialities/${editingId}`
-				: "/api/specialities";
-
-			const method = isEditing ? "PUT" : "POST";
-
-			const response = await fetch(url, {
-				method,
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(formData),
-			});
-
-			if (response.ok) {
-				setFormData(defaultState);
-				setShowForm(false);
-				setIsEditing(false);
-				setEditingId(null);
-				fetchSpecialities();
-			} else {
-				console.error(`Failed to ${isEditing ? "update" : "submit"} form`);
-			}
-		} catch (error) {
-			console.error(
-				`Error ${isEditing ? "updating" : "submitting"} form:`,
-				error
-			);
-		}
-	};
+	const {
+		loading,
+		specialitiesData,
+		showForm,
+		specialityType,
+		formData,
+		isEditing,
+		handleInputChange,
+		handlePrimarySpeciality,
+		handleSecondarySpeciality,
+		handleEdit,
+		handleDelete,
+		handleSubmit,
+	} = useSpecialities();
 
 	return (
 		<>

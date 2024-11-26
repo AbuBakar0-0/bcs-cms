@@ -1,5 +1,4 @@
 const payers = [
-    "Select Payer",
     "UnitedHealthcare",
     "Blue Cross Blue Shield (BCBS)",
     "Aetna",

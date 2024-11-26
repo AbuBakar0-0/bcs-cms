@@ -3,6 +3,7 @@ import { stateAbbreviations } from "@/data/stateAbbreviations";
 
 export const DROPDOWN_OPTIONS = {
 	planTypes: [
+		"Select Plan",
 		"All",
 		"EPO",
 		"HMO",
@@ -15,13 +16,21 @@ export const DROPDOWN_OPTIONS = {
 		"Medigap",
 	],
 	businesses: [
+		"Select Business",
 		"CHN Medical Support",
 		"Home Health Care",
 		"Pharmacy",
 		"Urgent Care",
 	],
-	providers: ["Adnan Qamar", "John Doe", "John Wick", "Zanjeel Malik"],
+	providers: [
+		"Select Provider",
+		"Adnan Qamar",
+		"John Doe",
+		"John Wick",
+		"Zanjeel Malik",
+	],
 	statuses: [
+		"Select Status",
 		"Submitted",
 		"In-Progress",
 		"Approved",
@@ -31,12 +40,12 @@ export const DROPDOWN_OPTIONS = {
 	],
 };
 export const defaultFormData = {
-	state: stateAbbreviations[0],
-	plan_type: DROPDOWN_OPTIONS.planTypes[0],
-	business: DROPDOWN_OPTIONS.businesses[0],
-	provider: DROPDOWN_OPTIONS.providers[0],
-	payer_name: payers[0],
-	status: DROPDOWN_OPTIONS.statuses[0],
+	state: "",
+	plan_type: "",
+	business: "",
+	provider: "",
+	payer_name: "",
+	status: "",
 	date: "",
 	notes: "",
 };

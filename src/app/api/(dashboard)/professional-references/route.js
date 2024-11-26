@@ -4,7 +4,7 @@ import insertAddress from "../util";
 export async function POST(request) {
 	try {
 		const formData = await request.json();
-
+		const { provider_id } = formData;
 		// Insert Address using utility function
 		const homeAddress = await insertAddress(formData, "Location");
 
@@ -32,6 +32,7 @@ export async function POST(request) {
 					last_name: formData.last_name,
 					address_id: homeAddress?.uuid,
 					contact_id: contact?.uuid,
+					provider_id,
 				})
 				.select("uuid")
 				.single();
@@ -59,13 +60,16 @@ export async function POST(request) {
 
 export async function GET(request) {
 	try {
+		const searchParams = request.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
 		// Get professional references
 		const { data: professionalReferences, error: referenceError } =
 			await supabase
 				.from("professional_references")
 				.select(
 					"uuid, provider_type, first_name, middle_initial, last_name, address_id, contact_id"
-				);
+				)
+				.eq("provider_id", provider_id);
 
 		if (referenceError) throw referenceError;
 

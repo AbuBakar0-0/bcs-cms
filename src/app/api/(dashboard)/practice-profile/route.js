@@ -2,7 +2,7 @@ import { supabase } from "@/lib/supabase";
 
 export async function POST(req) {
 	const formData = await req.json();
-	console.log(formData);
+	const { provider_id } = formData;
 	try {
 		const { data: serviceAddress, error: serviceAddressError } = await supabase
 			.from("addresses")
@@ -163,6 +163,7 @@ export async function POST(req) {
 					medicaid_number: formData.medicaid_number,
 					start_date: formData.start_date,
 					practice_contact_id: practiceContact.uuid,
+					provider_id,
 				})
 				.select()
 				.single();

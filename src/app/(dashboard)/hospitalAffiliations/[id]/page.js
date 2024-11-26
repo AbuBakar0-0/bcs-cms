@@ -20,7 +20,7 @@ const initialFormState = {
 	address_line_1: "",
 	address_line_2: "",
 	city: "",
-	state: stateAbbreviations[0],
+	state: "",
 	zip_code: "",
 };
 
@@ -32,14 +32,13 @@ function HospitalAffiliations() {
 	const [affiliationForm, setAffiliationForm] = useState(initialFormState);
 	const [arrangementsForm, setArrangementsForm] = useState(initialFormState);
 	const [editingId, setEditingId] = useState(null);
-
 	const { id: provider_id } = useParams();
-
-
 	const fetchData = async () => {
 		setLoading(true);
 		try {
-			const response = await fetch(`/api/hospital-affiliation?provider_id=${provider_id}`);
+			const response = await fetch(
+				`/api/hospital-affiliation?provider_id=${provider_id}`
+			);
 			const data = await response.json();
 			setHospitalData(data.result);
 		} catch (error) {
@@ -56,6 +55,7 @@ function HospitalAffiliations() {
 
 	const handleInputChange = (formType) => (e) => {
 		const { name, value } = e.target;
+		if (["Select State"].includes(value)) return;
 		const formSetter =
 			formType === "affiliation" ? setAffiliationForm : setArrangementsForm;
 
@@ -123,6 +123,7 @@ function HospitalAffiliations() {
 				body: JSON.stringify({
 					...payload,
 					uuid: editingId,
+					provider_id: provider_id,
 				}),
 			});
 

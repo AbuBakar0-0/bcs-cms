@@ -9,9 +9,14 @@ cloudinary.config({
 
 export async function GET(req) {
 	try {
+		const searchParams = req.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
+
 		const { data, error } = await supabase
 			.from("documents")
 			.select("*")
+			.eq("provider_id", provider_id)
+
 			.order("effective_date", { ascending: false });
 
 		if (error) throw error;
@@ -26,7 +31,7 @@ export async function GET(req) {
 export async function POST(req) {
 	try {
 		const formData = await req.formData();
-
+		const provider_id = formData.get("provide_id");
 		const file = formData.get("file");
 		if (!file || file.size === 0) {
 			return Response.json({ error: "File is required" }, { status: 400 });
@@ -76,6 +81,7 @@ export async function POST(req) {
 			expiry_date: formData.get("expiry_date") || null,
 			url,
 			file_public_id,
+			provider_id,
 		});
 
 		if (error) {

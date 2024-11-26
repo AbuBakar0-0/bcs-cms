@@ -1,6 +1,5 @@
-import { specialities } from "@/data/specialities";
-
 export const degrees = [
+	"Select Degree",
 	"MD - Doctor of Medicine",
 	"DO - Doctor of Osteopathy",
 	"DDS - Doctor of Dental Surgery",
@@ -28,6 +27,7 @@ export const degrees = [
 ];
 
 export const eduOptions = [
+	"Select Education",
 	"Internship",
 	"Residency",
 	"Undergraduate",
@@ -48,7 +48,7 @@ export const DEFAULT_TRAINING = {
 	end_date: "",
 	type_of_program: "",
 	department: "",
-	speciality: specialities[0] || "",
+	speciality: "",
 	is_completed: "",
 };
 export const DEFAULT_EDUCATION = {
@@ -58,7 +58,7 @@ export const DEFAULT_EDUCATION = {
 	state: "",
 	county: "",
 	professional_school: "",
-	degree: degrees[0] || "",
+	degree: "",
 	start_date: "",
 	end_date: "",
 };

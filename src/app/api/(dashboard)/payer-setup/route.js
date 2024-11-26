@@ -1,10 +1,14 @@
 import { supabase } from "@/lib/supabase";
 
-export async function GET() {
+export async function GET(request) {
 	try {
+		const searchParams = request.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
+		console.log("---------------------------- ", provider_id);
 		const { data, error } = await supabase
 			.from("payer_setup")
 			.select("*")
+			.eq("provider_id", provider_id)
 			.order("created_at", { ascending: false });
 
 		if (error) throw error;
@@ -21,7 +25,7 @@ export async function POST(request) {
 
 		const { data, error } = await supabase
 			.from("payer_setup")
-			.insert([body])
+			.insert([...body, provider_id])
 			.select();
 
 		if (error) throw error;

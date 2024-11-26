@@ -4,7 +4,7 @@ import insertAddress from "../util";
 export async function POST(request) {
 	try {
 		const formData = await request.json();
-
+		const { id: provider_id } = formData;
 		const homeAddress = await insertAddress(formData, "Location");
 
 		const { data: contact, error: contactError } = await supabase
@@ -31,6 +31,7 @@ export async function POST(request) {
 					current_employer: formData.current_employer,
 				})
 				.select("uuid")
+				.eq("provider_id", provider_id)
 				.single();
 
 		if (employmentError) throw employmentError;
@@ -54,6 +55,8 @@ export async function POST(request) {
 
 export async function GET(request) {
 	try {
+		const searchParams = request.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
 		// Fetching all records from the "contacts" table
 		const { data: contacts, error: contactError } = await supabase
 			.from("contacts")
@@ -67,8 +70,8 @@ export async function GET(request) {
 				.from("employment_information")
 				.select(
 					"uuid, legal_employer_name, doing_business_name, department_speciality, start_date, end_date, current_employer, contact_id, address_id"
-				);
-
+				)
+				.eq("provider_id", provider_id);
 		if (employmentError) throw employmentError;
 
 		// Fetching all records from the "Location" (addresses) table
