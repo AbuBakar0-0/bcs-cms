@@ -39,7 +39,7 @@ export default function ProvidersDashboard() {
   return (
     <AdminDashboardLayout barTitle={"Provider Dashboard"}>
       <div className="w-full flex flex-row justify-between items-center gap-4 py-4">
-        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-primary rounded-lg p-4">
           <div className="w-full flex flex-row justify-between items-center gap-4">
             <div className="w-1/2 flex flex-row justify-between items-center gap-2">
               <FaRegCircleUser className="size-16 text-gray-500" />
@@ -51,7 +51,7 @@ export default function ProvidersDashboard() {
           </div>
         </div>
 
-        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-secondary rounded-lg p-4">
           <div className="w-full flex flex-row justify-between items-center gap-4">
             <div className="w-1/2 flex flex-row justify-between items-center gap-2">
               <FiUserX className="size-16 text-gray-500" />
@@ -63,7 +63,7 @@ export default function ProvidersDashboard() {
           </div>
         </div>
 
-        <div className="w-[32%] flex flex-col justify-center items-start border-4 border-red-400 rounded-lg p-4">
+        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-primary rounded-lg p-4">
           <div className="w-full flex flex-row justify-between items-center gap-4">
             <div className="w-1/2 flex flex-row justify-between items-center gap-2">
               <LiaUserSlashSolid className="size-16 text-gray-500" />

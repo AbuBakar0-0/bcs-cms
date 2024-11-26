@@ -4,31 +4,18 @@ import { FaEye } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import Link from "next/link";
-import Button from "@/components/ui/Button";
-import { IoAddCircleOutline } from "react-icons/io5";
 
 export default function page() {
   const data = [
     {
-      legal_business_name: "Community Health Network",
-      npi_2: "1184215352",
-      code: "211D00000X",
-      address: "30 N GOULD, ST, STE R",
-      phone: "281-824-1497",
+      first_name: "Adnan Qamar",
+      last_name: "Qamar",
+      email: "aqamar@billingcaresolutions.com",
     },
     {
-      legal_business_name: "Billing Care Solutions",
-      npi_2: "1184215352",
-      code: "171100000X",
-      address: "10851 SCARSDALE BLVD STE 200 HOUSTON TX 77089-5738",
-      phone: "(302) 244-0434",
-    },
-    {
-      legal_business_name: "CreativeTrex",
-      npi_2: "1184215352",
-      code: "331L00000X",
-      address: "30 N GOULD, ST, STE R",
-      phone: "(302) 244-0434",
+      first_name: "Linh ",
+      last_name: "Tran",
+      email: "linhtrah@gmail.com",
     },
   ];
 
@@ -36,9 +23,11 @@ export default function page() {
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="w-full flex flex-col justify-start items-start gap-4">
         <div className="w-full flex flex-row justify-end items-center">
+          <Link href="/userManagement">
           <button className="px-4 py-3 bg-secondary flex flex-row justify-center items-center gap-4 text-white rounded-lg">
             Add
           </button>
+          </Link>
         </div>
       </div>
       <div className="min-h-screen flex flex-col md:flex-row">
@@ -48,22 +37,18 @@ export default function page() {
               <table className="w-full table-auto">
                 <thead className="bg-gray-200 text-left">
                   <tr>
-                    <th className="p-3">Legal Business Name</th>
-                    <th className="p-3">NPI 2</th>
-                    <th className="p-3">Taxonomy Code</th>
-                    <th className="p-3">Address</th>
-                    <th className="p-3">Phone</th>
+                    <th className="p-3">First Name</th>
+                    <th className="p-3">Last Name</th>
+                    <th className="p-3">Email</th>
                     <th className="p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data.map((item, index) => (
                     <tr className="border-b" key={index}>
-                      <td className="p-3">{item.legal_business_name}</td>
-                      <td className="p-3">{item.npi_2}</td>
-                      <td className="p-3">{item.code}</td>
-                      <td className="p-3 ">{item.address}</td>
-                      <td className="p-3 ">{item.phone}</td>
+                      <td className="p-3">{item.first_name}</td>
+                      <td className="p-3">{item.last_name}</td>
+                      <td className="p-3">{item.email}</td>
                       <td className="p-3 flex flex-row justify-start items-center gap-2">
                         <Link href="/organizationDetail">
                           <FaEye className="text-secondary" />
