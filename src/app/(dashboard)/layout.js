@@ -14,7 +14,7 @@ const sidenavLinks = [
   { title: "Practice Location", link: "/practiceLocation" },
   { title: "Hospital Affiliations", link: "/hospitalAffiliations" },
   { title: "Payer Setup", link: "/payerSetup" },
-  { title: "Credentialing Contacts", link: "/credentialingContracts" },
+  { title: "Credentialing Contacts", link: "/credentialingContacts" },
   { title: "Employment Information", link: "/employmentInformation" },
   { title: "Professional References", link: "/professionalReferences" },
   { title: "Document", link: "/document" },

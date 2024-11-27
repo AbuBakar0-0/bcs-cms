@@ -22,7 +22,6 @@ export const useDocuments = () => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const { id: provider_id } = useParams();
-	alert(provider_id);
 	const validators = {
 		title: (value) => {
 			if (!value || value === "Select Document")
