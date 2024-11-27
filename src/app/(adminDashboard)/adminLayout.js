@@ -10,7 +10,7 @@ const sidenavLinks = [
   { title: "Credentialing Status", link: "/credentialingStatus" },
   { title: "Payers", link: "/payers" },
   { title: "User Management", link: "/usersDashboard" },
-  { title: "HR Hiring", link: "" },
+  { title: "HR Hiring", link: "/hrHiring" },
   { title: "Reporting", link: "" },
   // { title: "Incident Reporting Configuration", link: "" },
   { title: "Help Center", link: "" },
