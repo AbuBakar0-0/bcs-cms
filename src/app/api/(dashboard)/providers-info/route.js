@@ -126,3 +126,41 @@ export async function POST(request) {
 		);
 	}
 }
+
+export async function GET() {
+	try {
+		const { data: providers, error: providersError } = await supabase
+			.from("providers_info")
+			.select(
+				`
+		  uuid,
+		  first_name,
+		  middle_initial,
+		  last_name,
+		  provider_title,
+		  ssn,
+		  gender,
+		  dob,
+		  license_id,
+		  state_issued,
+		  issue_date,
+		  expiry_date
+		`
+			);
+		if (providersError) throw providersError;
+
+		return new Response(
+			JSON.stringify({
+				message: "Provider information saved successfully",
+				provider: providers,
+			}),
+			{ status: 201 }
+		);
+	} catch (error) {
+		console.error("Error fetching providers:", error);
+		return new Response(
+			JSON.stringify({ error: error.message || "Failed to fetch providers" }),
+			{ status: 404 }
+		);
+	}
+}

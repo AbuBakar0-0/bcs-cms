@@ -15,6 +15,7 @@ import Button from "@/components/ui/Button";
 import { format, parse } from "date-fns";
 import { usePayerSetup } from "./usePrayerSetup";
 import { DROPDOWN_OPTIONS } from "./utilis";
+import { useProviders } from "@/hooks/useProvider";
 
 export default function PairSetup() {
 	const {
@@ -32,7 +33,7 @@ export default function PairSetup() {
 		handleEdit,
 		handleDelete,
 	} = usePayerSetup();
-
+	const { providers } = useProviders();
 	return (
 		<>
 			<div className="w-full flex flex-col justify-center items-center gap-4">
@@ -76,7 +77,7 @@ export default function PairSetup() {
 									/>
 									<Dropdown
 										title={"Provider"}
-										options={DROPDOWN_OPTIONS.providers}
+										options={providers}
 										name="provider"
 										value={formData.provider}
 										onChange={handleChange}

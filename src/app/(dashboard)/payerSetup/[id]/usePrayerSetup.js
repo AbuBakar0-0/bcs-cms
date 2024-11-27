@@ -3,6 +3,7 @@ import { format, parse } from "date-fns";
 import { defaultFormData } from "./utilis";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
+import { useProviders } from "@/hooks/useProvider";
 
 export const usePayerSetup = () => {
 	const [application, setShowApplication] = useState(false);
@@ -12,10 +13,13 @@ export const usePayerSetup = () => {
 	const [editingId, setEditingId] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
-	const { id: provider_id } = useParams();
+	// const { id: provider_id_params } = useParams();
+
+	const { getProviderByName, providers } = useProviders();
+
 	useEffect(() => {
 		fetchPayerSetups();
-	}, []);
+	}, [providers]);
 
 	const resetForm = () => {
 		setFormData(defaultFormData);
@@ -68,7 +72,8 @@ export const usePayerSetup = () => {
 		setError(null);
 		try {
 			const response = await fetch(
-				`/api/payer-setup?provider_id=${provider_id}`
+				// `/api/payer-setup?provider_id=${provider_id_params}`
+				`/api/payer-setup`
 			);
 			if (!response.ok) {
 				throw new Error(
@@ -89,8 +94,9 @@ export const usePayerSetup = () => {
 		setLoading(true);
 		setError(null);
 		try {
+			const providerData = getProviderByName(formData.provider);
+			const provider_id = providerData.uuid;
 			if (!validateForm()) return;
-
 			const url = isEditing
 				? `/api/payer-setup/${editingId}`
 				: "/api/payer-setup";
