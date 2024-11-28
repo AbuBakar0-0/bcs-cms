@@ -1,161 +1,71 @@
 "use client";
 
-import React, { useState } from "react";
-import AdminDashboardLayout from "../../adminLayout";
-import { FaChevronDown } from "react-icons/fa";
 import Link from "next/link";
+import AdminDashboardLayout from "../../adminLayout";
+import dynamic from "next/dynamic";
 
-export default function Page() {
-  // State for active dropdowns
-  const [activeDropdown, setActiveDropdown] = useState(null);
+export default function page() {
+  const hrData = [
+    { name: "Total Employee", value: 100, type: "Employees", link: "" },
+    { name: "On Boarding", value: 90, type: "Employees", link: "" },
+    { name: "Probation", value: 5, type: "Employees", link: "" },
+    { name: "Resigned Employees", value: 5, type: "Employees", link: "" },
+    { name: "Open Vacancies", value: 15, type: "Vacancies", link: "/applyNow" },
+  ];
 
-  // Timer to handle delay
-  let timer = null;
-
-  // Handlers for mouse events
-  const handleMouseEnter = (dropdown) => {
-    clearTimeout(timer); // Clear any existing timer
-    setActiveDropdown(dropdown);
-  };
-
-  const handleMouseLeave = () => {
-    timer = setTimeout(() => setActiveDropdown(null), 1000); // 1 second delay
-  };
-
+  const EmployeeChart = dynamic(() => import("./employeeChart.js"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+  const MonthlyChart = dynamic(() => import("./monthlyChart.js"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
   return (
     <AdminDashboardLayout barTitle="HR Hiring">
-      <div className="relative">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex space-x-6">
-            {/* Company Location */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter("location")}
-              onMouseLeave={handleMouseLeave}
-            >
-              <span className="cursor-pointer flex items-center">
-                Company Location <FaChevronDown className="ml-2" />
-              </span>
-              {activeDropdown === "location" && (
-                <div className="absolute text-sm rounded-md mt-2 w-64 shadow-lg bg-white z-10">
-                  <ul className="p-2 space-y-2 max-h-64 overflow-auto">
-                    {[
-                      "MyCHN Adoue",
-                      "Women & Children's Health Center",
-                      "Pearland Family Health Center",
-                      "MyCHN Freeport",
-                      "Bay Area Family Care",
-                      "MyCHN League City",
-                      "MyCHN Clute",
-                      "Scarsdale Family Health Center",
-                    ].map((item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="block hover:bg-secondary hover:text-white px-2 py-1 rounded"
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+      <div className="w-full flex flex-row justify-start items-center gap-4">
+        {hrData.map((item, index) => (
+          <Link
+            href={item.link}
+            key={index}
+            className="w-1/6 border-2 border-gray-300 rounded-lg flex flex-col justify-start items-start p-4"
+          >
+            <span className="text-lg font-semibold">{item.name}</span>
+            <span className="text-6xl font-semibold">{item.value}</span>
+            <span>{item.type}</span>
+          </Link>
+        ))}
+      </div>
 
-            {/* Job Category */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter("category")}
-              onMouseLeave={handleMouseLeave}
-            >
-              <span className="cursor-pointer flex items-center">
-                Job Category <FaChevronDown className="ml-2" />
-              </span>
-              {activeDropdown === "category" && (
-                <div className="absolute text-sm rounded-md mt-2 w-64 shadow-lg bg-white z-10">
-                  <ul className="p-2 space-y-2">
-                    {[
-                      "Medical (18)",
-                      "Dental (9)",
-                      "Behavioral Health (7)",
-                      "Patient Services (4)",
-                    ].map((item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="block hover:bg-secondary hover:text-white px-2 py-1 rounded"
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Schedule */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter("schedule")}
-              onMouseLeave={handleMouseLeave}
-            >
-              <span className="cursor-pointer flex items-center">
-                Schedule <FaChevronDown className="ml-2" />
-              </span>
-              {activeDropdown === "schedule" && (
-                <div className="absolute text-sm rounded-md mt-2 w-64 shadow-lg bg-white z-10">
-                  <ul className="p-2 space-y-2">
-                    {["Full Time (38)", "Part Time (1)"].map((item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="block hover:bg-secondary hover:text-white px-2 py-1 rounded"
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Job Location Type */}
-            <div
-              className="relative"
-              onMouseEnter={() => handleMouseEnter("locationType")}
-              onMouseLeave={handleMouseLeave}
-            >
-              <span className="cursor-pointer flex items-center">
-                Job Location Type <FaChevronDown className="ml-2" />
-              </span>
-              {activeDropdown === "locationType" && (
-                <div className="absolute text-sm rounded-md mt-2 w-64 shadow-lg bg-white z-10">
-                  <ul className="p-2 space-y-2">
-                    {["Hybrid (5)", "On-Site (33)", "Remote (1)"].map((item) => (
-                      <li key={item}>
-                        <a
-                          href="#"
-                          className="block hover:bg-secondary hover:text-white px-2 py-1 rounded"
-                        >
-                          {item}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+      <div className="w-full flex flex-row justify-between items-center gap-4 mt-4">
+        <div className="w-1/2 h-[27rem] flex flex-col justify-start items-start gap-4 border-2 border-gray-300 p-4 rounded-lg">
+          <div className="w-full flex flex-row justify-between items-center">
+            <span className="text-lg font-semibold">Employee</span>
+            <button className="bg-secondary px-3 py-1 text-white">
+              Filter & Sort
+            </button>
           </div>
-
-          {/* Apply Button */}
-          <div>
-            <Link href="/applyNow" className="bg-secondary hover:bg-primary text-white font-semibold px-4 py-2 rounded shadow">
-              Apply Now
-            </Link>
+          <div className="w-full flex flex-row justify-between items-center gap-4">
+            <span>Employee Status</span>
+            <span>Department</span>
+            <span>Age</span>
+            <span>Discipline</span>
+            <span>Status</span>
           </div>
+        </div>
+
+        <div className="w-1/2 flex flex-col justify-between items-center gap-4 border-2 border-gray-300 p-4 rounded-lg">
+          <span className="w-full text-lg font-semibold">
+            Employee Composition
+          </span>
+          <EmployeeChart />
+        </div>
+      </div>
+
+      <div className="w-full flex flex-row justify-between items-center mt-10">
+      <div className="w-1/2 flex flex-col justify-between items-center gap-4 border-2 border-gray-300 p-4 rounded-lg">
+          <span className="w-full text-lg font-semibold">
+            Job Statistics
+          </span>
+          <MonthlyChart />
         </div>
       </div>
     </AdminDashboardLayout>

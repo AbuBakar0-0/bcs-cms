@@ -1,8 +1,8 @@
 import React from "react";
 
-const Checkbox = ({ title, options }) => {
+const Checkbox = ({ title, options,width='w-1/5' }) => {
   return (
-    <div className="w-1/5">
+    <div className={width}>
       <label htmlFor={title} className="block mb-2 text-sm font-medium text-black">
         {title}
       </label>

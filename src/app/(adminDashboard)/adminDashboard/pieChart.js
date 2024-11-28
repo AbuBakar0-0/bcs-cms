@@ -11,7 +11,7 @@ const data = [
 
 const CustomPieChart = () => {
   return (
-    <PieChart width={400} height={350}>
+    <PieChart width={400} height={300}>
       <Pie
         data={data}
         dataKey="value"

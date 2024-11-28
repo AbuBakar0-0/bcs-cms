@@ -20,7 +20,6 @@ const VerifiedChart = () => {
       <XAxis type="number" hide />
       <YAxis dataKey="name" type="category" />
       <Tooltip />
-      <Legend />
       {/* Dynamically set the bar color using the fill property in the data */}
       <Bar dataKey="value" name="Verifications">
         {data.map((entry, index) => (

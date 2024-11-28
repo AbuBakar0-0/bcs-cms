@@ -1,7 +1,7 @@
 "use client";
-import { IoAddCircleOutline } from "react-icons/io5";
 import AdminDashboardLayout from "../adminLayout";
 import dynamic from "next/dynamic";
+import SubNavbar from "@/components/adminDashboard/SubNavbar";
 
 export default function AdminDashboard() {
   // Dynamically import the VerifiedChart with SSR disabled
@@ -13,7 +13,11 @@ export default function AdminDashboard() {
     ssr: false, // Ensure this component is only rendered on the client
   });
 
-  const PieChart = dynamic(() => import("./pieChart"), {
+  const StatusChart = dynamic(() => import("./pieChart"), {
+    ssr: false, // Ensure this component is only rendered on the client
+  });
+
+  const HrChart = dynamic(() => import("./hrChart"), {
     ssr: false, // Ensure this component is only rendered on the client
   });
 
@@ -22,26 +26,19 @@ export default function AdminDashboard() {
       <AdminDashboardLayout barTitle={"Admin Dashboard"}>
         <div className="w-full flex flex-col justify-center items-center gap-4">
           <div className="w-full flex flex-row justify-between items-center gap-4">
-            <button className="w-1/5 flex flex-row justify-center px-6 items-center bg-[#004aac] text-white rounded-lg gap-4 h-14">
-              <IoAddCircleOutline />
-              <span>New Enrollment</span>
-            </button>
-            <button className="w-1/5 flex flex-row justify-center h-14 px-6 items-center bg-[#00be62] text-white rounded-lg gap-4">
-              <IoAddCircleOutline />
-              <span>New Enrollment</span>
-            </button>
+            <SubNavbar />
 
-            <button className="w-1/5 flex flex-row justify-center h-14 px-6 items-center bg-gray-300 rounded-lg gap-4">
+            <button className="flex flex-row justify-center px-6 items-center bg-gray-300 rounded-lg gap-2 py-2">
               <span className="text-lg">0</span>
-              <span className="text-sm text-red-500">
+              <span className="text-xs text-red-500">
                 <span className="text-secondary">Documents</span> <br />
                 Expiring Today
               </span>
             </button>
 
-            <button className="w-1/5 flex flex-row justify-center h-14 px-6 items-center bg-gray-300 rounded-lg gap-4">
+            <button className="flex flex-row justify-center px-6 items-center bg-gray-300 rounded-lg gap-2 py-2">
               <span className="text-lg">0</span>
-              <span className="text-sm text-red-500">
+              <span className="text-xs text-red-500">
                 <span className="text-secondary">Verifications</span> <br />
                 Expiring Today
               </span>
@@ -93,7 +90,13 @@ export default function AdminDashboard() {
             </div>
             <div className="w-[48%] flex flex-col justify-start items-center gap-4">
               <div className="w-full h-96 border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
-                <PieChart />
+                <span className="text-lg font-semibold">Status</span>
+
+                <StatusChart />
+              </div>
+              <div className="w-full border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
+                <span className="text-lg font-semibold">HR Status</span>
+                  <HrChart />
               </div>
             </div>
           </div>

@@ -20,7 +20,7 @@ export default function AdminDashboardLayout({ children ,barTitle="Providers Das
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
-      <aside className="w-1/6  text-white bg-secondary">
+      <aside className="w-1/6 text-white bg-secondary">
         <div className="flex flex-col gap-3">
           <Link href={"/"}>
             <img
@@ -34,10 +34,10 @@ export default function AdminDashboardLayout({ children ,barTitle="Providers Das
               <Link
                 href={item.link}
                 key={index}
-                className="flex flex-row justify-start items-center gap-4"
+                className="flex flex-row justify-start items-center gap-2"
               >
                 <div className="w-full flex flex-col justify-center items-center gap-3">
-                  <div className="w-full flex flex-row justify-start items-center gap-4 pt-2">
+                  <div className="w-full flex flex-row justify-start items-center gap-2 pt-2">
                     <FaArrowCircleRight />
                     <span>{item.title}</span>
                   </div>
@@ -49,7 +49,6 @@ export default function AdminDashboardLayout({ children ,barTitle="Providers Das
         </div>
       </aside>
 
-      {/* Main content area with top bar */}
       <div className="flex flex-col flex-1">
         {/* Top Bar */}
         <header className="w-full h-[7.2rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
