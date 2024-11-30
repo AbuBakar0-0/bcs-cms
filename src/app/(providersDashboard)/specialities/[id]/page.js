@@ -14,10 +14,11 @@ import { specialities } from "@/data/specialities";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import { ClipLoader } from "react-spinners";
+import { BarLoader, ClipLoader } from "react-spinners";
 
 function Specialities() {
   const defaultState = {
@@ -141,23 +142,25 @@ function Specialities() {
     }
   };
 
+  const addSpeciality = async () => {
+    toast.loading("Adding Speciality")
+    const updatedformData = { ...formData, provider_id: provider_id };
 
-  const addPrimarySpeciality=async ()=>{
-	const response = await fetch("/api/specialities", {
-		method: "POST",
-		headers: {
-		  "Content-Type": "application/json",
-		},
-		body: JSON.stringify(formData),
-	  });
+    const response = await fetch("/api/specialities", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedformData),
+    });
 
-	  
-  }
-  
+    fetchSpecialities();
+    toast.success("Added Successfully")
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-	const res = await addPrimarySpeciality();
+    const res = await addSpeciality();
     // try {
     //   const url = isEditing
     //     ? `/api/specialities/${editingId}`
@@ -221,8 +224,8 @@ function Specialities() {
         </div>
 
         {loading ? (
-          <div className="w-full flex justify-center items-center">
-            <ClipLoader />
+          <div className="w-full flex justify-center items-center my-4">
+            <BarLoader />
           </div>
         ) : (
           <div className="w-full flex flex-col justify-center items-center gap-4">
@@ -358,7 +361,6 @@ function Specialities() {
           </div>
         )}
       </div>
-      <NavBottom />
     </>
   );
 }

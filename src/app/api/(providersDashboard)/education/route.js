@@ -1,3 +1,4 @@
+import insertAddress from "@/hooks/insertAddress";
 import { supabase } from "@/lib/supabase";
 
 export async function GET(request) {
@@ -44,39 +45,24 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
-    const body = await request.json();
+    const formData = await request.json();
 
-    const address = {
-      country: body.country,
-      state: body.state,
+    const address = insertAddress(formData);
+
+    const education = {
+      provider_id: formData.provider_id,
+      type: formData.type,
+      professional_school: formData.professional_school,
+      degree: formData.degree,
+      start_date: formData.start_date,
+      end_date: formData.end_date,
+      address_id: address?.uuid,
     };
-
-    const { data: addressData, error: addressError } = await supabase
-      .from("addresses")
-      .insert(address)
-      .single().select("uuid"); // single ensures we get the inserted address object back
-
-    if (addressError) {
-      throw new Error(addressError.message);
-    }
-
-    // 2. Insert education data into the education table, including the reference to the address
-
-	const education = {
-      provider_id: body.provider_id,
-      type: body.type,
-      professional_school: body.professional_school,
-      degree: body.degree,
-      start_date: body.start_date,
-      end_date: body.end_date,
-      address_id: addressData.uuid,
-    };
-	console.log(education);
-
 
     const { data: educationResult, error: educationError } = await supabase
       .from("educations")
-      .insert(education).select("uuid");
+      .insert(education)
+      .select("uuid");
 
     if (educationError) {
       throw new Error(educationError.message);

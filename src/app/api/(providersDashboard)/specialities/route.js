@@ -1,20 +1,21 @@
+import insertAddress from "@/hooks/insertAddress";
 import { supabase } from "@/lib/supabase";
-import insertAddress from "../util";
 
 export async function POST(request) {
   try {
     const formData = await request.json();
 
-    const homeAddress = await insertAddress(formData, "Location");
+    const address = await insertAddress(formData);
 
+    console.log(formData);
     // Inserting Provider Information
     const { data: speciality, error: specialityError } = await supabase
-      .from("speciality")
+      .from("specialities")
       .insert({
         name: formData.speciality,
         is_board_certified: formData.is_board_certified,
         name_of_board: formData.name_of_board,
-        address_id: homeAddress?.uuid,
+        address_id: address?.uuid,
         effective_date: formData.effective_date,
         expiry_date: formData.expiry_date,
         type: formData.type,
