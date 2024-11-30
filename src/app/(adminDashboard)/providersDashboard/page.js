@@ -15,11 +15,17 @@ export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-  // Fetch providers function
   const fetchProviders = async () => {
+    const userUuid = localStorage.getItem("user_uuid"); // Retrieve UUID from localStorage
+
+    if (!userUuid) {
+      console.error("User UUID is not found in localStorage");
+      return;
+    }
+
     try {
-      const response = await fetch("/api/get-providers");
+      // Send the UUID as a query parameter in the URL
+      const response = await fetch(`/api/providersDashboard?uuid=${userUuid}`);
       if (!response.ok) throw new Error("Failed to fetch providers");
 
       const data = await response.json();
@@ -34,7 +40,6 @@ export default function ProvidersDashboard() {
   useEffect(() => {
     fetchProviders();
   }, []);
-
 
   return (
     <AdminDashboardLayout barTitle={"Provider Dashboard"}>
@@ -82,7 +87,7 @@ export default function ProvidersDashboard() {
           width="w-1/6"
           required={false}
         />
-        <Link href={"/providersInformation"}>
+        <Link href={"/providersInformation/new_user"}>
           <Button
             title={"Add Provider"}
             icon={<IoAddCircleOutline className="size-6" />}
@@ -114,14 +119,16 @@ export default function ProvidersDashboard() {
       </div>
 
       {loading ? (
-        <ClipLoader />
+        <div className="w-full flex flex-col justify-center items-center">
+          <ClipLoader />
+        </div>
       ) : providers.length > 0 ? (
         providers.map((provider) => (
           <div
             className="w-full flex flex-row items-center justify-between gap-4 p-4 border-b"
             key={provider.uuid}
           >
-            <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3" onClick={(e) => {handleClick(provider.uuid);}}>
+            <Link href={`/providerDetail/${provider.uuid}`} className="w-1/3">
               <div className="w-full flex flex-row items-center gap-4">
                 <div>
                   <p className="font-bold text-lg">

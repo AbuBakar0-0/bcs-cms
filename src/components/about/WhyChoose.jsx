@@ -31,7 +31,7 @@ function WhyChoose() {
                         </div>
                     </div>
                     <div className="w-full lg:w-1/2 flex flex-col justify-center items-center gap-5">
-                        <img src="./assets/about/about.png" alt="About us" />
+                        <img src="/assets/about/about.png" alt="About us" />
                     </div>
                 </div>
             </div>

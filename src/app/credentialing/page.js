@@ -88,7 +88,7 @@ function Credentialing() {
                 <IoIosArrowForward />
               </div>
             </div>
-            <img src="./assets/credentialing/credentialing-2.png" alt="" />
+            <img src="/assets/credentialing/credentialing-2.png" alt="" />
           </div>
           <div className="w-full lg:w-1/2 flex flex-col justify-start items-start gap-5">
             <div className="bg-zinc-300 rounded-lg p-10 flex flex-col justify-center items-center gap-3 scale-90">

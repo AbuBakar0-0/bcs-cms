@@ -11,21 +11,21 @@ function ImportantFeatures() {
                 <div className="w-1/4 h-[4px] bg-primary my-2"></div>
                 <div className="w-full flex flex-wrap justify-between items-center gap-5 px-10">
                     <FeaturesCard
-                        icon={"./assets/home/CENTRALIZED PLATFORM 1.svg"}
+                        icon={"/assets/home/CENTRALIZED PLATFORM 1.svg"}
                         title={"Centralized Platform"}
                         description={
                             "Securely store provider data digitally with reduced paperwork overhead."
                         }
                     />
                     <FeaturesCard
-                        icon={"./assets/home/CME TRACKING 1.svg"}
+                        icon={"/assets/home/CME TRACKING 1.svg"}
                         title={"CME Tracking"}
                         description={
                             "CME tracking of the educational development of providers."
                         }
                     />
                     <FeaturesCard
-                        icon={"./assets/home/WORKFLOW TRACKING 1.svg"}
+                        icon={"/assets/home/WORKFLOW TRACKING 1.svg"}
                         title={"Workflow Tracking"}
                         description={
                             "Monitor and manage processes like payor enrollment, license renewals, and recredentialing."

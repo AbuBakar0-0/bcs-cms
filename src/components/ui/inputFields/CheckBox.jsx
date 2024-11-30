@@ -1,4 +1,3 @@
-import React from "react";
 
 const Checkbox = ({ title, options,width='w-1/5' }) => {
   return (

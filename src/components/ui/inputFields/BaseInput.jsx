@@ -1,10 +1,10 @@
 "use client";
 
-import { placeholder } from "@/utils/placeholders";
+
 const BaseInput = ({
 	title,
 	required = true,
-	readonly,
+	readonly = false,
 	type,
 	formatInput,
 	width = "w-1/5",
@@ -12,6 +12,9 @@ const BaseInput = ({
 	value,
 	onChange,
 	name,
+	placeholder,
+	minLength = 0,
+	maxLength = 100,
 }) => {
 	const handleInputChange = (e) => {
 		if (type === "file") {
@@ -45,12 +48,14 @@ const BaseInput = ({
 			<input
 				type={type}
 				className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-				placeholder={placeholder({ title: title })}
 				value={value}
+				placeholder={placeholder}
 				onChange={handleInputChange}
 				required={required}
-				readOnly={readonly}
+				readOnly={false}
 				name={name}
+				minLength={minLength}
+				maxLength={maxLength}
 			/>
 		</div>
 	);

@@ -20,7 +20,6 @@ export default async function submitForm(data, formRef, fetchReferences, url) {
     }
 
     const result = await response.json();
-    console.log("Form Data Submitted Successfully:", result);
     toast.success("Form submitted successfully!");
 
     // Fetch references after successful form submission
@@ -28,6 +27,8 @@ export default async function submitForm(data, formRef, fetchReferences, url) {
 
     // Reset the form
     formRef.current.reset();
+    return result;
+    
   } catch (error) {
     console.error("Unexpected error:", error);
     toast.error("An unexpected error occurred. Please try again.");

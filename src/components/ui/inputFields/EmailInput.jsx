@@ -3,7 +3,7 @@ import BaseInput from "./BaseInput";
 const EmailInput = ({
 	title,
 	required,
-	readonly,
+	readonly=false,
 	width,
 	value,
 	onChange,
