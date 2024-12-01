@@ -13,9 +13,10 @@ export const usePayerSetup = () => {
 	const [editingId, setEditingId] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
-	// const { id: provider_id_params } = useParams();
+	const { id: provider_id_params } = useParams();
 
-	const { getProviderByName, providers } = useProviders();
+	const { getProviderByName, providers, getProviderNameByUuid } =
+		useProviders();
 
 	useEffect(() => {
 		fetchPayerSetups();
@@ -72,8 +73,8 @@ export const usePayerSetup = () => {
 		setError(null);
 		try {
 			const response = await fetch(
-				// `/api/payer-setup?provider_id=${provider_id_params}`
-				`/api/payer-setup`
+				`/api/payer-setup?provider_id=${provider_id_params}`
+				// `/api/payer-setup`
 			);
 			if (!response.ok) {
 				throw new Error(
@@ -81,7 +82,11 @@ export const usePayerSetup = () => {
 				);
 			}
 			const data = await response.json();
-			setPayerSetups(data);
+			const formattedData = data.map((record) => ({
+				...record,
+				provider: getProviderNameByUuid(record.provider_id),
+			}));
+			setPayerSetups(formattedData);
 		} catch (error) {
 			setError(error.message);
 			console.error("Error fetching payer setups:", error);
@@ -97,6 +102,9 @@ export const usePayerSetup = () => {
 			const providerData = getProviderByName(formData.provider);
 			const provider_id = providerData.uuid;
 			if (!validateForm()) return;
+			const loadingToast = toast.loading(
+				isEditing ? "Updating payer setup..." : "Creating new payer setup..."
+			);
 			const url = isEditing
 				? `/api/payer-setup/${editingId}`
 				: "/api/payer-setup";
@@ -107,7 +115,10 @@ export const usePayerSetup = () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ ...formData, provider_id }),
+				body: JSON.stringify({
+					...formData,
+					provider_id,
+				}),
 			});
 
 			if (!response.ok) {
@@ -121,9 +132,18 @@ export const usePayerSetup = () => {
 			await fetchPayerSetups();
 			setShowApplication(false);
 			resetForm();
+			toast.success(
+				isEditing
+					? "Payer setup updated successfully"
+					: "Payer setup created successfully",
+				{ id: loadingToast }
+			);
 		} catch (error) {
 			setError(error.message);
 			console.error("Error submitting form:", error);
+			toast.error(`Error: ${error.message}`, {
+				id: loadingToast,
+			});
 		} finally {
 			setLoading(false);
 		}
@@ -132,9 +152,12 @@ export const usePayerSetup = () => {
 	const handleEdit = (setup) => {
 		setError(null);
 		try {
-			const parsedDate = parse(setup.date, "yyyy-MM-dd", new Date());
+			const parsedDate = parse(
+				setup.application_date,
+				"yyyy-MM-dd",
+				new Date()
+			);
 			const formattedDate = format(parsedDate, "MM/dd/yyyy");
-
 			setFormData({
 				state: setup.state,
 				plan_type: setup.plan_type,
@@ -142,8 +165,8 @@ export const usePayerSetup = () => {
 				provider: setup.provider,
 				payer_name: setup.payer_name,
 				status: setup.status,
-				date: formattedDate,
-				notes: setup.notes,
+				application_date: formattedDate,
+				note: setup.note,
 			});
 
 			setIsEditing(true);
@@ -158,6 +181,7 @@ export const usePayerSetup = () => {
 	const handleDelete = async (uuid) => {
 		setLoading(true);
 		setError(null);
+		const loadingToast = toast.loading("Deleting payer setup...");
 
 		try {
 			if (
@@ -179,9 +203,15 @@ export const usePayerSetup = () => {
 				resetForm();
 			}
 			await fetchPayerSetups();
+			toast.success("Payer setup deleted successfully", {
+				id: loadingToast,
+			});
 		} catch (error) {
 			setError(error.message);
 			console.error("Error deleting payer setup:", error);
+			toast.error(`Error: ${error.message}`, {
+				id: loadingToast,
+			});
 		} finally {
 			setLoading(false);
 		}

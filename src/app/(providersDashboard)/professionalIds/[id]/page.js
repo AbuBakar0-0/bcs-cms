@@ -72,18 +72,26 @@ const ProfessionalIds = () => {
 						readonly={entry[`has${capitalize(field)}`] === "No"}
 					/>
 					<div className="flex gap-2">
-						<Button
-							title="Add"
-							onClick={() => handleAddField(field)}
-							icon={<IoAddCircleOutline className="size-6" />}
-							className="bg-secondary text-white"
-							type="button"
-						/>
+						{index === 0 && (
+							<Button
+								title="Add"
+								onClick={(e) => {
+									e.preventDefault();
+									handleAddField(field);
+								}}
+								icon={<IoAddCircleOutline className="size-6" />}
+								className="bg-secondary text-white"
+								type="button"
+							/>
+						)}
 						{index > 0 && (
 							<Button
 								title="delete"
 								icon={<CgTrash className="size-6" />}
-								onClick={() => handleRemoveField(field, index)}
+								onClick={(e) => {
+									e.preventDefault();
+									handleRemoveField(field, index);
+								}}
 								type="button"
 							/>
 						)}
@@ -139,6 +147,7 @@ const ProfessionalIds = () => {
 					onChange={(e) => handleChange(e)}
 				/>
 			</div>
+			;
 		</>
 	);
 

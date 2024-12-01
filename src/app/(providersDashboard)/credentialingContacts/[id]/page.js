@@ -13,6 +13,7 @@ import { stateAbbreviations } from "@/data/stateAbbreviations";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { validateCredsContactForm } from "./utilis";
+import { useParams } from "next/navigation";
 const initialFormData = {
 	credentialingTitle: "Select Title",
 	firstName: "",
@@ -62,6 +63,7 @@ export default function CredentialingContacts() {
 	const [contacts, setContacts] = useState([]);
 	const [editingId, setEditingId] = useState(null);
 	const [loading, setLoading] = useState(false);
+	const { id: provider_id } = useParams();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -82,12 +84,17 @@ export default function CredentialingContacts() {
 			toast.error(errors);
 			return;
 		}
+		const loadingToast = toast.loading(
+			editingId ? "Updating contact..." : "Adding contact..."
+		);
 
 		setLoading(true);
 		try {
-			const url = "/api/credential-contact";
+			const url = "/api/credential-contacts";
 			const method = editingId ? "PUT" : "POST";
-			const body = editingId ? { uuid: editingId, ...formData } : formData;
+			const body = editingId
+				? { uuid: editingId, ...formData }
+				: { provider_id, ...formData };
 
 			const res = await fetch(url, {
 				method,
@@ -95,17 +102,19 @@ export default function CredentialingContacts() {
 				headers: { "Content-Type": "application/json" },
 			});
 
-			const data = await res.json();
-
 			if (!res.ok) {
+				toast.dismiss(loadingToast);
 				Object.values(data.errors).forEach((error) => toast.error(error));
 				return;
 			}
 
+			toast.dismiss(loadingToast);
 			toast.success(editingId ? "Contact updated!" : "Contact added!");
 			fetchContacts();
 			resetForm();
 		} catch (error) {
+			toast.error("Something went wrong!");
+			toast.dismiss(loadingToast);
 			toast.error("Something went wrong!");
 		} finally {
 			setLoading(false);
@@ -117,21 +126,25 @@ export default function CredentialingContacts() {
 			return;
 
 		setLoading(true);
+		const loadingToast = toast.loading("Deleting contact...");
 		try {
-			const res = await fetch("/api/credential-contact", {
+			const res = await fetch("/api/credential-contacts", {
 				method: "DELETE",
 				body: JSON.stringify({ uuid }),
 				headers: { "Content-Type": "application/json" },
 			});
 
 			if (!res.ok) {
+				toast.dismiss(loadingToast);
 				toast.error("Failed to delete contact");
 				return;
 			}
 
+			toast.dismiss(loadingToast);
 			toast.success("Contact deleted!");
 			fetchContacts();
 		} catch (error) {
+			toast.dismiss(loadingToast);
 			toast.error("Something went wrong!");
 		} finally {
 			setLoading(false);
@@ -147,7 +160,7 @@ export default function CredentialingContacts() {
 	const fetchContacts = async () => {
 		setLoading(true);
 		try {
-			const res = await fetch("/api/credential-contact");
+			const res = await fetch("/api/credential-contacts");
 			const { data, error } = await res.json();
 
 			if (error) {
@@ -175,6 +188,7 @@ export default function CredentialingContacts() {
 				<Button
 					title={editingId ? "Update" : "Add"}
 					onClick={() => setShowForm(!showForm)}
+					disabled={loading}
 				/>
 			</div>
 
@@ -321,10 +335,15 @@ export default function CredentialingContacts() {
 					</div>
 				</div>
 			)}
+			{!loading && contacts.length === 0 && (
+				<div className="w-full text-center p-4 text-gray-500">
+					No contacts found. Add your first contact using the button above.
+				</div>
+			)}
 
 			{contacts.map((contact) => (
 				<div
-					key={contact.id}
+					key={contact.uuid}
 					className="w-full flex flex-row justify-between items-center gap-4 shadow-lg rounded-lg p-4"
 				>
 					<div className="w-1/5 flex flex-col justify-start items-start gap-2">
@@ -346,31 +365,12 @@ export default function CredentialingContacts() {
 							/>
 							<MdDeleteOutline
 								className="size-6 text-red-400 cursor-pointer"
-								onClick={() => handleDelete(contact.id)}
+								onClick={() => handleDelete(contact.uuid)}
 							/>
 						</div>
 					</div>
 				</div>
 			))}
-			<div className="w-full flex flex-row justify-between items-center gap-4 shadow-lg rounded-lg p-4">
-				<div className="w-1/5 flex flex-col justify-start items-start gap-2">
-					<span>Adnan Qamar </span>
-				</div>
-				<div className="w-1/5 flex flex-col justify-start items-start gap-2">
-					<span>CFO</span>
-					<span>30 N GOULD, ST, STE R </span>
-					<span>281-824-1497</span>
-				</div>
-				<div className="w-1/5 flex flex-col justify-start items-start gap-2">
-					<span>adnanq@billingcaresolutions.com</span>
-				</div>
-				<div className="w-1/5 flex flex-col justify-start items-start gap-2">
-					<div className="w-full flex flex-row justify-end items-center gap-4">
-						<CiEdit className="size-6 text-primary cursor-pointer" />
-						<MdDeleteOutline className="size-6 text-red-400 cursor-pointer" />
-					</div>
-				</div>
-			</div>
 		</div>
 	);
 }

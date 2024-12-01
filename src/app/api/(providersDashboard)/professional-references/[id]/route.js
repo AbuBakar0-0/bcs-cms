@@ -5,7 +5,6 @@ export async function PUT(request, { params }) {
 		const { id: uuid } = params;
 		const formData = await request.json();
 
-		// Get existing reference data
 		const { data: existingReference, error: referenceError } = await supabase
 			.from("professional_references")
 			.select("address_id, contact_id")
@@ -14,7 +13,6 @@ export async function PUT(request, { params }) {
 
 		if (referenceError) throw referenceError;
 
-		// Update or create address
 		if (existingReference.address_id) {
 			const { error: addressError } = await supabase
 				.from("addresses")
@@ -34,7 +32,6 @@ export async function PUT(request, { params }) {
 			existingReference.address_id = homeAddress?.uuid;
 		}
 
-		// Update or create contact
 		if (existingReference.contact_id) {
 			const { error: contactError } = await supabase
 				.from("contacts")
@@ -61,7 +58,6 @@ export async function PUT(request, { params }) {
 			existingReference.contact_id = contact?.uuid;
 		}
 
-		// Update professional reference
 		const { error: updateReferenceError } = await supabase
 			.from("professional_references")
 			.update({
@@ -98,39 +94,58 @@ export async function DELETE(request, { params }) {
 	try {
 		const { id: uuid } = params;
 
-		// Get reference details before deletion
-		const { data: reference, error: referenceError } = await supabase
+		const { data: existingReference, error: checkError } = await supabase
 			.from("professional_references")
-			.select("address_id, contact_id")
+			.select("address_id, contact_id, deleted_at")
 			.eq("uuid", uuid)
 			.single();
 
-		if (referenceError) throw referenceError;
+		if (checkError) throw checkError;
 
-		// Delete professional reference
+		if (!existingReference) {
+			return new Response(
+				JSON.stringify({
+					error: "Reference not found",
+				}),
+				{ status: 404 }
+			);
+		}
+
+		if (existingReference.deleted_at) {
+			return new Response(
+				JSON.stringify({
+					error: "Reference is already deleted",
+				}),
+				{ status: 400 }
+			);
+		}
+
+		const currentTime = new Date().toISOString();
+
 		const { error: deleteReferenceError } = await supabase
 			.from("professional_references")
-			.delete()
+			.update({ deleted_at: currentTime })
 			.eq("uuid", uuid);
 
 		if (deleteReferenceError) throw deleteReferenceError;
 
-		// Delete associated address if exists
-		if (reference.address_id) {
+		if (existingReference.address_id) {
 			await supabase
 				.from("addresses")
-				.delete()
-				.eq("uuid", reference.address_id);
+				.update({ deleted_at: currentTime })
+				.eq("uuid", existingReference.address_id);
 		}
 
-		// Delete associated contact if exists
-		if (reference.contact_id) {
-			await supabase.from("contacts").delete().eq("uuid", reference.contact_id);
+		if (existingReference.contact_id) {
+			await supabase
+				.from("contacts")
+				.update({ deleted_at: currentTime })
+				.eq("uuid", existingReference.contact_id);
 		}
 
 		return new Response(
 			JSON.stringify({
-				message: "Reference deleted successfully",
+				message: "Reference soft deleted successfully",
 			}),
 			{ status: 200 }
 		);

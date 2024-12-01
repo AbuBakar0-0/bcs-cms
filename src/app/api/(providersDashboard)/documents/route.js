@@ -13,9 +13,10 @@ export async function GET(req) {
 		const provider_id = searchParams.get("provider_id");
 
 		const { data, error } = await supabase
-			.from("documents")
+			.from("provider_documents")
 			.select("*")
 			.eq("provider_id", provider_id)
+			.is("deleted_at", null)
 
 			.order("effective_date", { ascending: false });
 
@@ -31,7 +32,7 @@ export async function GET(req) {
 export async function POST(req) {
 	try {
 		const formData = await req.formData();
-		const provider_id = formData.get("provide_id");
+		const provider_id = formData.get("provider_id");
 		const file = formData.get("file");
 		if (!file || file.size === 0) {
 			return Response.json({ error: "File is required" }, { status: 400 });
@@ -73,7 +74,7 @@ export async function POST(req) {
 			);
 		}
 
-		const { error } = await supabase.from("documents").insert({
+		const { error } = await supabase.from("provider_documents").insert({
 			title,
 			provider,
 			status,
@@ -99,23 +100,42 @@ export async function POST(req) {
 }
 export async function DELETE(req) {
 	try {
-		const { uuid, file_public_id } = await req.json();
+		const { uuid } = await req.json();
 
-		if (file_public_id) {
-			await cloudinary.uploader.destroy(file_public_id);
+		const { data: existingDoc, error: checkError } = await supabase
+			.from("provider_documents")
+			.select("deleted_at")
+			.match({ uuid })
+			.single();
+
+		if (checkError) throw checkError;
+
+		if (!existingDoc) {
+			return Response.json({ error: "Document not found" }, { status: 404 });
 		}
 
-		const { error } = await supabase.from("documents").delete().match({ uuid });
+		if (existingDoc.deleted_at) {
+			return Response.json(
+				{ error: "Document is already deleted" },
+				{ status: 400 }
+			);
+		}
+
+		const { error } = await supabase
+			.from("provider_documents")
+			.update({
+				deleted_at: new Date().toISOString(),
+			})
+			.match({ uuid });
 
 		if (error) throw error;
 
-		return Response.json({ message: "Document deleted successfully" });
+		return Response.json({ message: "Document soft deleted successfully" });
 	} catch (error) {
 		console.error("DELETE document error:", error);
 		return Response.json({ error: error.message }, { status: 500 });
 	}
 }
-
 export async function PUT(req) {
 	try {
 		const formData = await req.formData();
@@ -146,7 +166,7 @@ export async function PUT(req) {
 		}
 
 		const { error } = await supabase
-			.from("documents")
+			.from("provider_documents")
 			.update({
 				title: formData.get("title"),
 				provider: formData.get("provider"),

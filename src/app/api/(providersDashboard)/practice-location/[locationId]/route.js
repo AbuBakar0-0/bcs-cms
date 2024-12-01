@@ -1,11 +1,14 @@
 import { supabase } from "@/lib/supabase";
 
-export async function DELETE(request, { params: { locationId } }) {
+export async function DELETE(request, { params }) {
 	try {
-		console.log("Deleting practice location:", locationId);
+		const { locationId } = await params;
+		console.log("Soft deleting practice location:", locationId);
+
+		const deletedAt = new Date().toISOString();
 
 		const { data: location, error: fetchError } = await supabase
-			.from("practice_location")
+			.from("practice_locations")
 			.select(
 				`
                 service_address_id,
@@ -17,9 +20,9 @@ export async function DELETE(request, { params: { locationId } }) {
                 practice_contact_id
             `
 			)
+			.is("deleted_at", null)
 			.eq("uuid", locationId)
 			.single();
-
 		if (fetchError || !location) {
 			console.error("Practice location not found:", locationId);
 			return new Response(null, { status: 404 });
@@ -39,17 +42,28 @@ export async function DELETE(request, { params: { locationId } }) {
 		].filter(Boolean);
 
 		await Promise.all([
-			supabase.from("practice_location").delete().eq("uuid", locationId),
+			supabase
+				.from("practice_locations")
+				.update({ deleted_at: deletedAt })
+				.eq("uuid", locationId),
+
 			addressIds.length > 0 &&
-				supabase.from("addresses").delete().in("uuid", addressIds),
+				supabase
+					.from("addresses")
+					.update({ deleted_at: deletedAt })
+					.in("uuid", addressIds),
+
 			contactIds.length > 0 &&
-				supabase.from("contacts").delete().in("uuid", contactIds),
+				supabase
+					.from("contacts")
+					.update({ deleted_at: deletedAt })
+					.in("uuid", contactIds),
 		]);
 
-		console.log("Successfully deleted practice location:", locationId);
+		console.log("Successfully soft deleted practice location:", locationId);
 		return new Response(null, { status: 200 });
 	} catch (error) {
-		console.error("Error deleting practice location:", error);
+		console.error("Error soft deleting practice location:", error);
 		return new Response(null, { status: 500 });
 	}
 }

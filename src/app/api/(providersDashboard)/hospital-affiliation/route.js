@@ -4,20 +4,19 @@ import insertAddress from "../util";
 export async function POST(request) {
 	try {
 		const formData = await request.json();
-
 		const homeAddress = await insertAddress(formData, "Location");
-
+		console.log(homeAddress);
 		const { data: hospitalAffiliation, error: hospitalError } = await supabase
-			.from("hospital_affiliations")
+			.from("hospital_admittings")
 			.insert({
 				hospital_name: formData.hospital_name,
 				address_id: homeAddress?.uuid,
 				type: formData.type,
 				provider_id: formData.provider_id,
+				deleted_at: null,
 			})
 			.select("uuid")
 			.single();
-
 		if (hospitalError) throw hospitalError;
 		console.log(hospitalAffiliation);
 		return new Response(
@@ -44,8 +43,9 @@ export async function GET(request) {
 		const provider_id = searchParams.get("provider_id");
 
 		const { data: hospitalAffiliations, error: hospitalError } = await supabase
-			.from("hospital_affiliations")
+			.from("hospital_admittings")
 			.select("uuid, hospital_name, address_id, type")
+			.is("deleted_at", null)
 			.eq("provider_id", provider_id);
 
 		if (hospitalError) throw hospitalError;
@@ -112,7 +112,7 @@ export async function PUT(request) {
 
 		// Get the existing hospital affiliation
 		const { data: existingHospital, error: fetchError } = await supabase
-			.from("hospital_affiliations")
+			.from("hospital_admittings")
 			.select("address_id")
 			.eq("uuid", uuid)
 			.single();
@@ -140,7 +140,7 @@ export async function PUT(request) {
 
 		// Update hospital affiliation
 		const { data: updatedHospital, error: hospitalError } = await supabase
-			.from("hospital_affiliations")
+			.from("hospital_admittings")
 			.update({
 				hospital_name: formData.hospital_name,
 				type: formData.type,
@@ -172,7 +172,6 @@ export async function PUT(request) {
 		);
 	}
 }
-
 export async function DELETE(request) {
 	try {
 		const { searchParams } = new URL(request.url);
@@ -187,28 +186,30 @@ export async function DELETE(request) {
 			);
 		}
 
-		// Get the address_id before deletion
 		const { data: hospital, error: fetchError } = await supabase
-			.from("hospital_affiliations")
+			.from("hospital_admittings")
 			.select("address_id")
 			.eq("uuid", uuid)
+			.is("deleted_at", null)
 			.single();
 
 		if (fetchError) throw fetchError;
 
-		// Delete hospital affiliation
+		const now = new Date().toISOString();
+
 		const { error: hospitalError } = await supabase
-			.from("hospital_affiliations")
-			.delete()
-			.eq("uuid", uuid);
+			.from("hospital_admittings")
+			.update({ deleted_at: now })
+			.eq("uuid", uuid)
+			.is("deleted_at", null);
 
 		if (hospitalError) throw hospitalError;
 
-		// Delete associated address
 		const { error: addressError } = await supabase
 			.from("addresses")
-			.delete()
-			.eq("uuid", hospital.address_id);
+			.update({ deleted_at: now })
+			.eq("uuid", hospital.address_id)
+			.is("deleted_at", null);
 
 		if (addressError) throw addressError;
 

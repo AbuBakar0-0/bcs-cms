@@ -98,15 +98,15 @@ export default function PairSetup() {
 									/>
 									<DateInput
 										title={"Application Date"}
-										name="date"
-										value={formData.date}
+										name="application_date"
+										value={formData.application_date}
 										onChange={handleChange}
 									/>
 									<TextInput
 										title={"Application Notes"}
-										name="notes"
+										name="note"
 										width={"w-full"}
-										value={formData.notes}
+										value={formData.note}
 										onChange={handleChange}
 									/>
 								</div>
@@ -132,7 +132,7 @@ export default function PairSetup() {
 							<div className="flex flex-col justify-center items-start">
 								<p>{setup.payer_name}</p>
 								<p>{setup.status}</p>
-								<p>{new Date(setup.date).toLocaleDateString()}</p>
+								<p>{new Date(setup.application_date).toLocaleDateString()}</p>
 							</div>
 							<div className="flex flex-row justify-center items-center gap-4">
 								<CiEdit

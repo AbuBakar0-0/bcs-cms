@@ -4,47 +4,47 @@ export async function GET(request) {
 	try {
 		// Get practice location with all related data
 		const { data: practiceLocations, error: practiceError } =
-			await supabase.from("practice_location").select(`
+			await supabase.from("practice_locations").select(`
                 *,
-                service_address:addresses!practice_location_service_address_id_fkey (
+                service_address:addresses!practice_locations_service_address_id_fkey (
                     address_line_1,
                     address_line_2,
                     city,
                     state,
                     zip_code
                 ),
-                mailing_address:addresses!practice_location_mailing_address_id_fkey (
+                mailing_address:addresses!practice_locations_mailing_address_id_fkey (
                     address_line_1,
                     address_line_2,
                     city,
                     state,
                     zip_code
                 ),
-                correspondence_address:addresses!practice_location_correspondence_address_id_fkey (
+                correspondence_address:addresses!practice_locations_correspondence_address_id_fkey (
                     address_line_1,
                     address_line_2,
                     city,
                     state,
                     zip_code
                 ),
-                service_contact:contacts!practice_location_service_contact_id_fkey (
+                service_contact:contacts!practice_locations_service_contact_id_fkey (
                     home_phone,
                     fax,
                     email,
                     cell_phone
                 ),
-                mailing_contact:contacts!practice_location_mailing_contact_id_fkey (
+                mailing_contact:contacts!practice_locations_mailing_contact_id_fkey (
                     home_phone,
                     fax,
                     email
                 ),
-                correspondence_contact:contacts!practice_location_correspondence_contact_id_fkey (
+                correspondence_contact:contacts!practice_locations_correspondence_contact_id_fkey (
                     home_phone,
                     fax,
                     email
                 ),
-                practice_contact:contacts!practice_location_practice_contact_id_fkey (
-                    name,
+                practice_contact:contacts!practice_locations_practice_contact_id_fkey (
+                    contact_name,
                     email,
                     work_email,
                     work_phone,
@@ -108,7 +108,7 @@ export async function GET(request) {
 			correspondence_email: location.correspondence_contact?.email,
 
 			// Practice Contact
-			practice_contact_name: location.practice_contact?.name,
+			practice_contact_name: location.practice_contact?.contact_name,
 			practice_contact_email: location.practice_contact?.email,
 			practice_contact_work_phone: location.practice_contact?.work_phone,
 			practice_contact_cell_phone: location.practice_contact?.cell_phone,
@@ -197,7 +197,7 @@ export async function POST(request) {
 
 						if (type === "practice") {
 							contactData = {
-								name: data.practice_contact_name || null,
+								contact_name: data.practice_contact_name || null,
 								email: data.practice_contact_email || null,
 								work_email: data.practice_contact_email || null,
 								work_phone: data.practice_contact_work_phone || null,
@@ -234,6 +234,7 @@ export async function POST(request) {
 				);
 
 				const practiceLocationData = {
+					provider_id: data.provider_id,
 					legal_business_name: data.legal_business_name,
 					doing_business_name: data.doing_business_name || null,
 					npi_2: data.npi_2 || null,
@@ -252,7 +253,7 @@ export async function POST(request) {
 				};
 
 				const { data: practiceLocationResult, error } = await supabase
-					.from("practice_location")
+					.from("practice_locations")
 					.insert(practiceLocationData)
 					.select()
 					.single();
@@ -302,7 +303,7 @@ export async function DELETE(request, { params }) {
 		console.log(`Starting deletion for location: ${locationId}`);
 
 		const { data: location, error: fetchError } = await supabase
-			.from("practice_location")
+			.from("practice_locations")
 			.select(
 				`
                 service_address_id,
@@ -342,7 +343,7 @@ export async function DELETE(request, { params }) {
 		].filter(Boolean);
 
 		await Promise.all([
-			supabase.from("practice_location").delete().eq("uuid", locationId),
+			supabase.from("practice_locations").delete().eq("uuid", locationId),
 			addressIds.length > 0 &&
 				supabase.from("addresses").delete().in("uuid", addressIds),
 			contactIds.length > 0 &&

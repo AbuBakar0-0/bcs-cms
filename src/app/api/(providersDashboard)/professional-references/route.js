@@ -5,10 +5,8 @@ export async function POST(request) {
 	try {
 		const formData = await request.json();
 		const { provider_id } = formData;
-		// Insert Address using utility function
 		const homeAddress = await insertAddress(formData, "Location");
 
-		// Insert Contact
 		const { data: contact, error: contactError } = await supabase
 			.from("contacts")
 			.insert({
@@ -21,7 +19,6 @@ export async function POST(request) {
 
 		if (contactError) throw contactError;
 
-		// Create Professional Reference
 		const { data: professionalReference, error: referenceError } =
 			await supabase
 				.from("professional_references")
@@ -62,14 +59,14 @@ export async function GET(request) {
 	try {
 		const searchParams = request.nextUrl.searchParams;
 		const provider_id = searchParams.get("provider_id");
-		// Get professional references
 		const { data: professionalReferences, error: referenceError } =
 			await supabase
 				.from("professional_references")
 				.select(
 					"uuid, provider_type, first_name, middle_initial, last_name, address_id, contact_id"
 				)
-				.eq("provider_id", provider_id);
+				.eq("provider_id", provider_id)
+				.is("deleted_at", null);
 
 		if (referenceError) throw referenceError;
 

@@ -23,8 +23,6 @@ function EducationAndTraining() {
 		trainingEntries,
 		newEducationEntry,
 		newTrainingEntry,
-		editEducationId,
-		editTrainingId,
 		handleEducation,
 		handleTraining,
 		handleEducationChange,

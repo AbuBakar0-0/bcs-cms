@@ -46,6 +46,6 @@ export const defaultFormData = {
 	provider: "",
 	payer_name: "",
 	status: "",
-	date: "",
-	notes: "",
+	application_date: "",
+	note: "",
 };

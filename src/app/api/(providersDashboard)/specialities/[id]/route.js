@@ -1,30 +1,32 @@
-// app/api/specialities/[id]/route.js
-
 import { supabase } from "@/lib/supabase";
 
 export async function DELETE(request, { params }) {
 	try {
-		const { id } = params;
-
+		const { id } = await params;
+		const now = new Date().toISOString();
+		console.log("id---------------", id);
 		const { data: speciality } = await supabase
-			.from("speciality")
+			.from("specialities")
 			.select("address_id")
 			.eq("uuid", id)
+			.is("deleted_at", null)
 			.single();
 
 		if (speciality?.address_id) {
 			const { error: addressError } = await supabase
 				.from("addresses")
-				.delete()
-				.eq("uuid", speciality.address_id);
+				.update({ deleted_at: now })
+				.eq("uuid", speciality.address_id)
+				.is("deleted_at", null);
 
 			if (addressError) throw addressError;
 		}
 
 		const { error: specialityError } = await supabase
-			.from("speciality")
-			.delete()
-			.eq("uuid", id);
+			.from("specialities")
+			.update({ deleted_at: now })
+			.eq("uuid", id)
+			.is("deleted_at", null);
 
 		if (specialityError) throw specialityError;
 
@@ -39,6 +41,7 @@ export async function DELETE(request, { params }) {
 		return new Response(
 			JSON.stringify({
 				message: "Error deleting speciality",
+				error: error.message,
 			}),
 			{ status: 500 }
 		);
@@ -48,6 +51,7 @@ export async function DELETE(request, { params }) {
 export async function PUT(request, { params }) {
 	try {
 		const { id } = params;
+
 		const formData = await request.json();
 
 		if (formData.address_line_1) {

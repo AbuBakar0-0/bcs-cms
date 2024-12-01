@@ -4,9 +4,8 @@ import insertAddress from "../util";
 export async function POST(request) {
 	try {
 		const formData = await request.json();
-		const { id: provider_id } = formData;
+		const { provider_id } = formData;
 		const homeAddress = await insertAddress(formData, "Location");
-
 		const { data: contact, error: contactError } = await supabase
 			.from("contacts")
 			.insert({
@@ -16,11 +15,12 @@ export async function POST(request) {
 			.select("uuid")
 			.single();
 		if (contactError) throw contactError;
-		// Inserting Provider Information
+
 		const { data: employmentInformation, error: employmentError } =
 			await supabase
-				.from("employment_information")
+				.from("employment_informations")
 				.insert({
+					provider_id,
 					legal_employer_name: formData.legal_employer_name,
 					doing_business_name: formData.doing_business_name,
 					department_speciality: formData.department_speciality,
@@ -28,10 +28,9 @@ export async function POST(request) {
 					contact_id: contact?.uuid,
 					start_date: formData.start_date,
 					end_date: formData.end_date,
-					current_employer: formData.current_employer,
+					is_current_employer: formData.current_employer,
 				})
 				.select("uuid")
-				.eq("provider_id", provider_id)
 				.single();
 
 		if (employmentError) throw employmentError;
@@ -57,24 +56,24 @@ export async function GET(request) {
 	try {
 		const searchParams = request.nextUrl.searchParams;
 		const provider_id = searchParams.get("provider_id");
-		// Fetching all records from the "contacts" table
+
 		const { data: contacts, error: contactError } = await supabase
 			.from("contacts")
 			.select("uuid, cell_phone, fax");
 
 		if (contactError) throw contactError;
 
-		// Fetching all records from the "employment_information" table
 		const { data: employmentInformation, error: employmentError } =
 			await supabase
-				.from("employment_information")
+				.from("employment_informations")
 				.select(
-					"uuid, legal_employer_name, doing_business_name, department_speciality, start_date, end_date, current_employer, contact_id, address_id"
+					"uuid, legal_employer_name, doing_business_name, department_speciality, start_date, end_date, is_current_employer, contact_id, address_id"
 				)
-				.eq("provider_id", provider_id);
+				.eq("provider_id", provider_id)
+				.is("deleted_at", null);
+
 		if (employmentError) throw employmentError;
 
-		// Fetching all records from the "Location" (addresses) table
 		const { data: addresses, error: addressError } = await supabase
 			.from("addresses")
 			.select(
@@ -83,7 +82,6 @@ export async function GET(request) {
 
 		if (addressError) throw addressError;
 
-		// Combine the fetched data
 		const fullData = employmentInformation.map((employment) => {
 			const contact = contacts.find(
 				(contact) => contact.uuid === employment.contact_id
@@ -116,7 +114,6 @@ export async function GET(request) {
 		);
 	}
 }
-
 export async function DELETE(request) {
 	try {
 		const { searchParams } = new URL(request.url);
@@ -127,46 +124,77 @@ export async function DELETE(request) {
 		}
 
 		const { data: employment, error: fetchError } = await supabase
-			.from("employment_information")
-			.select("contact_id, address_id")
+			.from("employment_informations")
+			.select("uuid, contact_id, address_id, deleted_at")
 			.eq("uuid", id)
 			.single();
 
 		if (fetchError) throw fetchError;
 
-		const { error: employmentError } = await supabase
-			.from("employment_information")
-			.delete()
-			.eq("uuid", id);
+		if (!employment) {
+			return Response.json(
+				{ message: "Employment record not found" },
+				{ status: 404 }
+			);
+		}
 
-		if (employmentError) throw employmentError;
+		if (employment.deleted_at) {
+			return Response.json(
+				{ message: "Employment record is already deleted" },
+				{ status: 400 }
+			);
+		}
+
+		const currentTime = new Date().toISOString();
+
+		const updates = [];
+
+		updates.push(
+			supabase
+				.from("employment_informations")
+				.update({ deleted_at: currentTime })
+				.eq("uuid", id)
+		);
 
 		if (employment.contact_id) {
-			const { error: contactError } = await supabase
-				.from("contacts")
-				.delete()
-				.eq("uuid", employment.contact_id);
-
-			if (contactError) throw contactError;
+			updates.push(
+				supabase
+					.from("contacts")
+					.update({ deleted_at: currentTime })
+					.eq("uuid", employment.contact_id)
+			);
 		}
 
 		if (employment.address_id) {
-			const { error: addressError } = await supabase
-				.from("addresses")
-				.delete()
-				.eq("uuid", employment.address_id);
+			updates.push(
+				supabase
+					.from("addresses")
+					.update({ deleted_at: currentTime })
+					.eq("uuid", employment.address_id)
+			);
+		}
 
-			if (addressError) throw addressError;
+		const results = await Promise.all(updates);
+
+		const errors = results.filter((result) => result.error);
+		if (errors.length > 0) {
+			throw new Error(
+				`Error in batch updates: ${errors
+					.map((e) => e.error.message)
+					.join(", ")}`
+			);
 		}
 
 		return Response.json(
-			{ message: "Employment record deleted successfully" },
+			{
+				message: "Employment record and related data soft deleted successfully",
+			},
 			{ status: 200 }
 		);
 	} catch (error) {
 		console.error("Error deleting employment record:", error);
 		return Response.json(
-			{ message: "Error deleting employment record" },
+			{ message: "Error deleting employment record", error: error.message },
 			{ status: 500 }
 		);
 	}
@@ -183,7 +211,7 @@ export async function PUT(request) {
 		}
 
 		const { data: existing, error: fetchError } = await supabase
-			.from("employment_information")
+			.from("employment_informations")
 			.select("contact_id, address_id")
 			.eq("uuid", id)
 			.single();
@@ -215,14 +243,14 @@ export async function PUT(request) {
 		if (contactError) throw contactError;
 
 		const { data: employment, error: employmentError } = await supabase
-			.from("employment_information")
+			.from("employment_informations")
 			.update({
 				legal_employer_name: formData.legal_employer_name,
 				doing_business_name: formData.doing_business_name,
 				department_speciality: formData.department_speciality,
 				start_date: formData.start_date,
 				end_date: formData.end_date,
-				current_employer: formData.current_employer === "Yes",
+				is_current_employer: formData.current_employer === "Yes",
 			})
 			.eq("uuid", id)
 			.select()

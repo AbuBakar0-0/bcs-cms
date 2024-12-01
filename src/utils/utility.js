@@ -1,10 +1,18 @@
 import { toast } from "react-hot-toast";
 export const validateNumber = (value, length, fieldName) => {
+	if (!value) {
+		toast.error(`${fieldName} is required`);
+		return false;
+	}
+
+	const cleanedValue = value.toString().replace(/[^0-9]/g, "");
+
 	const numberPattern = new RegExp(`^\\d{${length}}$`);
-	if (!numberPattern.test(value)) {
+	if (!numberPattern.test(cleanedValue)) {
 		toast.error(`${fieldName} must be exactly ${length} digits`);
 		return false;
 	}
+
 	return true;
 };
 

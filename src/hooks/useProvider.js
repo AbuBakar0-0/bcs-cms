@@ -6,12 +6,14 @@ export const useProviders = () => {
 	const [providersData, setProvidersData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-
 	useEffect(() => {
+		const user_uuid = localStorage.getItem("user_uuid");
 		const fetchProviders = async () => {
 			try {
 				setLoading(true);
-				const response = await fetch("/api/providers-info");
+				const response = await fetch(
+					`/api/user-providers?user_uuid=${user_uuid}`
+				);
 				if (!response.ok) {
 					throw new Error("Failed to fetch providers");
 				}
@@ -48,6 +50,12 @@ export const useProviders = () => {
 		);
 	};
 
+	const getProviderNameByUuid = (uuid) => {
+		const provider = providersData.find((provider) => provider.uuid === uuid);
+		if (!provider) return null;
+		return `${provider.first_name} ${provider.last_name}`;
+	};
+
 	const getProviderByUuid = (uuid) => {
 		return providersData.find((provider) => provider.uuid === uuid);
 	};
@@ -55,6 +63,7 @@ export const useProviders = () => {
 	return {
 		providers,
 		providersData,
+		getProviderNameByUuid,
 		getProviderByName,
 		getProviderByUuid,
 		loading,

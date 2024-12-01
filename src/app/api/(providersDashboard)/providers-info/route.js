@@ -84,14 +84,14 @@ export async function POST(request) {
 			.insert({
 				first_name: formData.firstName,
 				middle_initial: formData.middleInitial,
-				added_by:formData.added_by,
+				added_by: formData.added_by,
 				last_name: formData.lastName,
 				provider_title: formData.providerTitle,
 				ssn: formData.ssn,
 				gender: formData.gender,
-				birth_city:formData.birthCity,
-				birth_state:formData.birthState,
-				birth_country:formData.birthCountry,
+				birth_city: formData.birthCity,
+				birth_state: formData.birthState,
+				birth_country: formData.birthCountry,
 				dob: formData.dob,
 				license_id: formData.licenseOrId,
 				state_issued: formData.licenseStateIssued,
@@ -127,24 +127,23 @@ export async function POST(request) {
 	}
 }
 
-
 export async function GET(request) {
-  try {
-    // Extract UUID from query parameters
-    const { searchParams } = new URL(request.url);
-    const uuid = searchParams.get("uuid");
+	try {
+		// Extract UUID from query parameters
+		const { searchParams } = new URL(request.url);
+		const uuid = searchParams.get("uuid");
 
-    if (!uuid) {
-      return new Response(
-        JSON.stringify({ message: "UUID is required" }),
-        { status: 400 }
-      );
-    }
+		if (!uuid) {
+			return new Response(JSON.stringify({ message: "UUID is required" }), {
+				status: 400,
+			});
+		}
 
-    // Use joins to fetch related data from the tables
-    const { data, error } = await supabase
-      .from("providers_info")
-      .select(`
+		// Use joins to fetch related data from the tables
+		const { data, error } = await supabase
+			.from("providers_info")
+			.select(
+				`
         uuid,
         first_name,
         middle_initial,
@@ -202,24 +201,25 @@ export async function GET(request) {
           email,
           work_email
         )
-      `)
-      .eq("uuid", uuid)
-      .single();
+      `
+			)
+			.eq("uuid", uuid)
+			.single();
 
-    if (error) throw error;
+		if (error) throw error;
 
-    // Return the response with the joined data
-    return new Response(JSON.stringify(data), { status: 200 });
-  } catch (error) {
-    console.error("Error retrieving provider information:", error);
-    return new Response(
-      JSON.stringify({
-        message: "Failed to retrieve provider information",
-        error: error.message || "Unknown error",
-      }),
-      { status: 500 }
-    );
-  }
+		// Return the response with the joined data
+		return new Response(JSON.stringify(data), { status: 200 });
+	} catch (error) {
+		console.error("Error retrieving provider information:", error);
+		return new Response(
+			JSON.stringify({
+				message: "Failed to retrieve provider information",
+				error: error.message || "Unknown error",
+			}),
+			{ status: 500 }
+		);
+	}
 }
 
 // export async function GET() {

@@ -110,10 +110,8 @@ function HospitalAffiliations() {
 		try {
 			const payload = {
 				...formData,
-				type:
-					type === "affiliation"
-						? "Admitting Privilages"
-						: "Admitting Arrangements",
+				type: type === "affiliation" ? "admitting" : "hospital",
+
 				country: "US",
 			};
 
@@ -166,15 +164,13 @@ function HospitalAffiliations() {
 			state: hospital.address.state,
 			zip_code: hospital.address.zip_code,
 		};
-
-		if (hospital.type === "Admitting Privilages") {
+		if (hospital.type === "admitting") {
 			setAffiliationForm(formData);
 			setShowAffiliationForm(true);
 		} else {
 			setArrangementsForm(formData);
 			setShowArrangementsForm(true);
 		}
-
 		setEditingId(hospital.uuid);
 	};
 
@@ -208,7 +204,15 @@ function HospitalAffiliations() {
 	};
 
 	const getHospitalsByType = (type) => {
-		return hospitalData?.filter((hospital) => hospital.type === type);
+		return hospitalData?.filter((hospital) => {
+			if (type === "Admitting Privilages") {
+				return hospital.type === "admitting";
+			}
+			if (type === "Admitting Arrangements") {
+				return hospital.type === "hospital";
+			}
+			return false;
+		});
 	};
 
 	if (loading) {

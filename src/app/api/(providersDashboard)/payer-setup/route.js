@@ -2,15 +2,14 @@ import { supabase } from "@/lib/supabase";
 
 export async function GET(request) {
 	try {
-		// const searchParams = request.nextUrl.searchParams;
-		// const provider_id = searchParams.get("provider_id");
-		// console.log("---------------------------- ", provider_id);
+		const searchParams = request.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
 		const { data, error } = await supabase
-			.from("payer_setup")
+			.from("payers_setup")
 			.select("*")
-			// .eq("provider_id", provider_id)
-			.order("created_at", { ascending: false });
-
+			.eq("provider_id", provider_id)
+			.is("deleted_at", null);
+		// .order("created_at", { ascending: false });
 		if (error) throw error;
 
 		return Response.json(data);
@@ -24,8 +23,19 @@ export async function POST(request) {
 		const body = await request.json();
 
 		const { data, error } = await supabase
-			.from("payer_setup")
-			.insert([...body, provider_id])
+			.from("payers_setup")
+			.insert([
+				{
+					state: body.state,
+					plan_type: body.plan_type,
+					business: body.business,
+					provider_id: body.provider_id,
+					payer_name: body.payer_name,
+					status: body.status,
+					application_date: body.application_date,
+					note: body.note,
+				},
+			])
 			.select();
 
 		if (error) throw error;

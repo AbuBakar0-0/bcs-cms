@@ -1,3 +1,4 @@
+import { validateAlphanumeric, validateNumber } from "@/utils/utility";
 import { useParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -247,6 +248,8 @@ export const usePracticeLocations = () => {
 
 	const handleDelete = async (locationId) => {
 		if (window.confirm("Are you sure you want to delete this location?")) {
+			const loadingToast = toast.loading("Deleting location...");
+
 			try {
 				const response = await fetch(`/api/practice-location/${locationId}`, {
 					method: "DELETE",
@@ -255,10 +258,12 @@ export const usePracticeLocations = () => {
 				if (!response.ok) throw new Error("Failed to delete");
 
 				setLocations((prev) => prev.filter((loc) => loc.uuid !== locationId));
-				alert("Location deleted successfully");
+				toast.success("Location deleted successfully");
 			} catch (error) {
 				console.error("Error deleting location:", error);
-				alert("Failed to delete location");
+				toast.error("Failed to delete location");
+			} finally {
+				toast.dismiss(loadingToast);
 			}
 		}
 	};
@@ -270,6 +275,7 @@ export const usePracticeLocations = () => {
 		if (!validateForm()) {
 			return;
 		}
+		const loadingToast = toast.loading("Saving location...");
 
 		try {
 			const url = editingId
@@ -288,16 +294,17 @@ export const usePracticeLocations = () => {
 				const errorData = await response.json();
 				throw new Error(errorData.details || "Failed to save location");
 			}
+			toast.success(`Location ${editingId ? "updated" : "added"} successfully`);
 
 			await fetchLocations();
 			resetForm();
 			setShowLocationForm(false);
-			alert(`Location ${editingId ? "updated" : "added"} successfully`);
 		} catch (error) {
 			console.error("Error saving location:", error);
-			alert(error.message || "Failed to save location");
+			toast.error(error.message || "Failed to save location");
 		} finally {
 			setLoading(false);
+			toast.dismiss(loadingToast);
 		}
 	};
 

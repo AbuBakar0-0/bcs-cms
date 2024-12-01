@@ -1,6 +1,5 @@
 "use client";
 
-
 const BaseInput = ({
 	title,
 	required = true,
@@ -39,7 +38,6 @@ const BaseInput = ({
 			}
 		}
 	};
-
 	return (
 		<div className={width}>
 			<label className={`block mb-2 text-sm font-medium ${labelColor}`}>
