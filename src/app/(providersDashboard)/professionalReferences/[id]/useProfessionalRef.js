@@ -178,7 +178,7 @@ export const useProfessionalReferences = () => {
 		setFormData({
 			provider_type: ref.provider_type || "",
 			first_name: ref.first_name || "",
-			middle_initial: ref.middle_initial || "",
+			middle_initial: ref.middle_initial.trim() || "",
 			last_name: ref.last_name || "",
 			address_line_1: ref.address_line_1 || "",
 			address_line_2: ref.address_line_2 || "",

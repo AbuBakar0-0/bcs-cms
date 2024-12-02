@@ -51,7 +51,7 @@ export const DEFAULT_TRAINING = {
 	is_completed: "",
 };
 export const DEFAULT_EDUCATION = {
-	provider_id:"",
+	provider_id: "",
 	type: "Internship",
 	country: "",
 	state: "",
@@ -59,4 +59,5 @@ export const DEFAULT_EDUCATION = {
 	degree: "",
 	start_date: "",
 	end_date: "",
+	is_completed: "No",
 };

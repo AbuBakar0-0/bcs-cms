@@ -37,7 +37,6 @@ export const useEducationAndTraining = () => {
 			}
 
 			const data = await response.json();
-
 			setEducationEntries(data);
 		} catch (error) {
 			console.error("Error:", error);
@@ -79,7 +78,9 @@ export const useEducationAndTraining = () => {
 			const entryToEdit = trainingEntries.find(
 				(entry) => entry.uuid === editTrainingId
 			);
-			setNewTrainingEntry(entryToEdit);
+			setNewTrainingEntry({
+				...entryToEdit,
+			});
 		}
 	};
 	const handleEducationChange = (e) => {
@@ -305,8 +306,8 @@ export const useEducationAndTraining = () => {
 		const entryToEdit = educationEntries.find((entry) => entry.uuid === uuid);
 		setNewEducationEntry({
 			...entryToEdit,
-			start_date: formatDate(entryToEdit.start_date),
-			end_date: formatDate(entryToEdit.end_date),
+			// start_date: formatDate(entryToEdit.start_date),
+			// end_date: formatDate(entryToEdit.end_date),
 		});
 		showEducation(true);
 	};
@@ -320,8 +321,8 @@ export const useEducationAndTraining = () => {
 			country: entryToEdit.country || "",
 			state: entryToEdit.state || "",
 			county: entryToEdit.county || "",
-			start_date: formatDate(entryToEdit.start_date),
-			end_date: formatDate(entryToEdit.end_date),
+			// start_date: formatDate(entryToEdit.start_date),
+			// end_date: formatDate(entryToEdit.end_date),
 			hospital_name: entryToEdit.hospital_name || "",
 			affiliated_university: entryToEdit.affiliated_university || "",
 			email: entryToEdit.email || "",

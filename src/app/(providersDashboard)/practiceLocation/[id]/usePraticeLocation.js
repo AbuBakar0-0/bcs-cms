@@ -69,7 +69,6 @@ export const usePracticeLocations = () => {
 	};
 
 	const validateForm = () => {
-		// Check required fields
 		if (!formData.legal_business_name?.trim()) {
 			toast.error("Legal Business Name is required");
 			return false;
@@ -90,8 +89,53 @@ export const usePracticeLocations = () => {
 			return false;
 		}
 
+		if (!formData.service_zip) {
+			toast.error("Service Zip Code is required");
+			return false;
+		}
+
 		if (!formData.service_phone) {
 			toast.error("Service Phone is required");
+			return false;
+		}
+
+		if (!formData.mailing_address_1?.trim()) {
+			toast.error("Mailing Address is required");
+			return false;
+		}
+
+		if (!formData.mailing_city?.trim()) {
+			toast.error("Mailing City is required");
+			return false;
+		}
+
+		if (!formData.mailing_state) {
+			toast.error("Mailing State is required");
+			return false;
+		}
+
+		if (!formData.mailing_zip) {
+			toast.error("Mailing Zip Code is required");
+			return false;
+		}
+
+		if (!formData.correspondence_address_1?.trim()) {
+			toast.error("Correspondence Address is required");
+			return false;
+		}
+
+		if (!formData.correspondence_city?.trim()) {
+			toast.error("Correspondence City is required");
+			return false;
+		}
+
+		if (!formData.correspondence_state) {
+			toast.error("Correspondence State is required");
+			return false;
+		}
+
+		if (!formData.correspondence_zip) {
+			toast.error("Correspondence Zip Code is required");
 			return false;
 		}
 
@@ -108,22 +152,12 @@ export const usePracticeLocations = () => {
 			return false;
 		}
 
-		if (formData.service_zip) {
-			if (!validateNumber(formData.service_zip, 5, "Service Zip Code")) {
-				return false;
-			}
+		if (formData.npi_2 && !validateNumber(formData.npi_2, 10, "NPI")) {
+			return false;
 		}
 
-		if (formData.npi_2) {
-			if (!validateNumber(formData.npi_2, 10, "NPI")) {
-				return false;
-			}
-		}
-
-		if (formData.tax_id) {
-			if (!validateNumber(formData.tax_id, 9, "Tax ID")) {
-				return false;
-			}
+		if (formData.tax_id && !validateNumber(formData.tax_id, 9, "Tax ID")) {
+			return false;
 		}
 
 		if (formData.ptan_medicare_number) {
@@ -170,6 +204,7 @@ export const usePracticeLocations = () => {
 				return false;
 			}
 		}
+
 		return true;
 	};
 
@@ -198,49 +233,8 @@ export const usePracticeLocations = () => {
 		if (locationToEdit) {
 			setEditingId(locationId);
 			setFormData({
-				legal_business_name: locationToEdit.legal_business_name,
-				doing_business_name: locationToEdit.doing_business_name,
-				npi_2: locationToEdit.npi_2,
-				tax_id: locationToEdit.tax_id,
-				taxonomy_code_1: locationToEdit.taxonomy_code_1,
-				taxonomy_code_2: locationToEdit.taxonomy_code_2,
-
-				service_address_1: locationToEdit.service_address_1,
-				service_address_2: locationToEdit.service_address_2,
-				service_city: locationToEdit.service_city,
-				service_state: locationToEdit.service_state,
-				service_zip: locationToEdit.service_zip,
-				service_phone: locationToEdit.service_phone,
-				service_fax: locationToEdit.service_fax,
-				service_email: locationToEdit.service_email,
-				service_appointment_phone: locationToEdit.service_appointment_phone,
-
-				mailing_address_1: locationToEdit.mailing_address_1,
-				mailing_address_2: locationToEdit.mailing_address_2,
-				mailing_city: locationToEdit.mailing_city,
-				mailing_state: locationToEdit.mailing_state,
-				mailing_zip: locationToEdit.mailing_zip,
-				mailing_phone: locationToEdit.mailing_phone,
-				mailing_fax: locationToEdit.mailing_fax,
-				mailing_email: locationToEdit.mailing_email,
-
-				correspondence_address_1: locationToEdit.correspondence_address_1,
-				correspondence_address_2: locationToEdit.correspondence_address_2,
-				correspondence_city: locationToEdit.correspondence_city,
-				correspondence_state: locationToEdit.correspondence_state,
-				correspondence_zip: locationToEdit.correspondence_zip,
-				correspondence_phone: locationToEdit.correspondence_phone,
-				correspondence_fax: locationToEdit.correspondence_fax,
-				correspondence_email: locationToEdit.correspondence_email,
-
-				practice_contact_name: locationToEdit.practice_contact_name,
-				practice_contact_email: locationToEdit.practice_contact_email,
-				practice_contact_work_phone: locationToEdit.practice_contact_work_phone,
-				practice_contact_cell_phone: locationToEdit.practice_contact_cell_phone,
-				practice_contact_type: locationToEdit.practice_contact_type,
-
-				ptan_medicare_number: locationToEdit.ptan_medicare_number,
-				medicaid_number: locationToEdit.medicaid_number,
+				...DEFAULT_STATE,
+				...locationToEdit,
 			});
 			setShowLocationForm(true);
 		}

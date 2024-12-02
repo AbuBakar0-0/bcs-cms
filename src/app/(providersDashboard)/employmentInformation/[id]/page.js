@@ -172,8 +172,8 @@ function EmploymentInformation() {
 			zip_code: employment.address?.zip_code || "",
 			cell_phone: employment.contact?.cell_phone || "",
 			fax: employment.contact?.fax || "",
-			start_date: formatDate(employment.start_date),
-			end_date: formatDate(employment.end_date),
+			start_date: employment.start_date,
+			end_date: employment.end_date,
 			current_employer: employment.current_employer ? "Yes" : "No",
 		});
 		setEditingId(employment.uuid);

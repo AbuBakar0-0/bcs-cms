@@ -358,7 +358,7 @@ function PracticeProfile() {
 					/>
 				</div>
 
-				<div className="w-full flex justify-end mt-6">
+				{/* <div className="w-full flex justify-end mt-6">
 					<button
 						type="submit"
 						onClick={handleSubmit}
@@ -366,9 +366,9 @@ function PracticeProfile() {
 					>
 						Save Profile
 					</button>
-				</div>
+				</div> */}
 
-				<NavBottom />
+				<NavBottom onSave={handleSubmit} />
 			</div>
 		</div>
 	);

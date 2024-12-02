@@ -120,9 +120,9 @@ function EducationAndTraining() {
 					)}
 				</div>
 
-				{educationEntries.map((entry) => (
+				{educationEntries.map((entry, index) => (
 					<div
-						key={entry.uuid}
+						key={`education-${entry.uuid}-${index}`}
 						className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
 					>
 						<p className="w-1/3">{entry.degree}</p>
@@ -253,9 +253,9 @@ function EducationAndTraining() {
 					) : (
 						<></>
 					)}
-					{trainingEntries.map((entry) => (
+					{trainingEntries.map((entry, index) => (
 						<div
-							key={entry.uuid}
+							key={`training-${entry.uuid}-${index}`}
 							className="w-full h-28 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
 						>
 							<p className="w-1/3">{entry.training_type}</p>

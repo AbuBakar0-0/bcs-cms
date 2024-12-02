@@ -62,7 +62,7 @@ export async function POST(request) {
 			.select("uuid")
 			.single();
 		if (contactError) throw contactError;
-
+		console.log(formData.emergencyContactRelation, " ---------------- -- ");
 		// Inserting Emergency Contact
 		const { data: emergencyContact, error: emergencyContactError } =
 			await supabase

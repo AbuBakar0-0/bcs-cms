@@ -5,7 +5,6 @@ export async function GET(request) {
 		const { searchParams } = new URL(request.url);
 		const provider_id = searchParams.get("provider_id");
 
-		// Validate provider_id
 		if (!provider_id) {
 			throw new Error("Provider ID is required.");
 		}
@@ -25,13 +24,17 @@ export async function GET(request) {
 			.eq("provider_id", provider_id)
 			.is("deleted_at", null);
 
-		// Handle any errors from the Supabase query
 		if (educationError) {
 			throw new Error(educationError.message);
 		}
+		const flattenedData = educationData.map((record) => ({
+			...record,
+			country: record.addresses?.country || "",
+			state: record.addresses?.state || "",
+			county: record.addresses?.county || "",
+		}));
 
-		// Return the fetched data as JSON
-		return new Response(JSON.stringify(educationData), {
+		return new Response(JSON.stringify(flattenedData), {
 			status: 200,
 			headers: {
 				"Content-Type": "application/json",
@@ -216,7 +219,7 @@ export async function PUT(request) {
 		if (addressError) throw addressError;
 
 		const { data, error } = await supabase
-			.from("professional_training")
+			.from("professional_trainings")
 			.update({
 				training_type,
 				hospital_name,

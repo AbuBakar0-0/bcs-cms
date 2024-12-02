@@ -30,9 +30,13 @@ export async function GET(request) {
 		if (error) {
 			throw new Error(error.message);
 		}
+		const flattenedData = data.map((record) => ({
+			...record,
+			state: record.address_id?.state || "",
+			country: record.address_id?.country || "",
+		}));
 
-		// Return the result
-		return new Response(JSON.stringify(data), {
+		return new Response(JSON.stringify(flattenedData), {
 			headers: { "Content-Type": "application/json" },
 		});
 	} catch (error) {

@@ -1,95 +1,104 @@
+import { isEqual, validateAlphanumeric, validateNumber } from "@/utils/utility";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
+const DEFAULT_STATE = {
+	// Practice Information
+	type: "",
+	type_of_service_provided: "",
+	credentialing_type: "",
+	npi_2: "",
+	tax_id: "",
+	legal_business_name: "",
+	doing_business_name: "",
+	taxonomy_code_1: "",
+	taxonomy_code_2: "",
+
+	// Service Address
+	service_address1: "",
+	service_address2: "",
+	service_city: "",
+	service_state: "",
+	service_zipcode: "",
+	service_phone: "",
+	service_appointment_phone: "",
+	service_fax: "",
+	service_email: "",
+
+	// Mailing Address
+	mailing_address1: "",
+	mailing_address2: "",
+	mailing_city: "",
+	mailing_state: "",
+	mailing_zipcode: "",
+	mailing_phone: "",
+	mailing_fax: "",
+	mailing_email: "",
+
+	// Correspondence Address
+	correspondence_address1: "",
+	correspondence_address2: "",
+	correspondence_city: "",
+	correspondence_state: "",
+	correspondence_zipcode: "",
+	correspondence_phone: "",
+	correspondence_fax: "",
+	correspondence_email: "",
+
+	// Additional Information
+	ptan_medicare_number: "",
+	medicaid_number: "",
+	start_date: "",
+
+	// Practice Contact
+	practice_contact_role: "",
+	practice_contact_name: "",
+	practice_contact_email: "",
+	practice_contact_work_phone: "",
+	practice_contact_cell_phone: "",
+};
 export const usePracticeProfile = () => {
-	const [formData, setFormData] = useState({
-		// Practice Information
-		type: "",
-		type_of_service_provided: "",
-		credentialing_type: "",
-		npi_2: "",
-		tax_id: "",
-		legal_business_name: "",
-		doing_business_name: "",
-		taxonomy_code_1: "",
-		taxonomy_code_2: "",
-
-		// Service Address
-		service_address1: "",
-		service_address2: "",
-		service_city: "",
-		service_state: "",
-		service_zipcode: "",
-		service_phone: "",
-		service_appointment_phone: "",
-		service_fax: "",
-		service_email: "",
-
-		// Mailing Address
-		mailing_address1: "",
-		mailing_address2: "",
-		mailing_city: "",
-		mailing_state: "",
-		mailing_zipcode: "",
-		mailing_phone: "",
-		mailing_fax: "",
-		mailing_email: "",
-
-		// Correspondence Address
-		correspondence_address1: "",
-		correspondence_address2: "",
-		correspondence_city: "",
-		correspondence_state: "",
-		correspondence_zipcode: "",
-		correspondence_phone: "",
-		correspondence_fax: "",
-		correspondence_email: "",
-
-		// Additional Information
-		ptan_medicare_number: "",
-		medicaid_number: "",
-		start_date: "",
-
-		// Practice Contact
-		practice_contact_role: "",
-		practice_contact_name: "",
-		practice_contact_email: "",
-		practice_contact_work_phone: "",
-		practice_contact_cell_phone: "",
-	});
+	const [formData, setFormData] = useState(DEFAULT_STATE);
 	const { id: provider_id } = useParams();
 
 	const validateForm = () => {
-		let isValid = true;
-
-		if (isEqual(formData.type, "Select Type")) {
+		if (isEqual(formData.type, "Select Type") || !formData.type) {
 			toast.error("Please select a Practice Type");
-			isValid = false;
+			return false;
 		}
 
-		if (isEqual(formData.type_of_service_provided, "Select Service")) {
+		if (
+			isEqual(formData.type_of_service_provided, "Select Service") ||
+			!formData.type_of_service_provided
+		) {
 			toast.error("Please select a Service Type");
-			isValid = false;
+			return false;
 		}
 
-		if (isEqual(formData.credentialing_type, "Select Type")) {
+		if (
+			isEqual(formData.credentialing_type, "Select Type") ||
+			!formData.credentialing_type
+		) {
 			toast.error("Please select a Credentialing Type");
-			isValid = false;
+			return false;
 		}
 
-		if (isEqual(formData.practice_contact_role, "Select Role")) {
+		if (
+			isEqual(formData.practice_contact_role, "Select Role") ||
+			!formData.practice_contact_role
+		) {
 			toast.error("Please select a Contact Role");
-			isValid = false;
+			return false;
 		}
 
 		// Validate numbers
 		if (formData.npi_2 && !validateNumber(formData.npi_2, 10, "NPI 2")) {
-			isValid = false;
+			return false;
 		}
 
 		if (formData.tax_id && !validateNumber(formData.tax_id, 9, "Tax ID")) {
-			isValid = false;
+			return false;
 		}
 
 		// Validate Practice Names
@@ -100,7 +109,7 @@ export const usePracticeProfile = () => {
 				"Legal Business Name"
 			)
 		) {
-			isValid = false;
+			return false;
 		}
 
 		if (
@@ -111,7 +120,7 @@ export const usePracticeProfile = () => {
 				"Doing Business Name"
 			)
 		) {
-			isValid = false;
+			return false;
 		}
 
 		// Validate Required Addresses
@@ -123,7 +132,7 @@ export const usePracticeProfile = () => {
 							prefix.charAt(0).toUpperCase() + prefix.slice(1)
 						} Address 1 is required`
 					);
-					isValid = false;
+					return true;
 				}
 				if (!formData[`${prefix}_city`]) {
 					toast.error(
@@ -131,7 +140,7 @@ export const usePracticeProfile = () => {
 							prefix.charAt(0).toUpperCase() + prefix.slice(1)
 						} City is required`
 					);
-					isValid = false;
+					return true;
 				}
 				if (!formData[`${prefix}_state`]) {
 					toast.error(
@@ -139,7 +148,7 @@ export const usePracticeProfile = () => {
 							prefix.charAt(0).toUpperCase() + prefix.slice(1)
 						} State is required`
 					);
-					isValid = false;
+					return true;
 				}
 				if (
 					!validateNumber(
@@ -148,7 +157,7 @@ export const usePracticeProfile = () => {
 						`${prefix.charAt(0).toUpperCase() + prefix.slice(1)} Zipcode`
 					)
 				) {
-					isValid = false;
+					return true;
 				}
 				if (!formData[`${prefix}_phone`]) {
 					toast.error(
@@ -156,38 +165,39 @@ export const usePracticeProfile = () => {
 							prefix.charAt(0).toUpperCase() + prefix.slice(1)
 						} Phone is required`
 					);
-					isValid = false;
+					return true;
 				}
 			}
+			return false;
 		};
 
-		validateAddress("service");
-		validateAddress("mailing");
-		validateAddress("correspondence");
+		if (validateAddress("service")) return false;
+		if (validateAddress("mailing")) return false;
+		if (validateAddress("correspondence")) return false;
 
 		// Validate Contact Information
 		if (!formData.practice_contact_name) {
 			toast.error("Practice Contact Name is required");
-			isValid = false;
+			return false;
 		}
 
 		if (!formData.practice_contact_email) {
 			toast.error("Practice Contact Email is required");
-			isValid = false;
+			return false;
 		} else {
 			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailPattern.test(formData.practice_contact_email)) {
 				toast.error("Invalid email format");
-				isValid = false;
+				return false;
 			}
 		}
 
 		if (!formData.practice_contact_work_phone) {
 			toast.error("Practice Contact Work Phone is required");
-			isValid = false;
+			return false;
 		}
 
-		return isValid;
+		return true;
 	};
 
 	// Handle all input changes
@@ -249,6 +259,8 @@ export const usePracticeProfile = () => {
 		if (!validateForm()) {
 			return;
 		}
+		const loadingToastId = toast.loading("Saving practice profile...");
+
 		try {
 			const response = await fetch("/api/practice-profile", {
 				method: "POST",
@@ -263,10 +275,15 @@ export const usePracticeProfile = () => {
 			}
 
 			const result = await response.json();
-			toast.success("Practice profile saved successfully!");
+			toast.success("Practice profile saved successfully!", {
+				id: loadingToastId,
+			});
+			setFormData(DEFAULT_STATE);
 		} catch (error) {
 			console.error("Error:", error);
-			toast.error("Error saving practice profile", error.message);
+			toast.error("Error saving practice profile", error.message, {
+				id: loadingToastId,
+			});
 		}
 	};
 

@@ -26,7 +26,7 @@ export async function POST(req) {
 		const { data: serviceContact, error: serviceContactError } = await supabase
 			.from("contacts")
 			.insert({
-				name: formData.practice_contact_name,
+				contact_name: formData.practice_contact_name,
 				home_phone: formData.service_phone,
 				cell_phone: formData.service_appointment_phone,
 				fax: formData.service_fax,
@@ -65,7 +65,7 @@ export async function POST(req) {
 		const { data: mailingContact, error: mailingContactError } = await supabase
 			.from("contacts")
 			.insert({
-				name: formData.practice_contact_name,
+				contact_name: formData.practice_contact_name,
 				home_phone: formData.mailing_phone,
 				fax: formData.mailing_fax,
 				email: formData.mailing_email,
@@ -105,7 +105,7 @@ export async function POST(req) {
 			await supabase
 				.from("contacts")
 				.insert({
-					name: formData.practice_contact_name,
+					contact_name: formData.practice_contact_name,
 					home_phone: formData.correspondence_phone,
 					fax: formData.correspondence_fax,
 					email: formData.correspondence_email,
@@ -125,7 +125,7 @@ export async function POST(req) {
 			await supabase
 				.from("contacts")
 				.insert({
-					name: formData.practice_contact_name,
+					contact_name: formData.practice_contact_name,
 					work_email: formData.practice_contact_email,
 					home_phone: formData.practice_contact_work_phone,
 					cell_phone: formData.practice_contact_cell_phone,
@@ -142,9 +142,9 @@ export async function POST(req) {
 
 		const { data: practiceProfile, error: practiceProfileError } =
 			await supabase
-				.from("practice_profile")
+				.from("practice_profiles")
 				.insert({
-					type: formData.type,
+					practice_type: formData.type,
 					type_of_service_provided: formData.type_of_service_provided,
 					credentialing_type: formData.credentialing_type,
 					npi_2: formData.npi_2,
@@ -157,17 +157,18 @@ export async function POST(req) {
 					service_contact_id: serviceContact.uuid,
 					mailing_address_id: mailingAddress.uuid,
 					mailing_contact_id: mailingContact.uuid,
-					correspondence_address_id: correspondenceAddress.uuid,
-					correspondence_contact_id: correspondenceContact.uuid,
+					correspondance_address_id: correspondenceAddress.uuid,
+					correspondance_contact_id: correspondenceContact.uuid,
 					ptan_medicare_number: formData.ptan_medicare_number,
 					medicaid_number: formData.medicaid_number,
 					start_date: formData.start_date,
 					practice_contact_id: practiceContact.uuid,
 					provider_id,
 				})
-				.select()
+				.select("")
 				.single();
-
+		console.log(practiceProfileError);
+		console.log(practiceProfile);
 		if (practiceProfileError) {
 			console.log(practiceProfileError);
 			throw practiceProfileError;
