@@ -108,6 +108,13 @@ export async function POST(request) {
 
 		if (providerError) throw providerError;
 		console.log(provider);
+		// return new Response(null, {
+		// 	status: 303,
+		// 	headers: {
+		// 		Location: `/providersInformation/${provider?.uuid}`,
+		// 	},
+		// });
+
 		return new Response(
 			JSON.stringify({
 				message: "Provider information saved successfully",

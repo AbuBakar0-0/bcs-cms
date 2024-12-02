@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 export async function GET(req, { params }) {
 	try {
 		// Destructure the ID from the route parameters
-		const { id } = params;
+		const { id } = await params;
 
 		// Fetch provider details for the given ID
 		const { data, error } = await supabase

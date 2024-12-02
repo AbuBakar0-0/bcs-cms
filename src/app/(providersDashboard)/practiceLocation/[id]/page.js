@@ -63,6 +63,8 @@ function PracticeLocations() {
 								/>
 								<TextInput
 									title={"NPI 2 (if applicable)"}
+									type="number"
+									maxLength={10}
 									required={false}
 									name="npi_2"
 									value={formData.npi_2}
@@ -71,9 +73,11 @@ function PracticeLocations() {
 								<TextInput
 									title={"Tax ID (if applicable)"}
 									required={false}
+									type="number"
 									name="tax_id"
 									value={formData.tax_id}
 									onChange={handleInputChange}
+									maxLength={9}
 								/>
 								<Dropdown
 									title={"Taxonomy Code (if applicable)"}

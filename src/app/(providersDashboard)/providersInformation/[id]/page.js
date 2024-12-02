@@ -120,6 +120,7 @@ function ProvidersInformation() {
 				body: jsonBody,
 			});
 
+			toast.success("Successfully Added Provider");
 			return response.data;
 		} catch (error) {
 			console.error("Error:", error);
@@ -196,7 +197,9 @@ function ProvidersInformation() {
 			}
 		};
 
-		fetchProviderInfo();
+		if(uuid!="new_user"){
+			fetchProviderInfo();
+		}
 	}, []); // Empty dependency array ensures this runs once when the component mounts
 
 	return (
@@ -302,6 +305,7 @@ function ProvidersInformation() {
 							name={"licenseOrId"}
 							value={formData.licenseOrId}
 							onChange={handleChange}
+							maxLength={15}
 						/>
 						<Dropdown
 							title={"State Issued"}

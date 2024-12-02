@@ -136,10 +136,10 @@ export default function ProvidersDashboard() {
 										{provider.middle_initial} - {provider.provider_title}
 									</p>
 									<p className="text-gray-500">
-										{provider.speciality || "N/A"}
+										{provider.birth_state || "N/A"}
 									</p>
 									<p className="text-xs text-gray-400">
-										NPI {provider.ssn || "Unknown"}
+										SSN {provider.ssn || "Unknown"}
 									</p>
 								</div>
 							</div>

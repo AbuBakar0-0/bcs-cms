@@ -118,6 +118,7 @@ const ProfessionalIds = () => {
 					name={`${prefix}PolicyNumber`}
 					value={formData[`${prefix}PolicyNumber`]}
 					onChange={(e) => handleChange(e)}
+					maxLength={20}
 				/>
 				<DateInput
 					title="Effective Date"
@@ -222,7 +223,9 @@ const ProfessionalIds = () => {
 				<TextInput
 					title="NPI 1 (if applicable)"
 					width="w-1/6"
+					type="number"
 					required={true}
+					maxLength={10}
 					name="npi1"
 					value={formData.npi1}
 					onChange={(e) => handleChange(e)}
@@ -232,12 +235,16 @@ const ProfessionalIds = () => {
 					width="w-1/8"
 					required={false}
 					name="npi2"
+					type="number"
+					maxLength={10}
 					value={formData.npi2}
 					onChange={(e) => handleChange(e)}
 				/>
 				<TextInput
 					title="Tax ID #"
+					type="number"
 					name="taxId"
+					maxLength={9}
 					required={true}
 					value={formData.taxId}
 					onChange={(e) => handleChange(e)}
@@ -245,6 +252,7 @@ const ProfessionalIds = () => {
 				<TextInput
 					title="UPIN #"
 					name="upin"
+					maxLength={12}
 					value={formData.upin}
 					onChange={(e) => handleChange(e)}
 				/>

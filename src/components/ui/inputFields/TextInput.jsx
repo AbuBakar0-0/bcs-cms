@@ -2,6 +2,7 @@ import BaseInput from "./BaseInput";
 
 const TextInput = ({
     title,
+    type="text",
     required,
     readonly,
     width,
@@ -16,7 +17,7 @@ const TextInput = ({
         title={title}
         required={required}
         readonly={readonly}
-        type="text"
+        type={type}
         labelColor={labelColor}
         width={width}
         value={value}
