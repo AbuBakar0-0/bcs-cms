@@ -54,7 +54,8 @@ function PracticeProfile() {
 				/>
 				<TextInput
 					name="npi_2"
-					type="number"
+					type="text"
+					is_number={true}
 					maxLength={10}
 					title="NPI 2"
 					width="w-1/6"
@@ -64,7 +65,8 @@ function PracticeProfile() {
 				<TextInput
 					name="tax_id"
 					title="Tax ID"
-					type="number"
+					is_number={true}
+					type="text"
 					width="w-1/6"
 					maxLength={9}
 					value={formData.tax_id}

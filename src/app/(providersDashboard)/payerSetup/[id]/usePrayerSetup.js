@@ -86,6 +86,7 @@ export const usePayerSetup = () => {
 				...record,
 				provider: getProviderNameByUuid(record.provider_id),
 			}));
+			console.log(formattedData);
 			setPayerSetups(formattedData);
 		} catch (error) {
 			setError(error.message);

@@ -200,7 +200,7 @@ export const usePracticeLocations = () => {
 		];
 
 		for (const field of zipFields) {
-			if (field.value && !validateNumber(field.value, 5, field.name)) {
+			if (field.value && !validateNumber(field.value, 9, field.name)) {
 				return false;
 			}
 		}

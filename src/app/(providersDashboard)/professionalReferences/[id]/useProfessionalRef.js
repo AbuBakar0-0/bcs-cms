@@ -43,8 +43,8 @@ export const useProfessionalReferences = () => {
 			if (value.length < 2) return "First Name must be at least 2 characters";
 		},
 		middle_initial: (value) => {
-			if (value && value.length > 1)
-				return "Middle Initial should be a single character";
+			if (value && value.length > 2)
+				return "Middle Initial should be a two characters";
 		},
 		last_name: (value) => {
 			if (!value?.trim()) return "Last Name is required";

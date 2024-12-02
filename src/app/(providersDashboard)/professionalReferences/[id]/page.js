@@ -104,6 +104,7 @@ function ProfessionalReferences() {
 								<TextInput
 									title="Middle Initial"
 									required={false}
+									maxLength={2}
 									width="w-[8%]"
 									name="middle_initial"
 									value={formData.middle_initial}

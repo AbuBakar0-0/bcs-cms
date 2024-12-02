@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Button from "@/components/ui/Button";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
@@ -11,13 +10,13 @@ import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
 import NavBottom from "@/components/ui/NavBottom";
 import { medicalTitles } from "@/data/medicalTitles";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { CiEdit } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
-import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
-import { formatDate } from "../../educationTraining/[id]/useEducationTraning";
-import { ClipLoader } from "react-spinners";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast"; // Assuming you're using react-hot-toast for notifications
+import { CiEdit } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
+import { BarLoader } from "react-spinners";
 
 function EmploymentInformation() {
 	const [loading, setLoading] = useState(false);
@@ -309,14 +308,14 @@ function EmploymentInformation() {
 						disabled={loading}
 						className="border-4 border-primary rounded-lg px-6 py-2 font-semibold disabled:opacity-50"
 					>
-						{loading ? <ClipLoader /> : editingId ? "Update" : "Submit"}
+						{loading ? <BarLoader /> : editingId ? "Update" : "Submit"}
 					</button>
 				</form>
 			)}
 
 			{loading && !showForm ? (
 				<div className="flex justify-center items-center py-6">
-					<ClipLoader />
+					<BarLoader />
 				</div>
 			) : (
 				<div className="w-full space-y-4">

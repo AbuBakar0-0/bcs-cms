@@ -7,8 +7,8 @@ export async function GET(request) {
 		const { data, error } = await supabase
 			.from("payers_setup")
 			.select("*")
-			.eq("provider_id", provider_id)
 			.is("deleted_at", null);
+			// .eq("provider_id", provider_id)
 		// .order("created_at", { ascending: false });
 		if (error) throw error;
 

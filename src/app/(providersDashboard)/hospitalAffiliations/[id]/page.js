@@ -12,7 +12,7 @@ import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-hot-toast";
-import { ClipLoader } from "react-spinners";
+import { BarLoader, ClipLoader } from "react-spinners";
 import { useParams } from "next/navigation";
 
 const initialFormState = {
@@ -216,7 +216,7 @@ function HospitalAffiliations() {
 	};
 
 	if (loading) {
-		return <ClipLoader />;
+		return <div className="w-full flex justify-center items-center"><BarLoader /></div>;
 	}
 
 	const renderForm = (type, formData, onChange) => (

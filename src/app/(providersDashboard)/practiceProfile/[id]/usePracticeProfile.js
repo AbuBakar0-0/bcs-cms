@@ -153,7 +153,7 @@ export const usePracticeProfile = () => {
 				if (
 					!validateNumber(
 						formData[`${prefix}_zipcode`],
-						5,
+						9,
 						`${prefix.charAt(0).toUpperCase() + prefix.slice(1)} Zipcode`
 					)
 				) {

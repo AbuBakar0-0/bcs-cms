@@ -32,7 +32,7 @@ const ProfessionalIds = () => {
 				>
 					<Dropdown
 						title={`Do you have ${title}?`}
-						options={["Yes", "No"]}
+						options={[ "No","Yes",]}
 						width="w-1/6"
 						name={`has${capitalize(field)}`}
 						value={entry[`has${capitalize(field)}`]}
@@ -115,6 +115,7 @@ const ProfessionalIds = () => {
 				<TextInput
 					title="Policy #"
 					width="w-1/8"
+					is_number={true}
 					name={`${prefix}PolicyNumber`}
 					value={formData[`${prefix}PolicyNumber`]}
 					onChange={(e) => handleChange(e)}
@@ -220,13 +221,16 @@ const ProfessionalIds = () => {
 					value={formData.hasNPI}
 					onChange={(e) => handleChange(e)}
 				/>
+
 				<TextInput
 					title="NPI 1 (if applicable)"
 					width="w-1/6"
-					type="number"
+					type="text"
 					required={true}
 					maxLength={10}
 					name="npi1"
+					is_number={true}
+					readonly={formData.hasNPI=="No"}
 					value={formData.npi1}
 					onChange={(e) => handleChange(e)}
 				/>
@@ -235,15 +239,18 @@ const ProfessionalIds = () => {
 					width="w-1/8"
 					required={false}
 					name="npi2"
-					type="number"
+					type="text"
 					maxLength={10}
+					is_number={true}
+					readonly={formData.hasNPI=="No"}
 					value={formData.npi2}
 					onChange={(e) => handleChange(e)}
 				/>
 				<TextInput
 					title="Tax ID #"
-					type="number"
+					type="text"
 					name="taxId"
+					is_number={true}
 					maxLength={9}
 					required={true}
 					value={formData.taxId}
@@ -252,6 +259,7 @@ const ProfessionalIds = () => {
 				<TextInput
 					title="UPIN #"
 					name="upin"
+					is_number={true}
 					maxLength={12}
 					value={formData.upin}
 					onChange={(e) => handleChange(e)}

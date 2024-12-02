@@ -10,6 +10,7 @@ const TextInput = ({
     value,
     onChange,
     name,
+    is_number=false,
     minLength,
     maxLength,
 }) => (
@@ -21,6 +22,7 @@ const TextInput = ({
         labelColor={labelColor}
         width={width}
         value={value}
+        is_number={is_number}
         onChange={onChange}
         name={name}
         minLength={minLength}
