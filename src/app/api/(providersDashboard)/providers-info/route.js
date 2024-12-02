@@ -1,9 +1,11 @@
 import { supabase } from "@/lib/supabase";
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 
 export async function POST(request) {
 	try {
 		const formData = await request.json();
-
+console.log(formData);
 		const { data: homeAddress, error: homeAddressError } = await supabase
 			.from("addresses")
 			.insert({
@@ -62,7 +64,6 @@ export async function POST(request) {
 			.select("uuid")
 			.single();
 		if (contactError) throw contactError;
-		console.log(formData.emergencyContactRelation, " ---------------- -- ");
 		// Inserting Emergency Contact
 		const { data: emergencyContact, error: emergencyContactError } =
 			await supabase
@@ -107,19 +108,13 @@ export async function POST(request) {
 			.single();
 
 		if (providerError) throw providerError;
-		console.log(provider);
-		// return new Response(null, {
-		// 	status: 303,
-		// 	headers: {
-		// 		Location: `/providersInformation/${provider?.uuid}`,
-		// 	},
-		// });
-
-		return new Response(
-			JSON.stringify({
+		console.log(provider.uuid);
+		// redirect(`/providersInformation/${provider.uuid}`)
+		return NextResponse.json(
+			{
 				message: "Provider information saved successfully",
-				provider_id: provider?.uuid,
-			}),
+				provider_id: provider.uuid,
+			},
 			{ status: 201 }
 		);
 	} catch (error) {
