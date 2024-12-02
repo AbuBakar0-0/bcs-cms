@@ -5,8 +5,9 @@ export async function GET(request) {
 	console.log("CALLED")
     // Extract query parameter for added_by (if available)
     const url = new URL(request.url);
-    const addedBy = url.searchParams.get("added_by");
+    const addedBy = url.searchParams.get("uuid");
 
+    console.log(addedBy);
     // Build query conditionally based on 'added_by'
     let query = supabase.from("providers_info").select(
       `uuid, 
@@ -21,13 +22,9 @@ export async function GET(request) {
       state_issued, 
       issue_date, 
       expiry_date`
-    );
+    ).eq("added_by", addedBy);
 
-    // Add condition if added_by is present in the query parameters
-    if (addedBy) {
-      query = query.eq("added_by", addedBy);
-    }
-
+  
     // Fetch providers information
     const { data: providers, error: providersError } = await query;
 
