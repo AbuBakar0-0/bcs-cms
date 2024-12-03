@@ -7,6 +7,7 @@ import {
 	statusOptions,
 } from "./utilis";
 import { useParams } from "next/navigation";
+import { useProviders } from "@/hooks/useProvider";
 
 export function formatDate(date) {
 	const parsedDate = parse(date, "yyyy-MM-dd", new Date());
@@ -22,6 +23,9 @@ export const useDocuments = () => {
 	const [isEditing, setIsEditing] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const { id: provider_id } = useParams();
+
+	const { getProviderByName } = useProviders();
+
 	const validators = {
 		title: (value) => {
 			if (!value || value === "Select Document")
@@ -30,7 +34,6 @@ export const useDocuments = () => {
 		},
 		provider: (value) => {
 			if (!value || value === "Select Provider") return "Provider is required";
-			if (!providerOptions.includes(value)) return "Invalid Provider";
 		},
 		status: (value) => {
 			if (!value || value === "Select Status") return "Status is required";
@@ -48,7 +51,7 @@ export const useDocuments = () => {
 			const error = validator(formData[field]);
 			if (error) errors.push(error);
 		}
-
+		console.log(errors);
 		return errors;
 	};
 
@@ -103,10 +106,14 @@ export const useDocuments = () => {
 			const formDataToSend = new FormData();
 			Object.entries(formData).forEach(([key, value]) => {
 				if (value !== null && value !== "") {
-					formDataToSend.append(key, value);
+					if (key === "provider") {
+						const provider = getProviderByName(value);
+						formDataToSend.append("provider_id", provider.uuid);
+					} else {
+						formDataToSend.append(key, value);
+					}
 				}
 			});
-			formDataToSend.append("provider_id", provider_id);
 			const response = await fetch("/api/documents", {
 				method: isEditing ? "PUT" : "POST",
 				body: formDataToSend,

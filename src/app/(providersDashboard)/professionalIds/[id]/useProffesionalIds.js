@@ -70,11 +70,13 @@ export const useProfessionalIdsForm = () => {
 		],
 
 		// Insurance fields
+		professionalLiabilityPolicyName: "",
 		professionalLiabilityPolicyNumber: "",
 		professionalLiabilityEffectiveDate: "",
 		professionalLiabilityExpiryDate: "",
 		professionalLiabilityAggregate: "",
 
+		generalLiabilityPolicyName: "",
 		generalLiabilityPolicyNumber: "",
 		generalLiabilityEffectiveDate: "",
 		generalLiabilityExpiryDate: "",
@@ -169,6 +171,7 @@ export const useProfessionalIdsForm = () => {
 
 		try {
 			setLoading(true);
+			toast.loading("Adding Entry");
 			const response = await fetch("/api/professional-ids", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
@@ -180,6 +183,7 @@ export const useProfessionalIdsForm = () => {
 			}
 
 			const data = await response.json();
+			toast.dismiss();
 			toast.success("Professional information saved successfully!");
 			return data;
 		} catch (error) {
