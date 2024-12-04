@@ -13,28 +13,35 @@ import Link from "next/link";
 
 export default function Payers() {
   const [activeTab, setActiveTab] = useState("provider");
-
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  let added_by = localStorage.getItem("user_uuid");
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        added_by = localStorage.getItem("user_uuid");
-        const response = await axios.get(`/api/payers?added_by=${added_by}`);
-        setData(response.data);
-        console.log(response.data);
-      } catch (err) {
-        setError(err.response?.data?.error || "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [addedBy, setAddedBy] = useState(null);
 
-    fetchData();
-  }, []);
+  useEffect(() => {
+    // Check if window is defined (client-side) and fetch user data
+    if (typeof window !== "undefined") {
+      const userUuid = localStorage.getItem("user_uuid");
+      setAddedBy(userUuid);
+
+      if (userUuid) {
+        const fetchData = async () => {
+          setLoading(true);
+          try {
+            const response = await axios.get(`/api/payers?added_by=${userUuid}`);
+            setData(response.data);
+          } catch (err) {
+            setError(err.response?.data?.error || "An error occurred");
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchData();
+      }
+    }
+  }, []); // Runs only once when the component mounts
+
 
   const organizationDocuments = [
     {
