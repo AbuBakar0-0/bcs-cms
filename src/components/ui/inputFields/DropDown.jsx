@@ -38,7 +38,7 @@ const Dropdown = ({
 			});
 		}
 	};
-
+	
 	return (
 		<div className={`flex flex-col gap-2 ${width}`}>
 			<label className="block text-sm font-medium text-black">

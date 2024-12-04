@@ -15,6 +15,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import { validateCredsContactForm } from "./utilis";
 import { useParams } from "next/navigation";
 import { BarLoader } from "react-spinners";
+import NavBottom from "@/components/ui/NavBottom";
 const initialFormData = {
   credentialingTitle: "Select Title",
   firstName: "",
@@ -377,6 +378,7 @@ export default function CredentialingContacts() {
           </div>
         ))
       )}
+      <NavBottom/>
     </div>
   );
 }

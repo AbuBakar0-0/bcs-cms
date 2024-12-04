@@ -365,6 +365,7 @@ function Specialities() {
 					</div>
 				)}
 			</div>
+			<NavBottom/>
 		</>
 	);
 }

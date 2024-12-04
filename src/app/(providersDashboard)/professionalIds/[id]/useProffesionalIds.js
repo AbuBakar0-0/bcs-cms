@@ -8,7 +8,7 @@ export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
 export const useProfessionalIdsForm = () => {
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState({
-		hasNPI: "No",
+		hasNPI: "Select Option",
 		npi1: "",
 		npi2: "",
 		taxId: "",
@@ -20,7 +20,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasMedicare: "No",
+				hasMedicare: "Select Option",
 			},
 		],
 		medicaid: [
@@ -29,7 +29,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasMedica: "No",
+				hasMedica: "Select Option",
 			},
 		],
 		stateLicense: [
@@ -38,7 +38,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasStateLicense: "No",
+				hasStateLicense: "Select Option",
 			},
 		],
 		clia: [
@@ -47,7 +47,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasClia: "No",
+				hasClia: "Select Option",
 			},
 		],
 		dea: [
@@ -56,7 +56,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasDea: "No",
+				hasDea: "Select Option",
 			},
 		],
 		cds: [
@@ -65,7 +65,7 @@ export const useProfessionalIdsForm = () => {
 				state: "",
 				effectiveDate: "",
 				expiryDate: "",
-				hasCds: "No",
+				hasCds: "Select Option",
 			},
 		],
 

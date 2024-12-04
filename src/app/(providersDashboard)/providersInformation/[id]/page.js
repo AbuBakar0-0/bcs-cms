@@ -19,6 +19,7 @@ import { BarLoader } from "react-spinners";
 import axios from "axios";
 import { useRouter } from "next/navigation"; // Import useRouter
 import BaseInput from "@/components/ui/inputFields/BaseInput";
+import NavBottom from "@/components/ui/NavBottom";
 
 function ProvidersInformation() {
 	const { id: uuid } = useParams();
@@ -563,8 +564,9 @@ function ProvidersInformation() {
 							onChange={handleChange}
 						/>
 					</div>
-
-					<Button title={"Save & Next"} onClick={handleSubmit} />
+						
+					{/* <Button title={"Save & Next"} onClick={handleSubmit} /> */}
+					<NavBottom onSave={handleSubmit}/>
 				</div>
 			)}
 		</>

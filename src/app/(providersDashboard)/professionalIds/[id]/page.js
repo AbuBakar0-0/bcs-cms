@@ -31,7 +31,7 @@ const ProfessionalIds = () => {
         >
           <Dropdown
             title={`Do you have ${title}?`}
-            options={["No", "Yes"]}
+            options={["Select Option", "No", "Yes"]}
             width="w-1/6"
             name={`has${capitalize(field)}`}
             value={entry[`has${capitalize(field)}`]}
@@ -43,32 +43,33 @@ const ProfessionalIds = () => {
             name="number"
             value={entry.number}
             onChange={(e) => handleChange(e, index, field)}
-            readonly={entry[`has${capitalize(field)}`] === "No"}
+            readonly={entry[`has${capitalize(field)}`] !== "Yes"}
+            maxLength={title=="State License"?15:10}
+            is_number={title=="Medicaid"}
           />
           <Dropdown
             title="Issue State"
             options={stateAbbreviations}
-            width="w-1/8"
             name="state"
             value={entry.state}
             onChange={(e) => handleChange(e, index, field)}
-            readonly={entry[`has${capitalize(field)}`] === "No"}
+            readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
           <DateInput
             title="Effective Date"
-            width="w-1/8"
             name="effectiveDate"
             value={entry.effectiveDate}
+            width="w-1/8"
             onChange={(e) => handleChange(e, index, field)}
-            readonly={entry[`has${capitalize(field)}`] === "No"}
+            readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
           <DateInput
             title="Expiry Date"
-            width="w-1/8"
             name="expiryDate"
+            width="w-1/8"
             value={entry.expiryDate}
             onChange={(e) => handleChange(e, index, field)}
-            readonly={entry[`has${capitalize(field)}`] === "No"}
+            readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
           <div className="flex gap-2">
             {index === 0 && (
@@ -113,7 +114,6 @@ const ProfessionalIds = () => {
         />
         <TextInput
           title="Policy #"
-          width="w-1/8"
           is_number={true}
           name={`${prefix}PolicyNumber`}
           value={formData[`${prefix}PolicyNumber`]}
@@ -122,14 +122,12 @@ const ProfessionalIds = () => {
         />
         <DateInput
           title="Effective Date"
-          width="w-1/8"
           name={`${prefix}EffectiveDate`}
           value={formData[`${prefix}EffectiveDate`]}
           onChange={(e) => handleChange(e)}
         />
         <DateInput
           title="Expiry Date"
-          width="w-1/8"
           name={`${prefix}ExpiryDate`}
           value={formData[`${prefix}ExpiryDate`]}
           onChange={(e) => handleChange(e)}
@@ -214,7 +212,7 @@ const ProfessionalIds = () => {
       <div className="w-full flex flex-wrap justify-start gap-4 items-end">
         <Dropdown
           title="Do you have an individual NPI #"
-          options={["Yes", "No"]}
+          options={["Select Option", "Yes", "No"]}
           width="w-1/6"
           name="hasNPI"
           value={formData.hasNPI}
@@ -229,19 +227,18 @@ const ProfessionalIds = () => {
           maxLength={10}
           name="npi1"
           is_number={true}
-          readonly={formData.hasNPI == "No"}
+          readonly={formData.hasNPI != "Yes"}
           value={formData.npi1}
           onChange={(e) => handleChange(e)}
         />
         <TextInput
           title="NPI 2 (if applicable)"
-          width="w-1/8"
           required={false}
           name="npi2"
           type="text"
           maxLength={10}
           is_number={true}
-          readonly={formData.hasNPI == "No"}
+          readonly={formData.hasNPI != "Yes"}
           value={formData.npi2}
           onChange={(e) => handleChange(e)}
         />
