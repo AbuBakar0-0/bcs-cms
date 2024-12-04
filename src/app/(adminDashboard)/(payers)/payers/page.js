@@ -18,12 +18,13 @@ export default function Payers() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const added_by = localStorage.getItem("user_uuid");
+  const [added_by,setAddedBy]=useState();
   useEffect(() => {
-
+    
     const fetchData = async () => {
       setLoading(true);
       try {
+        setAddedBy(localStorage.getItem("user_uuid"));
         const response = await axios.get(`/api/payers?added_by=${added_by}`);
         setData(response.data);
       } catch (err) {
