@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
-import AdminDashboardLayout from "../../adminLayout";
-import { FaEye } from "react-icons/fa";
-import { CiEdit } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
 import Button from "@/components/ui/Button";
+import { useState } from "react";
+import { CiEdit } from "react-icons/ci";
+import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
+import AdminDashboardLayout from "../../adminLayout";
 
 export default function DocumentCenter() {
   // State to handle the active tab (Provider or Organization)

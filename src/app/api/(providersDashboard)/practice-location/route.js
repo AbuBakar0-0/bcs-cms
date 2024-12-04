@@ -2,6 +2,8 @@ import { supabase } from "@/lib/supabase";
 
 export async function GET(request) {
 	try {
+		const searchParams = request.nextUrl.searchParams;
+		const uuid = searchParams.get("uuid");
 		// Get practice location with all related data
 		const { data: practiceLocations, error: practiceError } =
 			await supabase.from("practice_locations").select(`
@@ -51,7 +53,7 @@ export async function GET(request) {
                     cell_phone,
                     relation
                 )
-            `);
+            `).eq("provider_id",uuid);
 
 		if (practiceError) {
 			throw new Error(

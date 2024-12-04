@@ -377,8 +377,7 @@ function PracticeLocations() {
           <div>No locations found</div>
         ) : (
           locations.map((location) =>
-            location.deleted_at == "" ? (
-              <div
+            <div
                 key={location.uuid}
                 className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
               >
@@ -399,9 +398,6 @@ function PracticeLocations() {
                   />
                 </div>
               </div>
-            ) : (
-              <div key={location.uuid}></div>
-            )
           )
         )}
 

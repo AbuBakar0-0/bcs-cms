@@ -1,8 +1,8 @@
 import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
-import AdminDashboardLayout from "../../adminLayout";
 import Button from "@/components/ui/Button";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
+import AdminDashboardLayout from "@/app/(adminDashboard)/adminLayout";
 
 export default function OrgIds() {
   const data = [

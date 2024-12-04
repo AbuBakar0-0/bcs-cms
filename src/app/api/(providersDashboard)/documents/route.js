@@ -61,10 +61,9 @@ export async function POST(req) {
 		}
 
 		const title = formData.get("title");
-		const provider = formData.get("provider");
 		const status = formData.get("status");
 
-		if (!title || !provider || !status) {
+		if (!title || !provider_id || !status) {
 			if (file_public_id) {
 				await cloudinary.uploader.destroy(file_public_id);
 			}
@@ -76,7 +75,6 @@ export async function POST(req) {
 
 		const { error } = await supabase.from("provider_documents").insert({
 			title,
-			provider,
 			status,
 			effective_date: formData.get("effective_date") || null,
 			expiry_date: formData.get("expiry_date") || null,
@@ -85,6 +83,7 @@ export async function POST(req) {
 			provider_id,
 		});
 
+		console.log(error);
 		if (error) {
 			if (file_public_id) {
 				await cloudinary.uploader.destroy(file_public_id);

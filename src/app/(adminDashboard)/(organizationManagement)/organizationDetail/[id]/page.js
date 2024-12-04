@@ -1,11 +1,8 @@
-import React from "react";
-import AdminDashboardLayout from "../../adminLayout";
+import AdminDashboardLayout from "@/app/(adminDashboard)/adminLayout";
 import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
-import Link from "next/link";
-import { FaEye } from "react-icons/fa";
 import Button from "@/components/ui/Button";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 export default function OrganizationDetail() {
   const data = [
@@ -52,7 +49,7 @@ export default function OrganizationDetail() {
               <table className="w-full table-auto">
                 <thead className="bg-gray-200 text-left">
                   <tr>
-                    <th className="p-3">Provider Ino</th>
+                    <th className="p-3">Provider Info</th>
                     <th className="p-3">NPI 2</th>
                     <th className="p-3">Taxonomy Code</th>
                     <th className="p-3">Address</th>

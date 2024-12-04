@@ -2,11 +2,12 @@ import { supabase } from "@/lib/supabase";
 
 export async function GET(request) {
 	try {
+		console.log("CALLED");
 		const searchParams = request.nextUrl.searchParams;
-		const provider_id = searchParams.get("provider_id");
+		// const provider_id = searchParams.get("provider_id");
 		const { data, error } = await supabase
 			.from("payers_setup")
-			.select("*")
+			.select()
 			.is("deleted_at", null);
 			// .eq("provider_id", provider_id)
 		// .order("created_at", { ascending: false });

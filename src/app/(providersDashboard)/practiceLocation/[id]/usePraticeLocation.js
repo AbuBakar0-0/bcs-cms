@@ -56,8 +56,9 @@ export const usePracticeLocations = () => {
 	}, []);
 
 	const fetchLocations = async () => {
+	
 		try {
-			const response = await fetch("/api/practice-location");
+			const response = await fetch(`/api/practice-location?uuid=${provider_id}`);
 			if (!response.ok) throw new Error("Failed to fetch");
 			const { data } = await response.json();
 			setLocations(data || []);

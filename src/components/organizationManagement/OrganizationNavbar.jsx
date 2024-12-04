@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-const OrganizationNavbar = () => {
+const OrganizationNavbar = ({uuid}) => {
 
 
     const sidenavLinks = [
@@ -15,7 +15,7 @@ const OrganizationNavbar = () => {
     return (
         <div className="w-full flex flex-row items-center gap-4 mt-4 text-sm bg-secondary text-white">
             {sidenavLinks.map((item, index) => (
-                <Link href={`${item.link}`} key={index}>
+                <Link href={`${item.link}/${uuid}`} key={index}>
                     <span
                         className={`hover:font-semibold text-center`}
                     >
