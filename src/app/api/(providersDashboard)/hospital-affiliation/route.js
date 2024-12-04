@@ -5,7 +5,7 @@ export async function POST(request) {
 	try {
 		const formData = await request.json();
 		const homeAddress = await insertAddress(formData, "Location");
-		console.log(homeAddress);
+		console.log(homeAddress);   
 		const { data: hospitalAffiliation, error: hospitalError } = await supabase
 			.from("hospital_admittings")
 			.insert({
