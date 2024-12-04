@@ -17,16 +17,15 @@ export default function Payers() {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  const [added_by,setAddedBy]=useState();
+  let added_by = localStorage.getItem("user_uuid");
   useEffect(() => {
-    
     const fetchData = async () => {
       setLoading(true);
       try {
-        setAddedBy(localStorage.getItem("user_uuid"));
+        added_by = localStorage.getItem("user_uuid");
         const response = await axios.get(`/api/payers?added_by=${added_by}`);
         setData(response.data);
+        console.log(response.data);
       } catch (err) {
         setError(err.response?.data?.error || "An error occurred");
       } finally {
@@ -86,34 +85,38 @@ export default function Payers() {
   const renderDocuments = () => {
     const documents = activeTab === "provider" ? data : organizationDocuments;
 
-    return documents.map((doc, index) => (
-      <tr className="border-b" key={index}>
-        <td className="p-3">
-          {doc.providers_info.last_name} {doc.providers_info.middle_initial}{" "}
-          {doc.providers_info.first_name}
-        </td>
-        <td className="p-3">{doc.plan_type}</td>
-        <td className="p-3">{doc.business}</td>
-        <td className="p-3">{doc.payer_name}</td>
-        <td className="p-3">{doc.status}</td>
-        <td className="p-3">{doc.note}</td>
-        <td className="p-3 flex flex-row items-center gap-3">
-          <FaEye className="text-secondary" />
-          <CiEdit className="text-primary" />
-          <MdDeleteOutline className="text-red-400" />
-        </td>
-      </tr>
-    ));
+    return data.providers_info != null ? (
+      documents.map((doc, index) => (
+        <tr className="border-b" key={index}>
+          <td className="p-3">
+            {doc.providers_info.last_name} {doc.providers_info.middle_initial}{" "}
+            {doc.providers_info.first_name}
+          </td>
+          <td className="p-3">{doc.plan_type}</td>
+          <td className="p-3">{doc.business}</td>
+          <td className="p-3">{doc.payer_name}</td>
+          <td className="p-3">{doc.status}</td>
+          <td className="p-3">{doc.note}</td>
+          <td className="p-3 flex flex-row items-center gap-3">
+            <FaEye className="text-secondary" />
+            <CiEdit className="text-primary" />
+            <MdDeleteOutline className="text-red-400" />
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr><td colSpan={7} className="text-center text-gray-500">No Data Found</td></tr>
+    );
   };
 
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
         <Link href={`/payerSetup/${added_by}`}>
-        <Button
-          title={"Add"}
-          icon={<IoAddCircleOutline className="size-6" />}
-        />
+          <Button
+            title={"Add"}
+            icon={<IoAddCircleOutline className="size-6" />}
+          />
         </Link>
       </div>
 

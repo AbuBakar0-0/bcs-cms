@@ -54,7 +54,7 @@ const BaseInput = ({
 			<input
 				type={type}
 				className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 font-semibold"
-				value={value}
+				// value={value}
 				placeholder={placeholder}
 				onChange={handleInputChange}
 				required={required}
@@ -62,6 +62,7 @@ const BaseInput = ({
 				name={name}
 				minLength={minLength}
 				maxLength={maxLength}
+				{...(type !== "file" ? { value } : {})}
 			/>
 		</div>
 	);

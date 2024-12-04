@@ -1,11 +1,49 @@
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
+import { v2 as cloudinary } from "cloudinary";
+cloudinary.config({
+	cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request) {
 	try {
-		const formData = await request.json();
-console.log(formData);
+		let formData = await request.formData();
+		const file = formData.get("picture");
+		formData = Object.fromEntries(formData);
+		formData.picture = file;
+		console.log(formData);
+		console.log(file, "----------------------------------------");
+		let picture_url = null;
+		let picture_public_id = null;
+
+		if (formData.picture) {
+			try {
+				const file = formData.picture;
+				console.log(file);
+				const fileBuffer = await file.arrayBuffer();
+				const buffer = Buffer.from(fileBuffer);
+				const base64File = buffer.toString("base64");
+				const mimeType = file.type;
+				const dataURI = `data:${mimeType};base64,${base64File}`;
+				const uploadResponse = await cloudinary.uploader.upload(dataURI, {
+					folder: "providers-profiles",
+					resource_type: "auto",
+				});
+
+				picture_url = uploadResponse.secure_url;
+				picture_public_id = uploadResponse.public_id;
+			} catch (uploadError) {
+				console.error("Picture upload error:", uploadError);
+				return Response.json(
+					{ error: "Failed to upload picture" },
+					{ status: 500 }
+				);
+			}
+		}
+
 		const { data: homeAddress, error: homeAddressError } = await supabase
 			.from("addresses")
 			.insert({
@@ -79,7 +117,6 @@ console.log(formData);
 
 		if (emergencyContactError) throw emergencyContactError;
 
-		// Inserting Provider Information
 		const { data: provider, error: providerError } = await supabase
 			.from("providers_info")
 			.insert({
@@ -103,6 +140,8 @@ console.log(formData);
 				mailing_address_id: mailingAddress?.uuid,
 				emergency_contact_id: emergencyContact?.uuid,
 				contact_id: contact?.uuid,
+				picture_url,
+				picture_public_id,
 			})
 			.select("uuid")
 			.single();
