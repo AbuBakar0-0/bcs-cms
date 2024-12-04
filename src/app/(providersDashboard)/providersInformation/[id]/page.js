@@ -130,6 +130,8 @@ function ProvidersInformation() {
 			toast.success("Successfully Added Provider");
 			router.push(`/providersInformation/${response.data.provider_id}`);
 		} catch (error) {
+			toast.dismiss();
+
 			console.error("Error:", error);
 			toast.error("Failed to save provider information. Please try again.");
 		}

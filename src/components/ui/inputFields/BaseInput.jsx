@@ -14,7 +14,7 @@ const BaseInput = ({
 	name,
 	placeholder,
 	minLength = 0,
-	maxLength = 100,
+	maxLength = 25,
 }) => {
 	const handleInputChange = (e) => {
 		let inputValue = e.target.value;
