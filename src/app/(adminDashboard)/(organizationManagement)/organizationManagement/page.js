@@ -56,7 +56,7 @@ export default function Page() {
               {loading ? (
                 <div className="flex justify-center"><BarLoader/></div>
               ) : error ? (
-                <div className="p-4 text-center text-red-500">{error}</div>
+                <div className="p-4 text-center text-gray-500">No Locations Found</div>
               ) : data.length === 0 ? (
                 <div className="p-4 text-center">No data available.</div>
               ) : (

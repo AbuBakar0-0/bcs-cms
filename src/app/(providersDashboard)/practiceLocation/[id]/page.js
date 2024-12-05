@@ -305,10 +305,13 @@ function PracticeLocations() {
                   <TextInput
                     title={"Location PTAN/Medicare number"}
                     name="ptan_medicare_number"
+                    is_number={true}
+                    maxLength={10}
                     value={formData.ptan_medicare_number}
                     onChange={handleInputChange}
                   />
                   <TextInput
+                    maxLength={10}
                     title={"Medicaid number"}
                     name="medicaid_number"
                     value={formData.medicaid_number}
@@ -376,29 +379,29 @@ function PracticeLocations() {
         ) : locations.length === 0 ? (
           <div>No locations found</div>
         ) : (
-          locations.map((location) =>
+          locations.map((location) => (
             <div
-                key={location.uuid}
-                className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
-              >
-                <p>{location.legal_business_name}</p>
-                <div className="flex flex-col justify-center items-start">
-                  <p>{location.service_city}</p>
-                  <p>{location.service_state}</p>
-                  <p>{location.service_phone}</p>
-                </div>
-                <div className="flex flex-row justify-center items-center gap-4">
-                  <CiEdit
-                    className="size-6 text-primary cursor-pointer"
-                    onClick={() => handleEdit(location.uuid)}
-                  />
-                  <MdDeleteOutline
-                    className="size-6 text-red-400 cursor-pointer"
-                    onClick={() => handleDelete(location.uuid)}
-                  />
-                </div>
+              key={location.uuid}
+              className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
+            >
+              <p>{location.legal_business_name}</p>
+              <div className="flex flex-col justify-center items-start">
+                <p>{location.service_city}</p>
+                <p>{location.service_state}</p>
+                <p>{location.service_phone}</p>
               </div>
-          )
+              <div className="flex flex-row justify-center items-center gap-4">
+                <CiEdit
+                  className="size-6 text-primary cursor-pointer"
+                  onClick={() => handleEdit(location.uuid)}
+                />
+                <MdDeleteOutline
+                  className="size-6 text-red-400 cursor-pointer"
+                  onClick={() => handleDelete(location.uuid)}
+                />
+              </div>
+            </div>
+          ))
         )}
 
         <NavBottom />

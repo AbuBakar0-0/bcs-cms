@@ -8,21 +8,18 @@ export async function GET(request) {
 
     // Build the query
     let query = supabase
-    .from("practice_locations")
-    .select(
-      `
-      *,
-      providers_info(*),
-      service_address:addresses!practice_locations_service_address_id_fkey(*),
-      mailing_address:addresses!practice_locations_mailing_address_id_fkey(*),
-      correspondence_address:addresses!practice_locations_correspondence_address_id_fkey(*),
-      service_contact:contacts!practice_locations_service_contact_id_fkey(*),
-      mailing_contact:contacts!practice_locations_mailing_contact_id_fkey(*),
-      correspondence_contact:contacts!practice_locations_correspondence_contact_id_fkey(*),
-      practice_contact:contacts!practice_locations_practice_contact_id_fkey(*)
-    `
-    )
-    .is("deleted_at", null);
+      .from("practice_locations")
+      .select(
+        `*,
+        service_address:addresses!practice_locations_service_address_id_fkey(*),
+        mailing_address:addresses!practice_locations_mailing_address_id_fkey(*),
+        correspondence_address:addresses!practice_locations_correspondence_address_id_fkey(*),
+        service_contact:contacts!practice_locations_service_contact_id_fkey(*),
+        mailing_contact:contacts!practice_locations_mailing_contact_id_fkey(*),
+        correspondence_contact:contacts!practice_locations_correspondence_contact_id_fkey(*),
+        practice_contact:contacts!practice_locations_practice_contact_id_fkey(*)`
+      )
+      .is("deleted_at", null); // Exclude deleted records
 
     // Add UUID filter if provided
     if (uuid) {

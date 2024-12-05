@@ -4,30 +4,16 @@ export async function GET(request) {
   try {
     // Extract optional filters, if any
     const searchParams = request.nextUrl.searchParams;
-    const uuid = searchParams.get("uuid");
+    const addedBy = searchParams.get("uuid"); // Filter based on added_by
 
-    // Build the query
+    // Build the query without aliases
     let query = supabase
-    .from("practice_locations")
-    .select(
-      `
-      *,
-      providers_info(*),
-      service_address:addresses!practice_locations_service_address_id_fkey(*),
-      mailing_address:addresses!practice_locations_mailing_address_id_fkey(*),
-      correspondence_address:addresses!practice_locations_correspondence_address_id_fkey(*),
-      service_contact:contacts!practice_locations_service_contact_id_fkey(*),
-      mailing_contact:contacts!practice_locations_mailing_contact_id_fkey(*),
-      correspondence_contact:contacts!practice_locations_correspondence_contact_id_fkey(*),
-      practice_contact:contacts!practice_locations_practice_contact_id_fkey(*)
-    `
-    )
-    .is("deleted_at", null);
-
-    // Add UUID filter if provided
-    if (uuid) {
-      query = query.eq("uuid", uuid);
-    }
+      .from("provider_documents")
+      .select(`
+        *,
+        providers_info(*)
+      `)
+      .eq("providers_info.added_by", addedBy); // Filtering by added_by
 
     // Execute the query
     const { data, error } = await query;
@@ -56,7 +42,6 @@ export async function GET(request) {
       JSON.stringify(data),
       {
         headers: { "Content-Type": "application/json" },
-        status: 200,
       }
     );
   } catch (error) {

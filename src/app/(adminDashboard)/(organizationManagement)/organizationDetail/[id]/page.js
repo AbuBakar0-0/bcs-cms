@@ -1,33 +1,36 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import AdminDashboardLayout from "@/app/(adminDashboard)/adminLayout";
 import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
 import Button from "@/components/ui/Button";
 import { CiEdit } from "react-icons/ci";
 import { IoAddCircleOutline } from "react-icons/io5";
+import axios from "axios";
+import { useParams } from "next/navigation";
 
 export default function OrganizationDetail() {
-  const data = [
-    {
-      legal_business_name: "Billing Care Solutions",
-      npi_2: "1184215352",
-      code: "171100000X",
-      address: "10851 SCARSDALE BLVD STE 200 HOUSTON TX 77089-5738",
-      phone: "(302) 244-0434",
-    },
-    {
-      legal_business_name: "Community Health Network",
-      doing_name: "1184215352",
-      code: "211D00000X",
-      address: "30 N GOULD, ST, STE R",
-      phone: "281-824-1497",
-    },
-    {
-      legal_business_name: "CreativeTrex",
-      doing_name: "1184215352",
-      code: "331L00000X",
-      address: "30 N GOULD, ST, STE R",
-      phone: "(302) 244-0434",
-    },
-  ];
+  const { id:uuid } = useParams();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`/api/organization-detail?uuid=${uuid}`); // Replace with your endpoint
+        setData(response.data);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+        setError("Failed to load data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <AdminDashboardLayout barTitle="Organization Management">
@@ -46,28 +49,34 @@ export default function OrganizationDetail() {
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full table-auto">
-                <thead className="bg-gray-200 text-left">
-                  <tr>
-                    <th className="p-3">Provider Info</th>
-                    <th className="p-3">NPI 2</th>
-                    <th className="p-3">Taxonomy Code</th>
-                    <th className="p-3">Address</th>
-                    <th className="p-3">Phone</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.map((item, index) => (
-                    <tr className="border-b" key={index}>
-                      <td className="p-3">{item.legal_business_name}</td>
-                      <td className="p-3">{item.npi_2}</td>
-                      <td className="p-3">{item.code}</td>
-                      <td className="p-3 ">{item.address}</td>
-                      <td className="p-3 ">{item.phone}</td>
+              {loading ? (
+                <div className="p-4 text-center"></div>
+              ) : error ? (
+                <div className="p-4 text-center text-red-500">{error}</div>
+              ) : (
+                <table className="w-full table-auto">
+                  <thead className="bg-gray-200 text-left">
+                    <tr>
+                      <th className="p-3">Provider Info</th>
+                      <th className="p-3">NPI 2</th>
+                      <th className="p-3">Taxonomy Code</th>
+                      <th className="p-3">Address</th>
+                      <th className="p-3">Phone</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {data.map((item, index) => (
+                      <tr className="border-b" key={index}>
+                        <td className="p-3">{item.legal_business_name}</td>
+                        <td className="p-3">{item.npi_2}</td>
+                        <td className="p-3">{item.taxonomy_code_1}</td>
+                        <td className="p-3">{item.service_address.address_line_1} {item.service_address.address_line_2}</td>
+                        <td className="p-3">{item.service_contact.cell_phone}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </main>

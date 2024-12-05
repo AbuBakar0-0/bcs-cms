@@ -12,7 +12,6 @@ export async function GET(request) {
     .select(
       `
       *,
-      providers_info(*),
       service_address:addresses!practice_locations_service_address_id_fkey(*),
       mailing_address:addresses!practice_locations_mailing_address_id_fkey(*),
       correspondence_address:addresses!practice_locations_correspondence_address_id_fkey(*),

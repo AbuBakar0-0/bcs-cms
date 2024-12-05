@@ -6,7 +6,7 @@ const OrganizationNavbar = ({uuid}) => {
 
     const sidenavLinks = [
         { title: "Information", link: "/orgInfo" },
-        { title: "Practice Ids", link: "/orgIds" },
+        { title: "Providers", link: "/organizationDetail" },
         { title: "Practice Location", link: "/orgLocation" },
         { title: "Practice Documents", link: "/orgDocs" },
 
