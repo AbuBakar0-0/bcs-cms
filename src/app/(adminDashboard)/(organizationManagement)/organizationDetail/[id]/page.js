@@ -35,7 +35,7 @@ export default function OrganizationDetail() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <OrganizationCard />
-      <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
+      {/* <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
         <Button
           title={"Add"}
           icon={<IoAddCircleOutline className="size-6" />}
@@ -44,7 +44,7 @@ export default function OrganizationDetail() {
           <CiEdit />
           <span>Edit</span>
         </button>
-      </div>
+      </div> */}
       <div className="min-h-screen flex flex-col md:flex-row">
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -67,7 +67,7 @@ export default function OrganizationDetail() {
                   <tbody>
                     {data.map((item, index) => (
                       <tr className="border-b" key={index}>
-                        <td className="p-3">{item.legal_business_name}</td>
+                        <td className="p-3">{item.providers_info.first_name} {item.providers_info.middle_initial} {item.providers_info.last_name}</td>
                         <td className="p-3">{item.npi_2}</td>
                         <td className="p-3">{item.taxonomy_code_1}</td>
                         <td className="p-3">{item.service_address.address_line_1} {item.service_address.address_line_2}</td>

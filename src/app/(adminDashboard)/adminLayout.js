@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
+import { IoLogOutOutline } from "react-icons/io5";
 
 const sidenavLinks = [
   { title: "Admin Dashboard", link: "/adminDashboard" },
@@ -16,7 +17,10 @@ const sidenavLinks = [
   { title: "Help Center", link: "" },
 ];
 
-export default function AdminDashboardLayout({ children ,barTitle="Providers Dashboard"}) {
+export default function AdminDashboardLayout({
+  children,
+  barTitle = "Providers Dashboard",
+}) {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -54,7 +58,7 @@ export default function AdminDashboardLayout({ children ,barTitle="Providers Das
         <header className="w-full h-[7.2rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
           <div className="flex flex-col justify-center items-start gap-2">
             <h1 className="text-xl font-semibold">
-              {barTitle!=""?barTitle:"Welcome to BCS-CMS Dashboard"}
+              {barTitle != "" ? barTitle : "Welcome to BCS-CMS Dashboard"}
             </h1>
             <p>Let's take a look at your credentials today!</p>
           </div>
@@ -67,6 +71,9 @@ export default function AdminDashboardLayout({ children ,barTitle="Providers Das
             <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
               <CiSearch className="size-8" />
             </div>
+            <Link href={"/signin"}>
+              <IoLogOutOutline className="size-7" />
+            </Link>
           </div>
         </header>
 

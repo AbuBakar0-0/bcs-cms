@@ -24,7 +24,7 @@ export default function OrgIds() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <OrganizationCard />
-      <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
+      {/* <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
         <Button
           title={"Add"}
           icon={<IoAddCircleOutline className="size-6" />}
@@ -33,7 +33,7 @@ export default function OrgIds() {
           <CiEdit />
           <span>Edit</span>
         </button>
-      </div>
+      </div> */}
       <div className="min-h-screen flex flex-col md:flex-row">
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">

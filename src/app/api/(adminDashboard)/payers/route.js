@@ -8,7 +8,7 @@ export async function GET(request) {
 
 		// Extract the added_by parameter from the request URL
 		const searchParams = request.nextUrl.searchParams;
-		const added_by = searchParams.get("added_by");
+		const added_by = searchParams.get("uuid");
 
 		if (!added_by) {
 			return NextResponse.json({ error: "Missing required parameter: added_by" }, { status: 400 });

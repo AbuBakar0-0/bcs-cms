@@ -9,6 +9,7 @@ import { MdDeleteOutline } from "react-icons/md";
 import AdminDashboardLayout from "../../adminLayout";
 import axios from "axios"; // Import axios for HTTP requests
 import { BarLoader } from "react-spinners";
+import Link from "next/link";
 
 export default function DocumentCenter() {
   // State to handle the active tab (Provider or Organization)
@@ -96,14 +97,16 @@ export default function DocumentCenter() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
+        <Link href={`/document/${localStorage.getItem("user_uuid")}`}>
         <Button
           title={"Add"}
           icon={<IoAddCircleOutline className="size-6" />}
         />
-        <button className="px-4 py-2 border-primary border-4 flex flex-row justify-center items-center gap-2 rounded-lg">
+        </Link>
+        {/* <button className="px-4 py-2 border-primary border-4 flex flex-row justify-center items-center gap-2 rounded-lg">
           <CiEdit />
           <span>Edit</span>
-        </button>
+        </button> */}
       </div>
 
       {/* Tabs for toggling */}

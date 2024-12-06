@@ -128,8 +128,8 @@ export default function PairSetup() {
 							key={setup.uuid}
 							className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
 						>
-							<p>{setup.provider}</p>
-							<div className="flex flex-col justify-center items-start">
+							<p className="w-1/5">{setup.provider}</p>
+							<div className="w-1/3 flex flex-col justify-center items-start">
 								<p>{setup.payer_name}</p>
 								<p>{setup.status}</p>
 								<p>{new Date(setup.application_date).toLocaleDateString()}</p>

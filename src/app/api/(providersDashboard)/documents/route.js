@@ -7,27 +7,66 @@ cloudinary.config({
 	api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function GET(req) {
+
+export async function GET(request) {
 	try {
-		const searchParams = req.nextUrl.searchParams;
-		const provider_id = searchParams.get("provider_id");
-
-		const { data, error } = await supabase
-			.from("provider_documents")
-			.select("*")
-			.eq("provider_id", provider_id)
-			.is("deleted_at", null)
-
-			.order("effective_date", { ascending: false });
-
-		if (error) throw error;
-
-		return Response.json(data);
+	  // Extract optional filters, if any
+	  const searchParams = request.nextUrl.searchParams;
+	  const addedBy = searchParams.get("uuid"); // Filter based on added_by
+  
+	  // Build the query without aliases
+	  let query = supabase
+		.from("provider_documents")
+		.select(`
+		  *,
+		  providers_info(*)
+		`)
+		.eq("providers_info.added_by", addedBy); // Filtering by added_by
+  
+	  // Execute the query
+	  const { data, error } = await query;
+  
+	  // Handle potential query errors
+	  if (error) {
+		throw new Error(`Failed to retrieve data: ${error.message}`);
+	  }
+  
+	  // Check if no data was found
+	  if (!data || data.length === 0) {
+		return new Response(
+		  JSON.stringify({
+			success: false,
+			message: "No records found",
+		  }),
+		  {
+			headers: { "Content-Type": "application/json" },
+			status: 404,
+		  }
+		);
+	  }
+  
+	  // Return the data as a list
+	  return new Response(
+		JSON.stringify(data),
+		{
+		  headers: { "Content-Type": "application/json" },
+		}
+	  );
 	} catch (error) {
-		console.error("GET documents error:", error);
-		return Response.json({ error: error.message }, { status: 500 });
+	  // Handle general errors
+	  console.error("Error in GET handler:", error);
+	  return new Response(
+		JSON.stringify({
+		  error: "Failed to retrieve data",
+		  details: error.message,
+		}),
+		{
+		  headers: { "Content-Type": "application/json" },
+		  status: 500,
+		}
+	  );
 	}
-}
+  }
 
 export async function POST(req) {
 	try {

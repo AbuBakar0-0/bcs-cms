@@ -40,7 +40,7 @@ export default function Page() {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      router.push("/adminDashboard");
+      router.push("/signin");
       toast.success("Registration successful!", { id: loadingToast });
     } catch (err) {
       toast.error(err.message || "Registration failed", { id: loadingToast });

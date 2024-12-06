@@ -43,11 +43,11 @@ export default function Page() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="w-full flex flex-col justify-start items-start gap-4">
-        <div className="w-full flex flex-row justify-end items-center">
+        {/* <div className="w-full flex flex-row justify-end items-center">
           <button className="px-4 py-3 bg-secondary flex flex-row justify-center items-center gap-4 text-white rounded-lg">
             Add
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="min-h-screen flex flex-col md:flex-row">
         <main className="flex-1 py-4">
@@ -63,8 +63,8 @@ export default function Page() {
                 <table className="w-full table-auto">
                   <thead className="bg-gray-200 text-left">
                     <tr>
-                      <th className="p-3">Provider Name</th>
                       <th className="p-3">Legal Business Name</th>
+                      <th className="p-3">Doing Business Name</th>
                       <th className="p-3">NPI 2</th>
                       <th className="p-3">Taxonomy Code</th>
                       <th className="p-3">Address</th>
@@ -75,7 +75,7 @@ export default function Page() {
                   <tbody>
                     {data.map((item, index) => (
                       <tr className="border-b" key={index}>
-                        <td className="p-3">{item.providers_info.last_name} {item.providers_info.middle_initial} {item.providers_info.first_name}</td>
+                        <td className="p-3">{item.doing_business_name}</td>
                         <td className="p-3">{item.legal_business_name}</td>
                         <td className="p-3">{item.npi_2}</td>
                         <td className="p-3">{item.taxonomy_code_1}</td>

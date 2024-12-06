@@ -128,6 +128,9 @@ export default function DocumentPage() {
 							<p className="text-sm text-gray-500">
 								Status: <span className="font-medium">{doc.status}</span>
 							</p>
+							<p className="text-sm text-gray-500">
+								Provider Name: <span className="font-medium">{doc.providers_info.first_name} {doc.providers_info.middle_initial} {doc.providers_info.last_name}</span>
+							</p>
 							{doc.effective_date && (
 								<p className="text-sm text-gray-500">
 									Effective: {new Date(doc.effective_date).toLocaleDateString()}
