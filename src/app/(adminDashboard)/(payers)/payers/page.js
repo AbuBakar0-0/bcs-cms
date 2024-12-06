@@ -1,24 +1,23 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { useEffect, useState } from "react";
-import { CiEdit } from "react-icons/ci";
-import { FaEye } from "react-icons/fa";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { MdDeleteOutline } from "react-icons/md";
-import { BarLoader } from "react-spinners";
-import AdminDashboardLayout from "../../adminLayout";
 import axios from "axios";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { BarLoader } from "react-spinners";
+import AdminDashboardLayout from "../../adminLayout";
 
 export default function Payers() {
   const [activeTab, setActiveTab] = useState("provider");
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [uuid,setUuid]=useState();
 
   useEffect(() => {
     const fetchData = async () => {
+      setUuid(localStorage.getItem("user_uuid"));
       setLoading(true);
       try {
         const response = await axios.get(
@@ -123,7 +122,7 @@ export default function Payers() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
-        <Link href={`/payerSetup/${localStorage.getItem("user_uuid")}`}>
+        <Link href={`/payerSetup/${uuid}`}>
           <Button
             title={"Add"}
             icon={<IoAddCircleOutline className="size-6" />}

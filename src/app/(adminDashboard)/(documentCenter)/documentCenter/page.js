@@ -18,6 +18,7 @@ export default function DocumentCenter() {
   const [loading, setLoading] = useState(true); // Handle loading state
   const [error, setError] = useState(""); // Store any errors
 
+  let id = "";
   // Function to toggle between the two tabs
   const toggleTab = (tab) => {
     setActiveTab(tab);
@@ -27,6 +28,7 @@ export default function DocumentCenter() {
 
   // Function to fetch documents using user_uuid
   const fetchDocuments = async () => {
+    id = localStorage.getItem("user_uuid");
     const userUuid = localStorage.getItem("user_uuid");
     if (!userUuid) {
       setError("User UUID not found");
@@ -97,11 +99,11 @@ export default function DocumentCenter() {
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
-        <Link href={`/document/${localStorage.getItem("user_uuid")}`}>
-        <Button
-          title={"Add"}
-          icon={<IoAddCircleOutline className="size-6" />}
-        />
+        <Link href={`/document/${id}}`}>
+          <Button
+            title={"Add"}
+            icon={<IoAddCircleOutline className="size-6" />}
+          />
         </Link>
         {/* <button className="px-4 py-2 border-primary border-4 flex flex-row justify-center items-center gap-2 rounded-lg">
           <CiEdit />

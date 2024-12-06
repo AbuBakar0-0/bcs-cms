@@ -1,15 +1,16 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
 import AdminDashboardLayout from "../../adminLayout";
-import html2pdf from "html2pdf.js"; // Import html2pdf
+
+// Dynamically import html2pdf to avoid SSR issues
+const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
 export default function DropdownForm() {
-  // State for selected form
   const [selectedTab, setSelectedTab] = useState("");
   const [isDrawing, setIsDrawing] = useState(false);
   const canvasRef = useRef(null);
 
-  // List of tabs and their corresponding forms
   const tabs = [
     { name: "Authorization and Consent", form: "Authorization Form" },
     { name: "Code of Conduct", form: "Code of Conduct Form" },
@@ -25,17 +26,16 @@ export default function DropdownForm() {
     { name: "Universal Precautions", form: "Universal Precautions Form" },
   ];
 
-  // Signature drawing logic
   const startDrawing = (e) => {
     setIsDrawing(true);
-    const context = canvasRef.current.getContext('2d');
+    const context = canvasRef.current.getContext("2d");
     context.beginPath();
     context.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
 
   const draw = (e) => {
     if (!isDrawing) return;
-    const context = canvasRef.current.getContext('2d');
+    const context = canvasRef.current.getContext("2d");
     context.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     context.stroke();
   };
@@ -45,30 +45,28 @@ export default function DropdownForm() {
   };
 
   const clearSignature = () => {
-    const context = canvasRef.current.getContext('2d');
+    const context = canvasRef.current.getContext("2d");
     context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
 
-  // Handle form submission and generate PDF
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create the HTML element to generate PDF from
-    const formElement = document.getElementById('formContent');
+    if (!html2pdf) return; // Ensure html2pdf is available
 
-    // Options for html2pdf
+    const formElement = document.getElementById("formContent");
+
     const options = {
       margin: 1,
-      filename: `${selectedTab}-form.pdf`, // Dynamic filename based on the selected tab
+      filename: `${selectedTab}-form.pdf`,
       html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
 
-    // Generate the PDF
     html2pdf()
       .from(formElement)
       .set(options)
-      .save(); // Download the PDF
+      .save();
   };
 
   return (
@@ -94,7 +92,6 @@ export default function DropdownForm() {
           </select>
         </div>
 
-        {/* Conditionally Render the Form */}
         <div>
           {tabs.map((tab) => {
             if (tab.name === selectedTab) {
@@ -105,7 +102,6 @@ export default function DropdownForm() {
                     This is the form for "{tab.form}". Fill out the required fields and submit.
                   </p>
 
-                  {/* Example Form Fields */}
                   <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -130,7 +126,6 @@ export default function DropdownForm() {
                       />
                     </div>
 
-                    {/* Signature Canvas */}
                     <div className="mt-6">
                       <label className="block text-sm font-medium text-gray-700">Signature:</label>
                       <canvas
@@ -169,12 +164,9 @@ export default function DropdownForm() {
             return null;
           })}
 
-          {/* Message if no tab is selected */}
           {selectedTab === "" && (
             <div className="p-4 border rounded-md shadow-sm bg-gray-50">
-              <p className="text-gray-600">
-                Please select a tab to display the corresponding form.
-              </p>
+              <p className="text-gray-600">Please select a tab to display the corresponding form.</p>
             </div>
           )}
         </div>
