@@ -52,7 +52,7 @@ export default function page() {
                       <td className="p-3 flex flex-row justify-start items-center gap-2">
                         <Link href="/organizationDetail">
                           <FaEye className="text-secondary" />
-                        </Link>{" "}
+                        </Link>
                         /
                         <CiEdit className="text-primary" /> /
                         <MdDeleteOutline className="text-red-400" />

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { BarLoader } from "react-spinners";
 import ProvidersNavbar from './ProvidersNavbar';
-import { ClipLoader } from "react-spinners";
 
 const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  // Accept id as a prop
     const [provider, setProvider] = useState(null);
@@ -30,7 +30,7 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
     }, [id]);
 
     if (loading) {
-        return <ClipLoader />; // Show loading spinner while fetching
+        return <div className='flex justify-center'><BarLoader /></div>
     }
 
     if (error) {
@@ -40,24 +40,27 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {  //
     return (
         <div className="w-full flex flex-col bg-secondary rounded-lg gap-4 p-4 text-white">
             <div className="w-full flex flex-row justify-start items-center gap-4">
-                <div className="w-1/3 flex flex-col justify-start items-start gap-2">
-                    <h2 className="text-lg font-semibold text-center">
-                        {provider?.first_name} {provider?.middle_initial || ""}{" "}
-                        {provider?.last_name}
-                    </h2>
-                    <p className="text-sm">
-                        Provider type: {provider?.provider_title || "-"}
-                    </p>
-                    <p className="text-sm">Gender: {provider?.gender || "Female"}</p>
+                <div className="w-1/3 flex flex-col justify-center items-start gap-2">
+                    <img src={provider.picture_url} alt="" className='size-28 rounded-full' />
+                    <div className='flex flex-col justify-center items-center gap-1'>
+                        <h2 className="text-lg font-semibold text-center">
+                            {provider?.first_name} {provider?.middle_initial || ""}
+                            {provider?.last_name}
+                        </h2>
+                        <p className="text-sm">
+                            Provider type: {provider?.provider_title || "-"}
+                        </p>
+                        <p className="text-sm">Gender: {provider?.gender || "Female"}</p>
+                    </div>
                 </div>
-                <div className="w-1/4 flex flex-col justify-start items-start gap-2">
+                <div className="w-1/3 flex flex-col justify-start items-start gap-2">
                     <p>NPI-1: 1902948326</p>
                     <p>Cell #: 281-727-0701</p>
                     <p>Email: Lttran@sfachc.org</p>
                     <p>Date of Birth: {provider?.dob || "-"}</p>
                     <p>SSN: {provider?.ssn || "-"}</p>
                 </div>
-                <div className="w-1/4 flex flex-col justify-start items-start gap-2">
+                <div className="w-1/3 flex flex-col justify-start items-start gap-2">
                     <p>Address: 6809 Adella Court</p>
                     <p>License ID: {provider?.license_id || "-"}</p>
                     <p>State Issued: {provider?.state_issued || "-"}</p>

@@ -1,4 +1,97 @@
 import { supabase } from "@/lib/supabase";
+import { NextResponse } from "next/server";
+
+export async function GET(request) {
+  try {
+    console.log("CALLED");
+
+    // Extract the provider_id parameter from the request URL
+    const searchParams = request.nextUrl.searchParams;
+    const provider_id = searchParams.get("uuid");
+
+    if (!provider_id) {
+      return NextResponse.json(
+        { error: "Missing required parameter: provider_id" },
+        { status: 400 }
+      );
+    }
+
+    // Query practice_profiles table for basic profile data
+    const { data: practiceData, error: practiceError } = await supabase
+      .from("practice_profiles")
+      .select(`
+        uuid,
+        provider_id,
+        practice_type,
+        type_of_service_provided,
+        credentialing_type,
+        npi_2,
+        tax_id,
+        legal_business_name,
+        doing_business_name,
+        taxonomy_code_1,
+        taxonomy_code_2,
+        ptan_medicare_number,
+        medicaid_number,
+        start_date,
+        service_address_id,
+        mailing_address_id,
+        correspondance_address_id,
+        service_contact_id,
+        mailing_contact_id,
+        correspondance_contact_id
+      `)
+      .eq("provider_id", provider_id);
+
+    if (practiceError) throw practiceError;
+
+    // If practice profile data is empty
+    if (!practiceData || practiceData.length === 0) {
+      return NextResponse.json({ message: "No Data Found" }, { status: 200 });
+    }
+
+    // Get address and contact details
+    const profile = practiceData[0]; // Assume single profile is returned
+
+    const addressQueries = [
+      supabase.from("addresses").select("*").eq("uuid", profile.service_address_id),
+      supabase.from("addresses").select("*").eq("uuid", profile.mailing_address_id),
+      supabase.from("addresses").select("*").eq("uuid", profile.correspondance_address_id),
+    ];
+
+    const contactQueries = [
+      supabase.from("contacts").select("*").eq("uuid", profile.service_contact_id),
+      supabase.from("contacts").select("*").eq("uuid", profile.mailing_contact_id),
+      supabase.from("contacts").select("*").eq("uuid", profile.correspondance_contact_id),
+    ];
+
+    // Execute all address and contact queries in parallel
+    const [serviceAddress, mailingAddress, correspondenceAddress] = await Promise.all(addressQueries);
+    const [serviceContact, mailingContact, correspondenceContact] = await Promise.all(contactQueries);
+
+    if (serviceAddress.error || mailingAddress.error || correspondenceAddress.error) {
+      throw new Error("Error fetching address data");
+    }
+    if (serviceContact.error || mailingContact.error || correspondenceContact.error) {
+      throw new Error("Error fetching contact data");
+    }
+
+    const responseData = {
+      ...profile,
+      service_address: serviceAddress.data[0] || null,
+      mailing_address: mailingAddress.data[0] || null,
+      correspondence_address: correspondenceAddress.data[0] || null,
+      service_contact: serviceContact.data[0] || null,
+      mailing_contact: mailingContact.data[0] || null,
+      correspondence_contact: correspondenceContact.data[0] || null,
+    };
+
+    return NextResponse.json(responseData);
+  } catch (error) {
+    console.error("Error in GET handler:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
 
 export async function POST(req) {
 	const formData = await req.json();

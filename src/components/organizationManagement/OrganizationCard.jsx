@@ -61,8 +61,8 @@ const OrganizationCard = () => {
 
                 <div className="w-1/3 flex flex-col justify-start items-start gap-2">
                     <p>
-                        Address: {organizationData.service_address.address_line_1},{" "}
-                        {organizationData.service_address.city},{" "}
+                        Address: {organizationData.service_address.address_line_1},
+                        {organizationData.service_address.city},
                         {organizationData.service_address.state}
                     </p>
                     <p>

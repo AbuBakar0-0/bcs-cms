@@ -337,7 +337,7 @@ function EmploymentInformation() {
 							<div className="flex flex-col text-sm text-gray-600">
 								<p>{item.address?.address_line_1}</p>
 								<p>
-									{item.address?.city}, {item.address?.state}{" "}
+									{item.address?.city}, {item.address?.state}
 									{item.address?.zip_code}
 								</p>
 								<p>{item.contact?.cell_phone}</p>

@@ -400,7 +400,7 @@ function ProvidersInformation() {
 						<input
 							type="checkbox"
 							onClick={() => handleReadonly("serviceAddress")}
-						/>{" "}
+						/>
 						Same as Home Address
 					</div>
 					<div className="w-full flex flex-wrap justify-start gap-4 items-start">
@@ -449,7 +449,7 @@ function ProvidersInformation() {
 						<input
 							type="checkbox"
 							onClick={() => handleReadonly("mailingAddress")}
-						/>{" "}
+						/>
 						Same as Service Location Address
 					</div>
 

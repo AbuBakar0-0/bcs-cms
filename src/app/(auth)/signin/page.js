@@ -101,7 +101,7 @@ export default function Page() {
 
 				<Link href="/signup">
 					<p className="">
-						Don't Have an Account?{" "}
+						Don't Have an Account?
 						<span className="text-secondary underline">Register Now</span>
 					</p>
 				</Link>

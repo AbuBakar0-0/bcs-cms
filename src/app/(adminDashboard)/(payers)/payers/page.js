@@ -93,8 +93,7 @@ export default function Payers() {
     // Return the classes for the given status or default classes
     return statusClasses[status] || "bg-gray-500 text-white"; // Default: Gray
   }
-  ``;
-
+  
   // Render the appropriate documents based on the active tab
   const renderDocuments = () => {
     const documents = activeTab === "provider" ? data : organizationDocuments;
@@ -102,7 +101,7 @@ export default function Payers() {
     return documents.map((doc, index) => (
       <tr className="border-b" key={index}>
         <td className="p-3">
-          {doc.providers_info.first_name} {doc.providers_info.middle_initial}{" "}
+          {doc.providers_info.first_name} {doc.providers_info.middle_initial}
           {doc.providers_info.last_name}
         </td>
         <td className="p-3">{doc.plan_type}</td>

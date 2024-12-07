@@ -1,19 +1,44 @@
-import ProvidersNavbar from "@/components/providersDashboard/ProvidersNavbar";
-import Link from "next/link";
-import React from "react";
-import { CiEdit, CiSearch, CiUser } from "react-icons/ci";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { CiCircleInfo } from "react-icons/ci";
-import Button from "@/components/ui/Button";
+"use client";
+
 import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
-import AdminDashboardLayout from "../../adminLayout";
+import Button from "@/components/ui/Button";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
-import { MdDeleteOutline } from "react-icons/md";
+import { IoAddCircleOutline } from "react-icons/io5";
+import AdminDashboardLayout from "../../adminLayout";
 
 export default function LocationSetup() {
+  const { id } = useParams();
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const response = await fetch(`/api/location-setup?uuid=${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch locations");
+        }
+        const data = await response.json();
+        setLocations(data);
+      } catch (error) {
+        console.error("Error fetching locations:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchLocations();
+    }
+  }, [id]);
+
   return (
     <AdminDashboardLayout>
-      <ProvidersCard />
+      <ProvidersCard id={id} />
       <div className="w-full flex flex-row justify-between items-center gap-4 my-4">
         <div className="w-1/3 flex flex-row justify-start items-center gap-4">
           <input
@@ -27,10 +52,13 @@ export default function LocationSetup() {
         </div>
 
         <div className="w-2/3 flex flex-row justify-end items-center gap-4">
-          <Button
-            title={"Add"}
-            icon={<IoAddCircleOutline className="size-6" />}
-          />
+        
+          <Link href={`/practiceLocation/${id}`}>
+            <Button
+              title={"Add"}
+              icon={<IoAddCircleOutline className="size-6" />}
+            />
+          </Link>
         </div>
       </div>
 
@@ -41,36 +69,39 @@ export default function LocationSetup() {
               <table className="w-full table-auto">
                 <thead className="bg-gray-200 text-left">
                   <tr>
-                    <th className="p-3">Location Name</th>
-                    <th className="p-3">Address</th>
-                    <th className="p-3">City</th>
-                    <th className="p-3">State</th>
+                    <th className="p-3">Legal Business Name</th>
+                    <th className="p-3">Doing Business Name</th>
+                    <th className="p-3">NPI 2</th>
+                    <th className="p-3">Tax Id</th>
                     <th className="p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b">
-                    <td className="p-3">CHN</td>
-                    <td className="p-3">10851 SCARSDALE BLVD STE 200</td>
-                    <td className="p-3">Houston</td>
-                    <td className="p-3">TX</td>
-                    <td className="p-3 flex flex-row justify-start items-center gap-2">
-                      <FaEye className="text-secondary" /> /
-                      <CiEdit className="text-primary" /> /
-                      <MdDeleteOutline className="text-red-400" />
-                    </td>
-                  </tr>
-                  <tr className="border-b">
-                    <td className="p-3">BCS</td>
-                    <td className="p-3">30 N GOULD, ST, STE R</td>
-                    <td className="p-3">Sheridan</td>
-                    <td className="p-3">WY</td>
-                    <td className="p-3 flex flex-row justify-start items-center gap-2">
-                      <FaEye className="text-secondary" /> /
-                      <CiEdit className="text-primary" /> /
-                      <MdDeleteOutline className="text-red-400" />
-                    </td>
-                  </tr>
+                  {loading ? (
+                    <tr>
+                      <td colSpan={5} className="text-center p-4"></td>
+                    </tr>
+                  ) : locations.length > 0 ? (
+                    locations.map((location, index) => (
+                      <tr key={index} className="border-b">
+                        <td className="p-3">{location.legal_business_name}</td>
+                        <td className="p-3">{location.doing_business_name}</td>
+                        <td className="p-3">{location.npi_2}</td>
+                        <td className="p-3">{location.tax_id}</td>
+                        <td className="p-3 flex flex-row justify-start items-center gap-2">
+                          <Link href={`/organizationDetail/${location.uuid}`}>
+                            <FaEye className="text-secondary cursor-pointer" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="text-center p-4">
+                        No locations found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

@@ -1,10 +1,14 @@
+"use client";
+
 import ProvidersCard from "@/components/providersDashboard/ProvidersCard";
 import AdminDashboardLayout from "../../adminLayout";
+import { useParams } from "next/navigation";
 
 export default function Verification() {
+  const {id} = useParams();
   return (
     <AdminDashboardLayout barTitle={"Providers Dashboard"}>
-      <ProvidersCard />
+      <ProvidersCard id={id}/>
       
         <div className="w-full flex flex-wrap items-center justify-between bg-gray-100 p-4 rounded-md gap-4 mt-4">
           <div className="flex gap-4">
@@ -98,7 +102,7 @@ export default function Verification() {
                 <tbody>
                   <tr>
                     <td className="px-4 py-2 border-b">
-                      Background Check{" "}
+                      Background Check
                       <span className="text-blue-500">Premium</span>
                     </td>
                     <td className="px-4 py-2 border-b">-</td>

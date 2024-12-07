@@ -2,7 +2,7 @@
 
 import Button from "@/components/ui/Button";
 import { useState, useEffect } from "react";
-import { CiEdit } from "react-icons/ci";
+import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
@@ -12,21 +12,19 @@ import { BarLoader } from "react-spinners";
 import Link from "next/link";
 
 export default function DocumentCenter() {
-  // State to handle the active tab (Provider or Organization)
   const [activeTab, setActiveTab] = useState("provider");
   const [documents, setDocuments] = useState([]); // Store documents in state
+  const [filteredDocuments, setFilteredDocuments] = useState([]); // Store filtered documents for search
   const [loading, setLoading] = useState(true); // Handle loading state
   const [error, setError] = useState(""); // Store any errors
+  const [searchTerm, setSearchTerm] = useState(""); // Search term state
 
   let id = "";
-  // Function to toggle between the two tabs
+
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
-  // Retrieve user_uuid from localStorage
-
-  // Function to fetch documents using user_uuid
   const fetchDocuments = async () => {
     id = localStorage.getItem("user_uuid");
     const userUuid = localStorage.getItem("user_uuid");
@@ -42,6 +40,7 @@ export default function DocumentCenter() {
 
       // Set the documents state with the fetched data
       setDocuments(response.data);
+      setFilteredDocuments(response.data); // Initially, set filtered docs to all docs
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch documents");
@@ -53,41 +52,65 @@ export default function DocumentCenter() {
   function getStatusColor(status) {
     switch (status) {
       case "Active":
-        return "text-green-500"; // Green for Active
+        return "text-green-500";
       case "Missing":
-        return "text-yellow-500"; // Yellow for Missing
+        return "text-yellow-500";
       case "Expiring":
-        return "text-orange-500"; // Orange for Expiring
+        return "text-orange-500";
       case "Expired":
-        return "text-red-500"; // Red for Expired
+        return "text-red-500";
       case "On File":
-        return "text-blue-500"; // Blue for On File
+        return "text-blue-500";
       case "Requested Provider":
-        return "text-purple-500"; // Purple for Requested Provider
+        return "text-purple-500";
       default:
-        return "text-gray-500"; // Default color for unknown status
+        return "text-gray-500";
     }
   }
-  // UseEffect to fetch documents when component mounts
+
   useEffect(() => {
     fetchDocuments();
-  }, []); // Empty dependency array means this runs once on component mount
+  }, []); // Fetch documents on component mount
 
-  // Function to render documents
+  // Filter documents based on search term
+  const handleSearch = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    // Filter the documents based on the search term
+    const filtered = documents.filter((doc) => {
+      return (
+        doc.providers_info.first_name.toLowerCase().includes(term) ||
+        doc.providers_info.last_name.toLowerCase().includes(term) ||
+        doc.title.toLowerCase().includes(term) ||
+        doc.status.toLowerCase().includes(term)
+      );
+    });
+    setFilteredDocuments(filtered);
+  };
+
+  // Function to format date to US format (MM/DD/YYYY)
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US");
+  };
+
+  // Inside renderDocuments function
   const renderDocuments = () => {
-    return documents.map((doc, index) => (
+    return filteredDocuments.map((doc, index) => (
       <tr className="border-b" key={index}>
         <td className="p-3">
-          {doc.providers_info.first_name} {doc.providers_info.middle_initial}{" "}
+          {doc.providers_info.first_name} {doc.providers_info.middle_initial}
           {doc.providers_info.last_name}
         </td>
         <td className="p-3">{doc.title}</td>
-        <td className="p-3">{doc.expiry_date}</td>
+        <td className="p-3">{formatDate(doc.expiry_date)}</td>
+        {/* Apply date format */}
         <td className={`p-3 ${getStatusColor(doc.status)}`}>{doc.status}</td>
         <td className="p-3 flex flex-row justify-start items-center gap-2">
           <a href={doc.url} target="_blank">
             <FaEye className="text-secondary" />
-          </a>{" "}
+          </a>
           /
           <CiEdit className="text-primary" /> /
           <MdDeleteOutline className="text-red-400" />
@@ -97,18 +120,26 @@ export default function DocumentCenter() {
   };
 
   return (
-    <AdminDashboardLayout barTitle="Organization Management">
-      <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
-        <Link href={`/document/${id}}`}>
+    <AdminDashboardLayout barTitle="Document Center">
+      <div className="flex flex-row justify-between items-center mt-4 mb-2 gap-4">
+        <div className="w-1/3 flex flex-row justify-start items-center gap-4">
+          <input
+            type="text"
+            className="w-full bg-gray-100 rounded-full px-4 py-2 text-black"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+          <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
+            <CiSearch className="size-8" />
+          </div>
+        </div>
+        <Link href={`/document/${id}`}>
           <Button
             title={"Add"}
             icon={<IoAddCircleOutline className="size-6" />}
           />
         </Link>
-        {/* <button className="px-4 py-2 border-primary border-4 flex flex-row justify-center items-center gap-2 rounded-lg">
-          <CiEdit />
-          <span>Edit</span>
-        </button> */}
       </div>
 
       {/* Tabs for toggling */}

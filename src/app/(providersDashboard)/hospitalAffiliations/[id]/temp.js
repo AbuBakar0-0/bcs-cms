@@ -137,7 +137,7 @@ function HospitalAffiliations() {
 							<div className="flex flex-col justify-center items-start">
 								<p>{hospital.address.address_line_1}</p>
 								<p>
-									{hospital.address.city}, {hospital.address.state}{" "}
+									{hospital.address.city}, {hospital.address.state}
 									{hospital.address.zip}
 								</p>
 							</div>
@@ -215,7 +215,7 @@ function HospitalAffiliations() {
 							<div className="flex flex-col justify-center items-start">
 								<p>{hospital.address.address_line_1}</p>
 								<p>
-									{hospital.address.city}, {hospital.address.state}{" "}
+									{hospital.address.city}, {hospital.address.state}
 									{hospital.address.zip}
 								</p>
 							</div>

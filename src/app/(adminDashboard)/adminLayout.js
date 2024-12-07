@@ -55,7 +55,7 @@ export default function AdminDashboardLayout({
 
       <div className="flex flex-col flex-1">
         {/* Top Bar */}
-        <header className="w-full h-[7.2rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
+        <header className="w-full h-[7rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
           <div className="flex flex-col justify-center items-start gap-2">
             <h1 className="text-xl font-semibold">
               {barTitle != "" ? barTitle : "Welcome to BCS-CMS Dashboard"}
@@ -63,14 +63,14 @@ export default function AdminDashboardLayout({
             <p>Let's take a look at your credentials today!</p>
           </div>
           <div className="flex flex-row justify-end items-center gap-4">
-            <input
+            {/* <input
               type="text"
               className="bg-white w-full rounded-full px-4 py-2 text-black"
               placeholder="Search Here..."
             />
             <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
               <CiSearch className="size-8" />
-            </div>
+            </div> */}
             <Link href={"/signin"}>
               <IoLogOutOutline className="size-7" />
             </Link>
