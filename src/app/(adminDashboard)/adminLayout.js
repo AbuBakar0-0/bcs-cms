@@ -12,7 +12,7 @@ const sidenavLinks = [
   { title: "Payers", link: "/payers" },
   { title: "User Management", link: "/usersDashboard" },
   { title: "HR Hiring", link: "/hrHiring" },
-  { title: "Reporting", link: "" },
+  { title: "Reporting", link: "/reporting" },
   // { title: "Incident Reporting Configuration", link: "" },
   { title: "Help Center", link: "/helpCenter" },
 ];
@@ -30,7 +30,7 @@ export default function AdminDashboardLayout({
             <img
               src="/assets/BCS Logo billingcaresolutions.com.svg"
               alt="HELLO"
-              className="bg-white p-5 h-[7.2rem] w-full"
+              className="bg-white p-3 h-[5rem] w-full"
             />
           </Link>
           <div className="px-5">
@@ -55,8 +55,8 @@ export default function AdminDashboardLayout({
 
       <div className="flex flex-col flex-1">
         {/* Top Bar */}
-        <header className="w-full h-[7rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
-          <div className="flex flex-col justify-center items-start gap-2">
+        <header className="w-full h-[5rem] bg-gradient-to-r from-primary to-secondary text-white p-4 flex flex-row justify-between items-center gap-1">
+          <div className="flex flex-col justify-center items-start">
             <h1 className="text-xl font-semibold">
               {barTitle != "" ? barTitle : "Welcome to BCS-CMS Dashboard"}
             </h1>

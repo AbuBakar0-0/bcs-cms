@@ -20,7 +20,7 @@ export default function page() {
   ];
 
   return (
-    <AdminDashboardLayout barTitle="Organization Management">
+    <AdminDashboardLayout barTitle="User Management">
       <div className="w-full flex flex-col justify-start items-start gap-4">
         <div className="w-full flex flex-row justify-end items-center">
           <Link href="/userManagement">
@@ -50,7 +50,7 @@ export default function page() {
                       <td className="p-3">{item.last_name}</td>
                       <td className="p-3">{item.email}</td>
                       <td className="p-3 flex flex-row justify-start items-center gap-2">
-                        <Link href="/organizationDetail">
+                        <Link href="">
                           <FaEye className="text-secondary" />
                         </Link>
                         /

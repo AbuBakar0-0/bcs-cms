@@ -28,20 +28,16 @@ export default function SubNavbar() {
           link: "/documentCenter",
         },
         {
-          title: "Location Setup",
-          link: "/locationSetup",
-        },
-        {
           title: "HR Setup",
           link: "/hrHiring",
         },
         {
           title: "User Setup",
-          link: "",
+          link: "/usersDashboard",
         },
         {
           title: "Reporting",
-          link: "",
+          link: "/reporting",
         },
       ];
 

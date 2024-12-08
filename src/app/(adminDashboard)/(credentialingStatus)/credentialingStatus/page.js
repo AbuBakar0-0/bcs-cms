@@ -140,7 +140,7 @@ export default function CredentialingStatus() {
   
 
   return (
-    <AdminDashboardLayout barTitle="Organization Management">
+    <AdminDashboardLayout barTitle="Credentialing Status">
       <div className="flex flex-row justify-between items-center mt-4 mb-2 gap-4">
         <div className="w-1/3 flex flex-row justify-start items-center gap-4">
           <input

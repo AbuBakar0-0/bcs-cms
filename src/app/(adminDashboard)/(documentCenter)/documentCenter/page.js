@@ -1,15 +1,15 @@
 "use client";
 
 import Button from "@/components/ui/Button";
-import { useState, useEffect } from "react";
+import axios from "axios"; // Import axios for HTTP requests
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import AdminDashboardLayout from "../../adminLayout";
-import axios from "axios"; // Import axios for HTTP requests
 import { BarLoader } from "react-spinners";
-import Link from "next/link";
+import AdminDashboardLayout from "../../adminLayout";
 
 export default function DocumentCenter() {
   const [activeTab, setActiveTab] = useState("provider");
@@ -18,15 +18,13 @@ export default function DocumentCenter() {
   const [loading, setLoading] = useState(true); // Handle loading state
   const [error, setError] = useState(""); // Store any errors
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
-
-  let id = "";
-
+  const [uuid,setuuid]=useState("");
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
   const fetchDocuments = async () => {
-    id = localStorage.getItem("user_uuid");
+    setuuid( localStorage.getItem("user_uuid"));
     const userUuid = localStorage.getItem("user_uuid");
     if (!userUuid) {
       setError("User UUID not found");
@@ -134,7 +132,7 @@ export default function DocumentCenter() {
             <CiSearch className="size-8" />
           </div>
         </div>
-        <Link href={`/document/${id}`}>
+        <Link href={`/document/${uuid}`}>
           <Button
             title={"Add"}
             icon={<IoAddCircleOutline className="size-6" />}

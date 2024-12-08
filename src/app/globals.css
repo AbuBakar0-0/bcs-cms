@@ -3,13 +3,12 @@
 @tailwind utilities;
 
 @font-face {
-    font-family: 'InriaSans';
-    src: url('/assets/fonts/InriaSans-Regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-  
-  .diagonalimg {
-    background-image: linear-gradient(320deg, #4ec39e 60%, #0073b9 40%);
-  }
-  
+  font-family: "InriaSans";
+  src: url("/assets/fonts/InriaSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.diagonalimg {
+  background-image: linear-gradient(320deg, #4ec39e 60%, #0073b9 40%);
+}

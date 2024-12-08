@@ -2,14 +2,33 @@
 import Button from "@/components/ui/Button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { FaRegCircleUser } from "react-icons/fa6";
-import { FiTrash2, FiUserX } from "react-icons/fi";
-import { IoAddCircleOutline, IoSearch } from "react-icons/io5";
-import { LiaUserSlashSolid } from "react-icons/lia";
+import { FiTrash2, FiUser, FiUserX } from "react-icons/fi";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { LiaUser, LiaUserSlashSolid } from "react-icons/lia";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
-import { CiEdit, CiSearch } from "react-icons/ci";
+
+const HoverExpandButton = ({ title, number, color, icon }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  return (
+    <div
+      className={`scale-110 flex items-center justify-center text-white gap-2 text-sm font-medium 
+                  transition-all duration-100 ease-in-out ${color}
+                  ${
+                    isHovered ? "w-40 px-4" : "w-20"
+                  } h-10 rounded-full overflow-hidden cursor-pointer`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {icon}
+      {isHovered ? title : number}
+    </div>
+  );
+};
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -63,42 +82,25 @@ export default function ProvidersDashboard() {
 
   return (
     <AdminDashboardLayout barTitle={"Provider Dashboard"}>
-      <div className="w-full flex flex-row justify-between items-center gap-4 py-4">
-        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-primary rounded-lg p-4">
-          <div className="w-full flex flex-row justify-between items-center gap-4">
-            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
-              <FaRegCircleUser className="size-16 text-gray-500" />
-              <p>Active Profiles</p>
-            </div>
-            <div>
-              <span className="text-6xl text-green-400">16</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-secondary rounded-lg p-4">
-          <div className="w-full flex flex-row justify-between items-center gap-4">
-            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
-              <FiUserX className="size-16 text-gray-500" />
-              <p>Not Enabled</p>
-            </div>
-            <div>
-              <span className="text-6xl text-red-400">162</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-[20%] flex flex-col justify-center items-start border-2 border-primary rounded-lg p-4">
-          <div className="w-full flex flex-row justify-between items-center gap-4">
-            <div className="w-1/2 flex flex-row justify-between items-center gap-2">
-              <LiaUserSlashSolid className="size-16 text-gray-500" />
-              <p>Terminated Profiles</p>
-            </div>
-            <div>
-              <span className="text-6xl text-green-400">16</span>
-            </div>
-          </div>
-        </div>
+      <div className="w-full flex flex-row justify-center gap-4 items-center py-4">
+        <HoverExpandButton
+          number={16}
+          title={"Active Profiles"}
+          color={"bg-green-400"}
+          icon={<FiUser />}
+        />
+        <HoverExpandButton
+          number={18}
+          title={"Inactive Enabled"}
+          color={"bg-red-400"}
+          icon={<FiUserX />}
+        />
+        <HoverExpandButton
+          number={1}
+          title={"Terminated"}
+          color={"bg-gray-400"}
+          icon={<LiaUserSlashSolid />}
+        />
       </div>
 
       <div className="w-full flex flex-row justify-between items-center mb-4">

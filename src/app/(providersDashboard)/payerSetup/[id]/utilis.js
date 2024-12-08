@@ -1,5 +1,3 @@
-import payers from "@/data/payers";
-import { stateAbbreviations } from "@/data/stateAbbreviations";
 
 export const DROPDOWN_OPTIONS = {
 	planTypes: [

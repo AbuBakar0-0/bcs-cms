@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { FaArrowCircleRight } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
-import { useParams } from "next/navigation";
 import { sidenavLinks } from "@/data/sideNavLinks";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { FaArrowCircleRight } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 
 export default function DashboardLayout({ children }) {
@@ -18,10 +17,19 @@ export default function DashboardLayout({ children }) {
             <img
               src="/assets/BCS Logo billingcaresolutions.com.svg"
               alt=""
-              className="bg-white p-5 h-[7.2rem] w-full"
+              className="bg-white p-2 h-[5rem] w-full"
             />
           </Link>
           <div className="px-5">
+            <Link href={'/adminDashboard'}>
+            <div className="w-full flex flex-col justify-center items-center gap-3">
+                  <div className="w-full flex flex-row justify-start items-center gap-4 pt-2">
+                    <FaArrowCircleRight />
+                    <span>Admin Dashboard</span>
+                  </div>
+                  <div className="bg-primary w-full h-[2px]"></div>
+                </div>
+            </Link>
             {sidenavLinks.map((item, index) => (
               <Link
                 href={`${item.link}/${id}`}
@@ -44,8 +52,8 @@ export default function DashboardLayout({ children }) {
       {/* Main content area with top bar */}
       <div className="flex flex-col flex-1">
         {/* Top Bar */}
-        <header className="w-full h-[7.2rem] bg-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
-          <div className="flex flex-col justify-center items-start gap-2">
+        <header className="w-full h-[5rem] bg-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
+          <div className="flex flex-col justify-center items-start">
             <h1 className="text-xl font-semibold">Welcome to BCS-CMS</h1>
             <p>Let's take a look at your credentials today!</p>
           </div>
