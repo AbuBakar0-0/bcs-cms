@@ -1,21 +1,19 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import HeadingLine from "@/components/ui/HeadingLine";
 import DateInput from "@/components/ui/inputFields/DateInput";
 import Dropdown from "@/components/ui/inputFields/DropDown";
-import { stateAbbreviations } from "@/data/stateAbbreviations";
 import TextInput from "@/components/ui/inputFields/TextInput";
-import payers from "@/data/payers";
-import { useEffect, useState } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { CiEdit } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
 import NavBottom from "@/components/ui/NavBottom";
-import Button from "@/components/ui/Button";
-import { format, parse } from "date-fns";
+import payers from "@/data/payers";
+import { stateAbbreviations } from "@/data/stateAbbreviations";
+import { useProviders } from "@/hooks/useProvider";
+import { CiEdit } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { usePayerSetup } from "./usePrayerSetup";
 import { DROPDOWN_OPTIONS } from "./utilis";
-import { useProviders } from "@/hooks/useProvider";
 
 export default function PairSetup() {
 	const {

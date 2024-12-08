@@ -21,7 +21,8 @@ export async function GET(request) {
 		  *,
 		  providers_info(*)
 		`)
-		.eq("providers_info.added_by", addedBy); // Filtering by added_by
+		.eq("providers_info.added_by", addedBy)
+		.is("deleted_at", null);
   
 	  // Execute the query
 	  const { data, error } = await query;

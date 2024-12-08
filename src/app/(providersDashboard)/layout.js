@@ -5,10 +5,9 @@ import { FaArrowCircleRight } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { useParams } from "next/navigation";
 import { sidenavLinks } from "@/data/sideNavLinks";
-
+import { FiLogOut } from "react-icons/fi";
 
 export default function DashboardLayout({ children }) {
-
   const { id } = useParams();
   return (
     <div className="flex min-h-screen">
@@ -50,7 +49,7 @@ export default function DashboardLayout({ children }) {
             <h1 className="text-xl font-semibold">Welcome to BCS-CMS</h1>
             <p>Let's take a look at your credentials today!</p>
           </div>
-          <div className="flex flex-row justify-end items-center gap-4">
+          {/* <div className="flex flex-row justify-end items-center gap-4">
             <input
               type="text"
               className="bg-white w-full rounded-full px-4 py-2 text-black"
@@ -59,7 +58,10 @@ export default function DashboardLayout({ children }) {
             <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
               <CiSearch className="size-8" />
             </div>
-          </div>
+          </div> */}
+          <Link href={"/signin"}>
+            <FiLogOut className="size-6" />
+          </Link>
         </header>
 
         {/* Main content area */}

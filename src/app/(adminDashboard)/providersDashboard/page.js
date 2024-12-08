@@ -9,7 +9,7 @@ import { IoAddCircleOutline, IoSearch } from "react-icons/io5";
 import { LiaUserSlashSolid } from "react-icons/lia";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
-import { CiSearch } from "react-icons/ci";
+import { CiEdit, CiSearch } from "react-icons/ci";
 
 export default function ProvidersDashboard() {
   const [providers, setProviders] = useState([]);
@@ -166,6 +166,10 @@ export default function ProvidersDashboard() {
                         className="text-green-400"
                       >
                         <FaEye />
+                      </Link>
+                      /
+                      <Link href={`/providersInformation/${provider.uuid}`}>
+                        <CiEdit className="text-blue-400" />
                       </Link>
                       /
                       <button className="text-red-500 hover:text-red-700">

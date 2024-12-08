@@ -1,28 +1,20 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
+import { useEffect, useState } from "react";
 
-import { FaEye } from "react-icons/fa";
-import { CiEdit, CiSearch } from "react-icons/ci";
-import { MdDeleteOutline } from "react-icons/md";
 import Button from "@/components/ui/Button";
-import { IoAddCircleOutline } from "react-icons/io5";
-import AdminDashboardLayout from "./../../adminLayout";
 import axios from "axios";
+import { CiEdit, CiSearch } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
+import AdminDashboardLayout from "./../../adminLayout";
 
 export default function CredentialingStatus() {
-  // State to handle the active tab (Provider or Organization)
   const [activeTab, setActiveTab] = useState("provider");
-
-  // State to store documents data
   const [documents, setDocuments] = useState([]);
-
-  // State to store loading state
   const [loading, setLoading] = useState(false);
-
-  // Retrieve user ID from localStorage (UUID)
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   const organizationDocuments = [
     {
@@ -79,7 +71,6 @@ export default function CredentialingStatus() {
     },
   ];
 
-  // Function to toggle between the two tabs
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
@@ -95,9 +86,7 @@ export default function CredentialingStatus() {
       console.log(response);
       const data = response.data;
 
-      // Set the fetched data to the state
       if (data) {
-        // Assuming data contains 'providerDocuments' and 'organizationDocuments' keys
         setDocuments(data);
       }
     } catch (error) {
@@ -107,20 +96,33 @@ export default function CredentialingStatus() {
     }
   };
 
-  // useEffect to fetch data when the component is mounted
   useEffect(() => {
     fetchDocuments();
-  }, []); // Refetch when userId changes or when component mounts
+  }, []);
 
-  // Render the appropriate documents based on the active tab
   const renderDocuments = () => {
     const docs = activeTab === "provider" ? documents : organizationDocuments;
-
-    return docs.map((doc, index) => (
+  
+    const filteredDocs = docs.filter((doc) => {
+      const fieldsToSearch = [
+        `${doc.providers_info.first_name} ${doc.providers_info.last_name}`,
+        doc.practice_type,
+        doc.type_of_service_provided,
+        doc.credentialing_type,
+        doc.ptan_medicare_number,
+        doc.medicaid_number,
+      ];
+  
+      return fieldsToSearch.some((field) =>
+        field?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+  
+    return filteredDocs.map((doc, index) => (
       <tr className="border-b" key={index}>
         <td className="p-3">
-          {doc.providers_info.first_name} {doc.providers_info.middle_initial}{" "}
-          {doc.providers_info.last_name}{" "}
+          {doc.providers_info.first_name} {doc.providers_info.middle_initial}
+          {doc.providers_info.last_name}
         </td>
         <td className="p-3">{doc.practice_type}</td>
         <td className="p-3">{doc.type_of_service_provided}</td>
@@ -129,13 +131,13 @@ export default function CredentialingStatus() {
           {doc.ptan_medicare_number} <br /> {doc.medicaid_number}
         </td>
         <td className="p-3 flex flex-row justify-start items-center gap-2">
-          <FaEye className="text-secondary" /> /
           <CiEdit className="text-primary" /> /
           <MdDeleteOutline className="text-red-400" />
         </td>
       </tr>
     ));
   };
+  
 
   return (
     <AdminDashboardLayout barTitle="Organization Management">
@@ -145,18 +147,19 @@ export default function CredentialingStatus() {
             type="text"
             className="w-full bg-gray-100 rounded-full px-4 py-2 text-black"
             placeholder="Search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
           <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
             <CiSearch className="size-8" />
           </div>
         </div>
-        <Button
+        {/* <Button
           title={"Add"}
           icon={<IoAddCircleOutline className="size-6" />}
-        />
+        /> */}
       </div>
 
-      {/* Tabs for toggling */}
       <div className="flex mb-4">
         <button
           className={`px-4 py-2 mr-2 rounded-lg ${
@@ -182,32 +185,27 @@ export default function CredentialingStatus() {
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full table-auto">
-                <thead className="bg-gray-200 text-left">
-                  <tr>
-                    <th className="p-3">Provider Name</th>
-                    <th className="p-3">Practice Type</th>
-                    <th className="p-3">Type of Service</th>
-                    <th className="p-3">Credentialing Type</th>
-                    <th className="p-3">Medicare / Medicaid Number</th>
-                    <th className="p-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {loading ? (
-                    <tr>
-                      <td
-                        colSpan="5"
-                        className="w-full flex justify-center items-center p-4"
-                      >
-                        <BarLoader />
-                      </td>
-                    </tr>
-                  ) : (
-                    renderDocuments()
-                  )}
-                </tbody>
-              </table>
+              {loading ? (
+                <div className="flex justify-center">
+                  <BarLoader />
+                </div>
+              ) : (
+                <>
+                  <table className="w-full table-auto">
+                    <thead className="bg-gray-200 text-left">
+                      <tr>
+                        <th className="p-3">Provider Name</th>
+                        <th className="p-3">Practice Type</th>
+                        <th className="p-3">Type of Service</th>
+                        <th className="p-3">Credentialing Type</th>
+                        <th className="p-3">Numbers</th>
+                        <th className="p-3">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>{renderDocuments()}</tbody>
+                  </table>
+                </>
+              )}
             </div>
           </div>
         </main>

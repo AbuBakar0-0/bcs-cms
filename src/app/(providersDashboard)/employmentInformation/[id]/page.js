@@ -324,7 +324,7 @@ function EmploymentInformation() {
 							key={item.uuid}
 							className="w-full shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-6"
 						>
-							<div className="flex-1">
+							<div className="w-1/2 flex flex-col gap-1">
 								<h3 className="font-medium">{item.legal_employer_name}</h3>
 								<p className="text-sm text-gray-600">
 									{item.doing_business_name}
@@ -334,13 +334,14 @@ function EmploymentInformation() {
 								</p>
 							</div>
 
-							<div className="flex flex-col text-sm text-gray-600">
+							<div className="w-1/2 flex flex-col text-sm text-gray-600 gap-1">
 								<p>{item.address?.address_line_1}</p>
 								<p>
 									{item.address?.city}, {item.address?.state}
 									{item.address?.zip_code}
 								</p>
 								<p>{item.contact?.cell_phone}</p>
+								<p>Current Employer {item.is_current_employer?"YES":"NO"}</p>
 							</div>
 
 							<div className="flex gap-3">

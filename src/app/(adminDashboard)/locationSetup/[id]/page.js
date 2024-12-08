@@ -13,6 +13,8 @@ import AdminDashboardLayout from "../../adminLayout";
 export default function LocationSetup() {
   const { id } = useParams();
   const [locations, setLocations] = useState([]);
+  const [filteredLocations, setFilteredLocations] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function LocationSetup() {
         }
         const data = await response.json();
         setLocations(data);
+        setFilteredLocations(data);
       } catch (error) {
         console.error("Error fetching locations:", error.message);
       } finally {
@@ -36,6 +39,21 @@ export default function LocationSetup() {
     }
   }, [id]);
 
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredLocations(locations);
+    } else {
+      const lowercasedQuery = searchQuery.toLowerCase();
+      const filtered = locations.filter((location) =>
+        location.legal_business_name.toLowerCase().includes(lowercasedQuery) ||
+        location.doing_business_name.toLowerCase().includes(lowercasedQuery) ||
+        location.npi_2.toLowerCase().includes(lowercasedQuery) ||
+        location.tax_id.toLowerCase().includes(lowercasedQuery)
+      );
+      setFilteredLocations(filtered);
+    }
+  }, [searchQuery, locations]);
+
   return (
     <AdminDashboardLayout>
       <ProvidersCard id={id} />
@@ -43,6 +61,8 @@ export default function LocationSetup() {
         <div className="w-1/3 flex flex-row justify-start items-center gap-4">
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-gray-100 rounded-full px-4 py-2 text-black"
             placeholder="Search"
           />
@@ -52,7 +72,6 @@ export default function LocationSetup() {
         </div>
 
         <div className="w-2/3 flex flex-row justify-end items-center gap-4">
-        
           <Link href={`/practiceLocation/${id}`}>
             <Button
               title={"Add"}
@@ -79,10 +98,12 @@ export default function LocationSetup() {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={5} className="text-center p-4"></td>
+                      <td colSpan={5} className="text-center p-4">
+                        Loading...
+                      </td>
                     </tr>
-                  ) : locations.length > 0 ? (
-                    locations.map((location, index) => (
+                  ) : filteredLocations.length > 0 ? (
+                    filteredLocations.map((location, index) => (
                       <tr key={index} className="border-b">
                         <td className="p-3">{location.legal_business_name}</td>
                         <td className="p-3">{location.doing_business_name}</td>

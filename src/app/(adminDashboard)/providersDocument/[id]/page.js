@@ -116,7 +116,8 @@ export default function ProvidersDocument() {
                             new Date(document.expiry_date) < Date.now()
                               ? "text-red-500"
                               : Math.ceil(
-                                  (new Date(document.expiry_date) - Date.now()) /
+                                  (new Date(document.expiry_date) -
+                                    Date.now()) /
                                     (1000 * 60 * 60 * 24)
                                 ) < 30
                               ? "text-yellow-500"
@@ -126,7 +127,8 @@ export default function ProvidersDocument() {
                           {new Date(document.expiry_date) < Date.now()
                             ? `Expired ${Math.abs(
                                 Math.ceil(
-                                  (new Date(document.expiry_date) - Date.now()) /
+                                  (new Date(document.expiry_date) -
+                                    Date.now()) /
                                     (1000 * 60 * 60 * 24)
                                 )
                               )} Days Ago`
@@ -142,8 +144,14 @@ export default function ProvidersDocument() {
                         </td>
 
                         <td className="p-3 flex flex-row justify-start items-center gap-2">
-                          <FaEye className="text-secondary cursor-pointer" /> /
-                          <CiEdit className="text-primary cursor-pointer" /> /
+                          <Link href={document.url}>
+                            <FaEye className="text-secondary cursor-pointer" />
+                          </Link>
+                          /
+                          <Link href={`/document/${id}`}>
+                            <CiEdit className="text-primary cursor-pointer" />
+                          </Link>
+                          /
                           <MdDeleteOutline className="text-red-400 cursor-pointer" />
                         </td>
                       </tr>

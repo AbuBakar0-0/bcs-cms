@@ -109,7 +109,7 @@ export default function Enrollment() {
                         (payer, index) => (
                           <tr className="border-b" key={index}>
                             <td className="w-1/5 p-3">{payer.payer_name}</td>
-                            <td className="w-1/5 p-3">{payer.status}</td>
+                            <td className="w-1/5 p-3">{payer.plan_type}</td>
                             <td className="w-1/5 p-3">{payer.business}</td>
                             <td className={`w-1/5 p-3 ${getColor(payer.status)}`}>
                               {payer.status}

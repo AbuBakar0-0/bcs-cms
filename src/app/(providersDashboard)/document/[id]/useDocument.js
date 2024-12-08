@@ -8,6 +8,7 @@ import {
 } from "./utilis";
 import { useParams } from "next/navigation";
 import { useProviders } from "@/hooks/useProvider";
+import { format, parse } from "date-fns";
 
 export function formatDate(date) {
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
@@ -139,15 +140,15 @@ export const useDocuments = () => {
 
   const handleEdit = (doc) => {
     setFormData({
-      title: doc.title,
-      provider: doc.provider,
-      status: doc.status,
+      title: doc.title || "",
+      provider: doc.provider || "",
+      status: doc.status || "",
       effective_date: formatDate(doc.effective_date) || "",
       expiry_date: formatDate(doc.expiry_date) || "",
-      file: doc.url || null,
+      file: doc.url || "",
       existing_url: doc.url || "",
       existing_file_public_id: doc.file_public_id || "",
-      uuid: doc.uuid,
+      uuid: doc.uuid || "",
     });
     setIsEditing(true);
     setShowForm(true);

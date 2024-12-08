@@ -14,7 +14,7 @@ const sidenavLinks = [
   { title: "HR Hiring", link: "/hrHiring" },
   { title: "Reporting", link: "" },
   // { title: "Incident Reporting Configuration", link: "" },
-  { title: "Help Center", link: "" },
+  { title: "Help Center", link: "/helpCenter" },
 ];
 
 export default function AdminDashboardLayout({

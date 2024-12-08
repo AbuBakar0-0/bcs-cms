@@ -7,13 +7,15 @@ import { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
+import { CiSearch } from "react-icons/ci";
 
 export default function Payers() {
   const [activeTab, setActiveTab] = useState("provider");
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [uuid,setUuid]=useState();
+  const [uuid, setUuid] = useState();
+  const [searchQuery, setSearchQuery] = useState(""); // Added state for search query
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,10 +84,10 @@ export default function Payers() {
 
   function getColor(status) {
     const statusClasses = {
-      "Submitted": "text-blue-500", // Blue
+      Submitted: "text-blue-500", // Blue
       "In-Progress": "text-yellow-500", // Yellow
-      "Approved": "text-green-500", // Green
-      "Rejected": "text-red-500", // Red
+      Approved: "text-green-500", // Green
+      Rejected: "text-red-500", // Red
       "Panel Closed": "text-purple-500", // Purple
       "Missing Information": "text-orange-500", // Orange
     };
@@ -93,34 +95,61 @@ export default function Payers() {
     // Return the classes for the given status or default classes
     return statusClasses[status] || "bg-gray-500 text-white"; // Default: Gray
   }
-  
-  // Render the appropriate documents based on the active tab
+
+  // Render the appropriate documents based on the active tab and search query
   const renderDocuments = () => {
     const documents = activeTab === "provider" ? data : organizationDocuments;
 
-    return documents.map((doc, index) => (
+    const filteredDocs = documents.filter((doc) => {
+      const searchFields = [
+        doc.plan_type,
+        doc.business,
+        doc.providers_info?.first_name,
+        doc.providers_info?.last_name,
+        doc.payer_name,
+        doc.status,
+        doc.application_date,
+        doc.note,
+      ];
+
+      return searchFields.some(
+        (field) =>
+          field &&
+          field.toString().toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    });
+
+    return filteredDocs.map((doc, index) => (
       <tr className="border-b" key={index}>
+        <td className="p-3">{doc.plan_type}</td>
+        <td className="p-3">{doc.business}</td>
         <td className="p-3">
           {doc.providers_info.first_name} {doc.providers_info.middle_initial}
           {doc.providers_info.last_name}
         </td>
-        <td className="p-3">{doc.plan_type}</td>
-        <td className="p-3">{doc.business}</td>
         <td className="p-3">{doc.payer_name}</td>
         <td className={`p-3 ${getColor(doc.status)}`}>{doc.status}</td>
+        <td className="p-3">{doc.application_date}</td>
         <td className="p-3">{doc.note}</td>
-        {/* <td className="p-3 flex flex-row items-center gap-3">
-          <FaEye className="text-secondary" />
-          <CiEdit className="text-primary" />
-          <MdDeleteOutline className="text-red-400" />
-        </td> */}
       </tr>
     ));
   };
 
   return (
     <AdminDashboardLayout barTitle="Organization Management">
-      <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
+      <div className="flex flex-row justify-between items-center mt-4 mb-2 gap-4">
+        <div className="w-1/3 flex flex-row justify-start items-center gap-4">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+            className="w-full bg-gray-100 rounded-full px-4 py-2 text-black"
+            placeholder="Search"
+          />
+          <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
+            <CiSearch className="size-8" />
+          </div>
+        </div>
         <Link href={`/payerSetup/${uuid}`}>
           <Button
             title={"Add"}
@@ -163,13 +192,13 @@ export default function Payers() {
                 <table className="w-full table-auto">
                   <thead className="bg-gray-200 text-left">
                     <tr>
-                      <th className="p-3">Full Name</th>
                       <th className="p-3">Plan Type</th>
                       <th className="p-3">Business</th>
+                      <th className="p-3">Provider Name</th>
                       <th className="p-3">Payer Name</th>
                       <th className="p-3">Application Status</th>
+                      <th className="p-3">Application Date</th>
                       <th className="p-3">Application Details</th>
-                      {/* <th className="p-3">Actions</th> */}
                     </tr>
                   </thead>
                   <tbody>{renderDocuments()}</tbody>
