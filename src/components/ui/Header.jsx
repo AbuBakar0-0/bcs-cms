@@ -30,10 +30,12 @@ const Header = () => {
                             <span>Sign in</span>
                         </Link>
 
+                        <Link href={"/signup"} className='hover:cursor-pointer'>
                         <div className='flex flex-row gap-4 items-center'>
                             <FaRegUserCircle />
                             <span>Free Signup</span>
                         </div>
+                        </Link>
                     </div>
                 </div>
             </div>
