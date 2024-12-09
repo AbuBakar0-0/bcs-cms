@@ -28,7 +28,7 @@ export const DROPDOWN_OPTIONS = {
 		"Zanjeel Malik",
 	],
 	statuses: [
-		"Select Status",
+		"Requested Application",
 		"Submitted",
 		"In-Progress",
 		"Approved",

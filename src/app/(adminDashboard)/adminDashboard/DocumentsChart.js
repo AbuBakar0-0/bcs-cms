@@ -40,7 +40,7 @@ function DocumentChart({ data }) {
   return (
     <BarChart
       width={500}
-      height={300}
+      height={348}
       data={renderData}
       barSize={30} // Controls the thickness of the bars
     >
