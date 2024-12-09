@@ -258,8 +258,8 @@ const ProfessionalIds = () => {
         <TextInput
           title="UPIN #"
           name="upin"
-          is_number={true}
-          maxLength={12}
+          is_number={false}
+          maxLength={10}
           value={formData.upin}
           onChange={(e) => handleChange(e)}
         />
