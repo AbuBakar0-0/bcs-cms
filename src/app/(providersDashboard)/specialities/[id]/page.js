@@ -354,8 +354,8 @@ function Specialities() {
 										<p>{speciality.type}</p>
 									</div>
 									<div className="w-1/3 flex flex-col justify-center items-start">
-										<p>{speciality.name_of_board}</p>
-										<p>{speciality.expiry_date}</p>
+										<p>{speciality.boardName}</p>
+										<p>{speciality.expiryDate}</p>
 									</div>
 									<div className="flex flex-row justify-center items-center gap-4">
 										<CiEdit
