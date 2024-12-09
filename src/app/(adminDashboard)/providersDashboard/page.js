@@ -134,9 +134,11 @@ export default function ProvidersDashboard() {
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 text-left">Name</th>
+                <th className="px-4 py-2 text-left">Gender</th>
                 <th className="px-4 py-2 text-left">DOB</th>
                 <th className="px-4 py-2 text-left">SSN</th>
                 <th className="px-4 py-2 text-left">License ID</th>
+                <th className="px-4 py-2 text-left">Issue Date</th>
                 <th className="px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
@@ -153,6 +155,7 @@ export default function ProvidersDashboard() {
                         {provider.middle_initial} - {provider.provider_title}
                       </Link>
                     </td>
+                    <td className="px-4 py-2 uppercase">{provider.gender}</td>
                     <td className="px-4 py-2">
                       {provider.dob.split("-")[1] || "N/A"}-
                       {provider.dob.split("-")[2] || "N/A"}-
@@ -161,6 +164,9 @@ export default function ProvidersDashboard() {
                     <td className="px-4 py-2">{provider.ssn || "Unknown"}</td>
                     <td className="px-4 py-2">
                       {provider.license_id || "Unknown"}
+                    </td>
+                    <td className="px-4 py-2">
+                      {provider.issue_date || "Unknown"}
                     </td>
                     <td className="px-4 py-2 flex justify-center items-center gap-2">
                       <Link
