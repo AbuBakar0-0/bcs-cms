@@ -186,6 +186,7 @@ function EducationAndTraining() {
 								<TextInput
 									title={"County"}
 									name="county"
+									required={false}
 									value={newTrainingEntry.county}
 									onChange={handleTrainingChange}
 								/>
