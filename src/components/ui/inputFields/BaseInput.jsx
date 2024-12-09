@@ -14,7 +14,7 @@ const BaseInput = ({
   name,
   placeholder,
   minLength = 0,
-  maxLength = 25,
+  maxLength = 1000,
   max, // Add max prop here
 }) => {
   const handleInputChange = (e) => {
