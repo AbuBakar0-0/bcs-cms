@@ -184,27 +184,6 @@ export const usePracticeProfile = () => {
       return false;
     }
 
-    // Validate Practice Names
-    if (
-      !validateAlphanumeric(
-        formData.legal_business_name,
-        50,
-        "Legal Business Name"
-      )
-    ) {
-      return false;
-    }
-
-    if (
-      formData.doing_business_name &&
-      !validateAlphanumeric(
-        formData.doing_business_name,
-        50,
-        "Doing Business Name"
-      )
-    ) {
-      return false;
-    }
 
     // Validate Required Addresses
     const validateAddress = (prefix, required = true) => {

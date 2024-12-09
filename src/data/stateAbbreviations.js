@@ -1,5 +1,4 @@
 export const stateAbbreviations = [
-	"Select State",
 	"AL",
 	"AK",
 	"AZ",
