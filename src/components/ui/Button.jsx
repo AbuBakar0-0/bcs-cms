@@ -13,7 +13,7 @@ const Button = ({ title, onClick, icon, style="solid" }) => {
     return (
         <button
             onClick={(e) => onClick && onClick(e)} // Ensure onClick is defined
-            className={`${type} px-4 py-3 flex flex-row justify-center items-center gap-4`}
+            className={`w-52 ${type} px-4 py-3 flex flex-row justify-center items-center gap-4`}
         >
             {icon}
             <p>{title}</p>

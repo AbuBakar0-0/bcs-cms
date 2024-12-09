@@ -4,264 +4,300 @@ import { defaultFormData } from "./utilis";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
 import { useProviders } from "@/hooks/useProvider";
+import axios from "axios";
 
 export const usePayerSetup = () => {
-	const [application, setShowApplication] = useState(false);
-	const [payerSetups, setPayerSetups] = useState([]);
-	const [formData, setFormData] = useState(defaultFormData);
-	const [isEditing, setIsEditing] = useState(false);
-	const [editingId, setEditingId] = useState(null);
-	const [loading, setLoading] = useState(false);
-	const [error, setError] = useState(null);
-	const { id: provider_id_params } = useParams();
+  const [application, setShowApplication] = useState(false);
+  const [payerSetups, setPayerSetups] = useState([]);
+  const [formData, setFormData] = useState(defaultFormData);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [profiles, setProfiles] = useState([]);
+  const [fullProfile, setFullProfile] = useState([]);
+  
+  const { id: provider_id_params } = useParams();
 
-	const { getProviderByName, providers, getProviderNameByUuid } =
-		useProviders();
+  const { getProviderByName, providers, getProviderNameByUuid } =
+    useProviders();
 
-	useEffect(() => {
-		fetchPayerSetups();
-	}, [providers]);
+  useEffect(() => {
+    fetchPayerSetups();
+  }, [providers]);
 
-	const resetForm = () => {
-		setFormData(defaultFormData);
-		setIsEditing(false);
-		setEditingId(null);
-		setError(null);
-	};
+  const resetForm = () => {
+    setFormData(defaultFormData);
+    setIsEditing(false);
+    setEditingId(null);
+    setError(null);
+  };
 
-	const toggleApplication = () => {
-		setShowApplication((prev) => !prev);
-		if (!application) {
-			resetForm();
-		}
-	};
+  const toggleApplication = () => {
+    setShowApplication((prev) => !prev);
+    if (!application) {
+      resetForm();
+    }
+  };
 
-	const handleChange = (event) => {
-		const { name, value } = event.target;
-		if (
-			[
-				"Select State",
-				"Select Status",
-				"Select Business",
-				"Select Plan",
-				"Select Provider",
-			].includes(value)
-		)
-			return;
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-		setError(null);
-	};
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    if (
+      [
+        "Select State",
+        "Select Status",
+        "Select Business",
+        "Select Plan",
+        "Select Provider",
+      ].includes(value)
+    )
+      return;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    setError(null);
+  };
 
-	const validateForm = () => {
-		const requiredFields = Object.keys(defaultFormData);
-		const missingFields = requiredFields.filter((field) => !formData[field]);
+  const validateForm = () => {
+    const requiredFields = Object.keys(defaultFormData);
+    const missingFields = requiredFields.filter((field) => !formData[field]);
 
-		if (missingFields.length > 0) {
-			toast.error(
-				`Please fill in all required fields: ${missingFields.join(", ")}`
-			);
-			return false;
-		}
-		return true;
-	};
+    if (missingFields.length > 0) {
+      toast.error(
+        `Please fill in all required fields: ${missingFields.join(", ")}`
+      );
+      return false;
+    }
+    return true;
+  };
 
-	const fetchPayerSetups = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await fetch(
-				`/api/payer-setup?provider_id=${provider_id_params}`
-				// `/api/payer-setup`
-			);
-			if (!response.ok) {
-				throw new Error(
-					`Failed to fetch payer setups. Status: ${response.status}`
-				);
-			}
-			const data = await response.json();
-			const formattedData = data.map((record) => ({
-				...record,
-				provider: getProviderNameByUuid(record.provider_id),
-			}));
-			console.log(formattedData);
-			setPayerSetups(formattedData);
-		} catch (error) {
-			setError(error.message);
-			console.error("Error fetching payer setups:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
+  const fetchPayerSetups = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        `/api/payer-setup?provider_id=${provider_id_params}`
+        // `/api/payer-setup`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch payer setups. Status: ${response.status}`
+        );
+      }
+      const data = await response.json();
+      const formattedData = data.map((record) => ({
+        ...record,
+        provider: getProviderNameByUuid(record.provider_id),
+      }));
+      console.log(formattedData);
+      setPayerSetups(formattedData);
 
-	const fetchBusiness = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const response = await fetch(
-				`/api/payer-setup?provider_id=${provider_id_params}`
-				// `/api/payer-setup`
-			);
-			if (!response.ok) {
-				throw new Error(
-					`Failed to fetch payer setups. Status: ${response.status}`
-				);
-			}
-			const data = await response.json();
-			const formattedData = data.map((record) => ({
-				...record,
-				provider: getProviderNameByUuid(record.provider_id),
-			}));
-			console.log(formattedData);
-			setPayerSetups(formattedData);
-		} catch (error) {
-			setError(error.message);
-			console.error("Error fetching payer setups:", error);
-		} finally {
-			setLoading(false);
-		}
-	};
+      const userUuid = localStorage.getItem("user_uuid");
+      const { data: profileData } = await axios.get(
+        `/api/get-practice-profiles`,
+        { params: { uuid: userUuid } }
+      );
+      const formattedProfiles = profileData.map(
+        (item) => item.legal_business_name
+      );
+      setProfiles(formattedProfiles);
 
-	const handleSubmit = async () => {
-		setLoading(true);
-		setError(null);
-		try {
-			const providerData = getProviderByName(formData.provider);
-			const provider_id = providerData.uuid;
-			if (!validateForm()) return;
-			const loadingToast = toast.loading(
-				isEditing ? "Updating payer setup..." : "Creating new payer setup..."
-			);
-			const url = isEditing
-				? `/api/payer-setup/${editingId}`
-				: "/api/payer-setup";
-			const method = isEditing ? "PUT" : "POST";
+      const formattedFullProfiles = profileData.map((item) => ({
+        name: item.legal_business_name,
+        uuid: item.uuid,
+      }));
+      setFullProfile(formattedFullProfiles);
+    } catch (error) {
+      setError(error.message);
+      console.error("Error fetching payer setups:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-			const response = await fetch(url, {
-				method,
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					...formData,
-					provider_id,
-				}),
-			});
+  const fetchBusiness = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(
+        `/api/payer-setup?provider_id=${provider_id_params}`
+        // `/api/payer-setup`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch payer setups. Status: ${response.status}`
+        );
+      }
+      const data = await response.json();
+      const formattedData = data.map((record) => ({
+        ...record,
+        provider: getProviderNameByUuid(record.provider_id),
+      }));
+      console.log(formattedData);
+      setPayerSetups(formattedData);
+    } catch (error) {
+      setError(error.message);
+      console.error("Error fetching payer setups:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-			if (!response.ok) {
-				throw new Error(
-					`Failed to ${isEditing ? "update" : "create"} payer setup. Status: ${
-						response.status
-					}`
-				);
-			}
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const providerData = getProviderByName(formData.provider);
+      const provider_id = providerData.uuid;
+      if (!validateForm()) return;
+      const loadingToast = toast.loading(
+        isEditing ? "Updating payer setup..." : "Creating new payer setup..."
+      );
+      const url = isEditing
+        ? `/api/payer-setup/${editingId}`
+        : "/api/payer-setup";
+      const method = isEditing ? "PUT" : "POST";
 
-			await fetchPayerSetups();
-			setShowApplication(false);
-			resetForm();
-			toast.success(
-				isEditing
-					? "Payer setup updated successfully"
-					: "Payer setup created successfully",
-				{ id: loadingToast }
-			);
-		} catch (error) {
-			setError(error.message);
-			console.error("Error submitting form:", error);
-			toast.error(`Error: ${error.message}`, {
-				id: loadingToast,
-			});
-		} finally {
-			setLoading(false);
-		}
-	};
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          provider_id,
+        }),
+      });
 
-	const handleEdit = (setup) => {
-		setError(null);
-		try {
-			const parsedDate = parse(
-				setup.application_date,
-				"yyyy-MM-dd",
-				new Date()
-			);
-			const formattedDate = format(parsedDate, "MM/dd/yyyy");
-			setFormData({
-				state: setup.state,
-				plan_type: setup.plan_type,
-				business: setup.business,
-				provider: setup.provider,
-				payer_name: setup.payer_name,
-				status: setup.status,
-				application_date: formattedDate,
-				note: setup.note,
-			});
+      if (!response.ok) {
+        throw new Error(
+          `Failed to ${isEditing ? "update" : "create"} payer setup. Status: ${
+            response.status
+          }`
+        );
+      }
 
-			setIsEditing(true);
-			setEditingId(setup.uuid);
-			setShowApplication(true);
-		} catch (error) {
-			setError("Error processing date format");
-			console.error("Error editing payer setup:", error);
-		}
-	};
+      await fetchPayerSetups();
+      setShowApplication(false);
+      resetForm();
+      toast.success(
+        isEditing
+          ? "Payer setup updated successfully"
+          : "Payer setup created successfully",
+        { id: loadingToast }
+      );
+    } catch (error) {
+      setError(error.message);
+      console.error("Error submitting form:", error);
+      toast.error(`Error: ${error.message}`, {
+        id: loadingToast,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	const handleDelete = async (uuid) => {
-		setLoading(true);
-		setError(null);
-		const loadingToast = toast.loading("Deleting payer setup...");
+  const getUuidByName = (name) => {
+    const profile = fullProfile.find((item) => item.name === name);
+    return profile ? profile.uuid : null; // Return UUID or null if not found
+  };
 
-		try {
-			if (
-				!window.confirm("Are you sure you want to delete this payer setup?")
-			) {
-				return;
-			}
+  const handleLegalBusinessName = (e) => {
+	const { value } = e.target; // Extract the value from the event
+	const uuid = getUuidByName(value); // Get the UUID corresponding to the name
+  
+	setFormData((prev) => ({
+	  ...prev,
+	  business: value, // Update the selected legal business name
+	  practice_id: uuid, // Set the practice_id based on the UUID
+	}));
+  };
 
-			const response = await fetch(`/api/payer-setup/${uuid}`, {
-				method: "DELETE",
-			});
+  const handleEdit = (setup) => {
+    setError(null);
+    try {
+      const parsedDate = parse(
+        setup.application_date,
+        "yyyy-MM-dd",
+        new Date()
+      );
+      const formattedDate = format(parsedDate, "MM/dd/yyyy");
+      setFormData({
+        state: setup.state,
+        plan_type: setup.plan_type,
+        business: setup.business,
+        provider: setup.provider,
+        payer_name: setup.payer_name,
+        status: setup.status,
+        application_date: formattedDate,
+        note: setup.note,
+      });
 
-			if (!response.ok) {
-				throw new Error(
-					`Failed to delete payer setup. Status: ${response.status}`
-				);
-			}
-			if (editingId === uuid) {
-				resetForm();
-			}
-			await fetchPayerSetups();
-			toast.success("Payer setup deleted successfully", {
-				id: loadingToast,
-			});
-		} catch (error) {
-			setError(error.message);
-			console.error("Error deleting payer setup:", error);
-			toast.error(`Error: ${error.message}`, {
-				id: loadingToast,
-			});
-		} finally {
-			setLoading(false);
-		}
-	};
+      setIsEditing(true);
+      setEditingId(setup.uuid);
+      setShowApplication(true);
+    } catch (error) {
+      setError("Error processing date format");
+      console.error("Error editing payer setup:", error);
+    }
+  };
 
-	return {
-		// State
-		application,
-		payerSetups,
-		formData,
-		isEditing,
-		loading,
-		error,
+  const handleDelete = async (uuid) => {
+    setLoading(true);
+    setError(null);
+    const loadingToast = toast.loading("Deleting payer setup...");
 
-		// handle
-		toggleApplication,
-		handleChange,
-		handleSubmit,
-		handleEdit,
-		handleDelete,
-	};
+    try {
+      if (
+        !window.confirm("Are you sure you want to delete this payer setup?")
+      ) {
+        return;
+      }
 
+      const response = await fetch(`/api/payer-setup/${uuid}`, {
+        method: "DELETE",
+      });
 
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete payer setup. Status: ${response.status}`
+        );
+      }
+      if (editingId === uuid) {
+        resetForm();
+      }
+      await fetchPayerSetups();
+      toast.success("Payer setup deleted successfully", {
+        id: loadingToast,
+      });
+    } catch (error) {
+      setError(error.message);
+      console.error("Error deleting payer setup:", error);
+      toast.error(`Error: ${error.message}`, {
+        id: loadingToast,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    // State
+    application,
+    payerSetups,
+    formData,
+	profiles,
+    isEditing,
+    loading,
+    error,
+
+    // handle
+	handleLegalBusinessName,
+    toggleApplication,
+    handleChange,
+    handleSubmit,
+    handleEdit,
+    handleDelete,
+  };
 };

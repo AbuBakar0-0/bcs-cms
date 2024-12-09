@@ -2,7 +2,6 @@ import { supabase } from "@/lib/supabase";
 
 export async function GET(request) {
   try {
-	console.log("CALLED")
     // Extract query parameter for added_by (if available)
     const url = new URL(request.url);
     const addedBy = url.searchParams.get("uuid");

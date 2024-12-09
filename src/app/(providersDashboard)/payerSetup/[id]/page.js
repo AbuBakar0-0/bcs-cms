@@ -21,11 +21,13 @@ export default function PairSetup() {
 		application,
 		payerSetups,
 		formData,
+		profiles,
 		isEditing,
 		loading,
 
 		// Handlers
 		toggleApplication,
+		handleLegalBusinessName,
 		handleChange,
 		handleSubmit,
 		handleEdit,
@@ -70,8 +72,8 @@ export default function PairSetup() {
 										title={"Business"}
 										name="business"
 										value={formData.business}
-										onChange={handleChange}
-										options={DROPDOWN_OPTIONS.businesses}
+										onChange={handleLegalBusinessName}
+										options={profiles}
 									/>
 									<Dropdown
 										title={"Provider"}

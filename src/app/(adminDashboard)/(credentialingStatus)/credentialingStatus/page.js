@@ -2,10 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import Button from "@/components/ui/Button";
 import axios from "axios";
 import { CiEdit, CiSearch } from "react-icons/ci";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "./../../adminLayout";
@@ -106,8 +104,8 @@ export default function CredentialingStatus() {
     const filteredDocs = docs.filter((doc) => {
       const fieldsToSearch = [
         `${doc.providers_info.first_name} ${doc.providers_info.last_name}`,
-        doc.practice_type,
-        doc.type_of_service_provided,
+        doc.npi_2,
+        doc.providers_info.ssn,
         doc.credentialing_type,
         doc.ptan_medicare_number,
         doc.medicaid_number,
@@ -195,10 +193,10 @@ export default function CredentialingStatus() {
                     <thead className="bg-gray-200 text-left">
                       <tr>
                         <th className="p-3">Provider Name</th>
-                        <th className="p-3">Practice Type</th>
-                        <th className="p-3">Type of Service</th>
-                        <th className="p-3">Credentialing Type</th>
-                        <th className="p-3">Numbers</th>
+                        <th className="p-3">NPI</th>
+                        <th className="p-3">SSN</th>
+                        <th className="p-3">Speciality</th>
+                        <th className="p-3">Last Status</th>
                         <th className="p-3">Actions</th>
                       </tr>
                     </thead>

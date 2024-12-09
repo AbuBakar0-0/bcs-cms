@@ -1,59 +1,144 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import HeadingLine from "@/components/ui/HeadingLine";
 import HeadingLine2 from "@/components/ui/HeadingLine2";
 import Dropdown from "@/components/ui/inputFields/DropDown";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
+import PhoneInput from "@/components/ui/inputFields/PhoneInput";
 import TextInput from "@/components/ui/inputFields/TextInput";
 import ZipCodeInput from "@/components/ui/inputFields/ZipcodeInput";
+import NavBottom from "@/components/ui/NavBottom";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import taxonomyCodes from "@/data/taxonomyCodes";
-import { IoAddCircleOutline } from "react-icons/io5";
 import { CiEdit } from "react-icons/ci";
+import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
-import NavBottom from "@/components/ui/NavBottom";
-import Button from "@/components/ui/Button";
-import PhoneInput from "@/components/ui/inputFields/PhoneInput";
-import { usePracticeLocations } from "./usePraticeLocation";
 import { BarLoader } from "react-spinners";
+import { usePracticeLocations } from "./usePraticeLocation";
+import { useState } from "react";
 
 function PracticeLocations() {
   const {
     locations,
+    profiles,
     loading,
     showLocationForm,
     formData,
+    providers,
+    dropLocations,
+    linkFormData,
+    handleLink,
+    links,
+    handleDropFullLocation,
+    handleFullProviders,
+    handleSetLink,
     handleInputChange,
     handleLocation,
     handleEdit,
+    handleLegalBusinessName,
     handleDelete,
     handleSubmit,
     copyServiceToMailing,
     copyMailingToCorrespondence,
+    handleSubmitLink,
   } = usePracticeLocations();
+
+  const [active, setActive] = useState("Locations");
+
+  const handleSetActive = (target) => {
+    setActive(target);
+  };
 
   return (
     <>
       <div className="w-full flex flex-col justify-center items-center gap-4">
         <div className="w-full flex flex-row justify-between items-center">
           <p className="w-full text-lg">Practice Location</p>
-          <Button
-            title={"Add"}
-            icon={<IoAddCircleOutline className="size-6" />}
-            onClick={handleLocation}
-          />
+          <div className="flex justify-end items-center gap-2">
+            <Button
+              title={"Link Provider"}
+              icon={<IoAddCircleOutline className="size-6" />}
+              onClick={handleSetLink}
+            />
+
+            <Button
+              title={"Add"}
+              icon={<IoAddCircleOutline className="size-6" />}
+              onClick={handleLocation}
+            />
+          </div>
+        </div>
+        <div className="w-full flex justify-start items-center gap-4">
+          <button
+            className={`px-4 py-2 border-green-400 border-4 rounded-lg ${
+              active == "Locations" ? "bg-green-400 text-white" : ""
+            }`}
+            onClick={() => handleSetActive("Locations")}
+          >
+            Locations
+          </button>
+          <button
+            className={`px-4 py-2 border-green-400 border-4 rounded-lg  ${
+              active == "Links" ? "bg-green-400 text-white" : ""
+            }`}
+            onClick={() => handleSetActive("Links")}
+          >
+            Links
+          </button>
+        </div>
+
+        <div className="w-full flex flex-col justify-center items-center gap-4">
+          {handleLink && (
+            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
+              <div className="w-full flex flex-wrap justify-start items-end gap-4">
+                <Dropdown
+                  title="Doing Business Name"
+                  width="w-[49%]"
+                  options={dropLocations}
+                  name="business_id" // Updated to match the state key
+                  value={linkFormData.business_id}
+                  onChange={handleDropFullLocation}
+                />
+                <Dropdown
+                  title="Provider Name"
+                  width="w-[49%]"
+                  options={providers}
+                  name="provider_id" // Updated to match the state key
+                  value={linkFormData.provider_id}
+                  onChange={handleFullProviders}
+                />
+
+                <div className="w-full mt-4 flex justify-end gap-4">
+                  <Button
+                    type="submit"
+                    title="Save"
+                    onClick={handleSubmitLink}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="w-full flex flex-col justify-center items-center gap-4">
           {showLocationForm && (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start items-end gap-4">
-                <TextInput
+                {/* <TextInput
                   title={"Legal Business Name"}
                   width={"w-[49%]"}
                   name="legal_business_name"
                   value={formData.legal_business_name}
                   onChange={handleInputChange}
+                /> */}
+                <Dropdown
+                  title={"Legal Business Name"}
+                  width="w-[49%]"
+                  options={profiles}
+                  name="legal_business_name"
+                  value={formData.legal_business_name}
+                  onChange={handleLegalBusinessName}
                 />
                 <TextInput
                   title={"Doing Business Name"}
@@ -372,36 +457,69 @@ function PracticeLocations() {
           )}
         </div>
 
-        {loading ? (
-          <div>
-            <BarLoader />
-          </div>
-        ) : locations.length === 0 ? (
-          <div>No locations found</div>
-        ) : (
-          locations.map((location) => (
-            <div
-              key={location.uuid}
-              className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
-            >
-              <p className="w-1/5">{location.legal_business_name}</p>
-              <div className="w-1/3 flex flex-col justify-center items-start">
-                <p>{location.service_city}</p>
-                <p>{location.service_state}</p>
-                <p>{location.service_phone}</p>
-              </div>
-              <div className="flex flex-row justify-center items-center gap-4">
-                <CiEdit
-                  className="size-6 text-primary cursor-pointer"
-                  onClick={() => handleEdit(location.uuid)}
-                />
-                <MdDeleteOutline
-                  className="size-6 text-red-400 cursor-pointer"
-                  onClick={() => handleDelete(location.uuid)}
-                />
-              </div>
+        {active == "Locations" ? (
+          loading ? (
+            <div>
+              <BarLoader />
             </div>
-          ))
+          ) : locations.length === 0 ? (
+            <div>No locations found</div>
+          ) : (
+            locations.map((location) => (
+              <div
+                key={location.uuid}
+                className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
+              >
+                <p className="w-1/5">{location.legal_business_name}</p>
+                <div className="w-1/3 flex flex-col justify-center items-start">
+                  <p>{location.service_city}</p>
+                  <p>{location.service_state}</p>
+                  <p>{location.service_phone}</p>
+                </div>
+                <div className="flex flex-row justify-center items-center gap-4">
+                  <CiEdit
+                    className="size-6 text-primary cursor-pointer"
+                    onClick={() => handleEdit(location.uuid)}
+                  />
+                  <MdDeleteOutline
+                    className="size-6 text-red-400 cursor-pointer"
+                    onClick={() => handleDelete(location.uuid)}
+                  />
+                </div>
+              </div>
+            ))
+          )
+        ) : (
+          <>
+            {loading ? (
+              <div className="w-full flex justify-center items-center">
+                <BarLoader />
+              </div>
+            ) : (
+              links.map((item) => (
+                <div
+                  key={item.uuid}
+                  className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
+                >
+                  <span>{item.doing_business_name}</span>
+                  <span>
+                    {
+                      item.practice_location_providers[0].providers_info
+                        .first_name
+                    }{" "}
+                    {
+                      item.practice_location_providers[0].providers_info
+                        .middle_initial
+                    }{" "}
+                    {
+                      item.practice_location_providers[0].providers_info
+                        .last_name
+                    }
+                  </span>
+                </div>
+              ))
+            )}
+          </>
         )}
 
         <NavBottom />

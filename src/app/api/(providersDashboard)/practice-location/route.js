@@ -53,7 +53,7 @@ export async function GET(request) {
                     cell_phone,
                     relation
                 )
-            `).eq("provider_id",uuid);
+            `).eq("provider_id",uuid).is("deleted_at",null);
 
 		if (practiceError) {
 			throw new Error(
@@ -252,6 +252,7 @@ export async function POST(request) {
 					practice_contact_id: contacts[3].uuid,
 					ptan_medicare_number: data.ptan_medicare_number || null,
 					medicaid_number: data.medicaid_number || null,
+					practice_id:data.practice_id||"",
 				};
 
 				const { data: practiceLocationResult, error } = await supabase
