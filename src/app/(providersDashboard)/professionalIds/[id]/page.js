@@ -114,7 +114,6 @@ const ProfessionalIds = () => {
         />
         <TextInput
           title="Policy #"
-          is_number={true}
           name={`${prefix}PolicyNumber`}
           value={formData[`${prefix}PolicyNumber`]}
           onChange={(e) => handleChange(e)}
