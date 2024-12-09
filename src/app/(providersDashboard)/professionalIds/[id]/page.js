@@ -42,6 +42,7 @@ const ProfessionalIds = () => {
             width="w-1/6"
             name="number"
             value={entry.number}
+			required={!(entry[`has${capitalize(field)}`] == "No")}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
             maxLength={title == "State License" ? 15 : 10}
@@ -52,6 +53,7 @@ const ProfessionalIds = () => {
             options={stateAbbreviations}
             name="state"
             value={entry.state}
+			required={!(entry[`has${capitalize(field)}`] == "No")}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
@@ -60,6 +62,7 @@ const ProfessionalIds = () => {
             name="effectiveDate"
             value={entry.effectiveDate}
             width="w-1/8"
+			required={!(entry[`has${capitalize(field)}`] == "No")}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
@@ -68,6 +71,7 @@ const ProfessionalIds = () => {
             name="expiryDate"
             width="w-1/8"
             value={entry.expiryDate}
+			required={!(entry[`has${capitalize(field)}`] == "No")}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
