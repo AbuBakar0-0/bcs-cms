@@ -1,5 +1,4 @@
 export const documentsList = [
-	"Select Document",
 	"IRS Letter (It could be your SS-4, CP 575 or 147C)",
 	"Professional State License or Business License",
 	"State Release",
@@ -25,10 +24,6 @@ export const documentsList = [
 ];
 
 export const providerOptions = [
-	"Adnan Qamar",
-	"John Doe",
-	"John Wick",
-	"Zanjeel Malik",
 ];
 
 export const statusOptions = [
