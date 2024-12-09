@@ -146,7 +146,7 @@ const ProfessionalIds = () => {
           onChange={(e) => handleChange(e)}
         />
       </div>
-      ;
+      
     </>
   );
 
@@ -326,7 +326,7 @@ const ProfessionalIds = () => {
 
       <NavBottom onSave={handleSubmit} loading={loading} />
     </form>
-  );
+  )
 };
 
 export default ProfessionalIds;

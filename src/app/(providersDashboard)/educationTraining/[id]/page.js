@@ -159,10 +159,13 @@ function EducationAndTraining() {
 								<Dropdown
 									title={"Training Type"}
 									options={[
+										"Internship",
 										"Residency",
 										"Fellowship",
 										"Continuing Education",
 										"Specialized Training",
+										"Faculty Positions/Academic Appointments",
+										"Others"
 									]}
 									name={"training_type"}
 									value={newTrainingEntry.training_type}
