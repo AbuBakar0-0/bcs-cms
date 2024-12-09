@@ -371,7 +371,6 @@ export const usePracticeProfile = () => {
   };
 
   const PRACTICE_TYPES = [
-    "Select Type",
     "Medical",
     "Dental",
     "Behavioural Health",
@@ -380,7 +379,6 @@ export const usePracticeProfile = () => {
   ];
 
   const SERVICE_TYPES = [
-    "Select Service",
     "Solo Primary Care",
     "Solo Speciality Care",
     "Solo SPE / PCP",
@@ -390,7 +388,6 @@ export const usePracticeProfile = () => {
   ];
 
   const CREDENTIALING_TYPES = [
-    "Select Type",
     "Initial Credentialing",
     "Demographic Updates",
     "Re Credentialing",

@@ -1,5 +1,4 @@
 const taxonomyCodes = [
-	{ name: "", code: "Select Code" },
 	{ name: "Acupuncturist", code: "171100000X" },
 	{ name: "Advanced Practice Dental Therapist", code: "125K00000X" },
 	{ name: "Advanced Practice Midwife", code: "367A00000X" },
