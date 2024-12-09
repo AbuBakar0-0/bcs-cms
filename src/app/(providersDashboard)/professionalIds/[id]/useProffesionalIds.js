@@ -1,107 +1,132 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { stateAbbreviations } from "@/data/stateAbbreviations";
 import toast from "react-hot-toast";
 import { validateForm } from "./utilis";
 import { useParams } from "next/navigation";
 export const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1);
+const defaultState = {
+	hasNPI: "Select Option",
+	npi1: "",
+	npi2: "",
+	taxId: "",
+	upin: "",
 
+	medicare: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasMedicare: "Select Option",
+		},
+	],
+	medicaid: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasMedicaid: "Select Option",
+		},
+	],
+	stateLicense: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasStateLicense: "Select Option",
+		},
+	],
+	clia: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasClia: "Select Option",
+		},
+	],
+	dea: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasDea: "Select Option",
+		},
+	],
+	cds: [
+		{
+			number: "",
+			state: "",
+			effectiveDate: "",
+			expiryDate: "",
+			hasCds: "Select Option",
+		},
+	],
+
+	// Insurance fields
+	professionalLiabilityPolicyName: "",
+	professionalLiabilityPolicyNumber: "",
+	professionalLiabilityEffectiveDate: "",
+	professionalLiabilityExpiryDate: "",
+	professionalLiabilityAggregate: "",
+
+	generalLiabilityPolicyName: "",
+	generalLiabilityPolicyNumber: "",
+	generalLiabilityEffectiveDate: "",
+	generalLiabilityExpiryDate: "",
+	generalLiabilityAggregate: "",
+
+	// Portal credentials
+	caqhUserId: "",
+	caqhUsername: "",
+	caqhPassword: "",
+
+	pecosUsername: "",
+	pecosPassword: "",
+
+	uhcUsername: "",
+	uhcPassword: "",
+
+	optumUsername: "",
+	optumPassword: "",
+
+	availityUsername: "",
+	availityPassword: "",
+
+	medicaidUsername: "",
+	medicaidPassword: "",
+
+	bankLoginUsername: "",
+	bankLoginPassword: "",
+
+	echoUsername: "",
+	echoPassword: "",
+
+	payspanUsername: "",
+	payspanPassword: "",
+
+	billingUsername: "",
+	billingPassword: "",
+
+	ediUsername: "",
+	ediPassword: "",
+
+	faxUsername: "",
+	faxPassword: "",
+
+	molinaUsername: "",
+	molinaPassword: "",
+
+	otherPlatformName: "",
+	otherUsername: "",
+	otherPassword: "",
+};
 export const useProfessionalIdsForm = () => {
 	const [loading, setLoading] = useState(false);
-	const [formData, setFormData] = useState({
-		hasNPI: "Select Option",
-		npi1: "",
-		npi2: "",
-		taxId: "",
-		upin: "",
-
-		medicare: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasMedicare: "Select Option",
-			},
-		],
-		medicaid: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasMedica: "Select Option",
-			},
-		],
-		stateLicense: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasStateLicense: "Select Option",
-			},
-		],
-		clia: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasClia: "Select Option",
-			},
-		],
-		dea: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasDea: "Select Option",
-			},
-		],
-		cds: [
-			{
-				number: "",
-				state: "",
-				effectiveDate: "",
-				expiryDate: "",
-				hasCds: "Select Option",
-			},
-		],
-
-		// Insurance fields
-		professionalLiabilityPolicyName: "",
-		professionalLiabilityPolicyNumber: "",
-		professionalLiabilityEffectiveDate: "",
-		professionalLiabilityExpiryDate: "",
-		professionalLiabilityAggregate: "",
-
-		generalLiabilityPolicyName: "",
-		generalLiabilityPolicyNumber: "",
-		generalLiabilityEffectiveDate: "",
-		generalLiabilityExpiryDate: "",
-		generalLiabilityAggregate: "",
-
-		// Portal credentials
-		caqhUserId: "",
-		caqhUsername: "",
-		caqhPassword: "",
-
-		pecosUsername: "",
-		pecosPassword: "",
-
-		uhcUsername: "",
-		uhcPassword: "",
-
-		optumUsername: "",
-		optumPassword: "",
-
-		availityUsername: "",
-		availityPassword: "",
-
-		medicaidUsername: "",
-		medicaidPassword: "",
-	});
+	const [formData, setFormData] = useState(defaultState);
 	const { id: provider_id } = useParams();
 	const arrayFields = [
 		"medicare",
@@ -112,9 +137,43 @@ export const useProfessionalIdsForm = () => {
 		"cds",
 	];
 
+	useEffect(() => {
+		const fetchData = async () => {
+			if (!provider_id) return;
+
+			setLoading(true);
+			try {
+				const response = await fetch(
+					`/api/professional-ids?provider_id=${provider_id}`
+				);
+				if (!response.ok) {
+					if (response.status === 404) {
+						setFormData(defaultState);
+						return;
+					}
+					throw new Error("Failed to fetch data");
+				}
+
+				const data = await response.json();
+				setFormData((prev) => ({
+					...defaultState,
+					...data,
+				}));
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				toast.error("Failed to load provider information");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [provider_id]);
+
 	const handleChange = (e, index, field) => {
 		const { name, value } = e.target;
-		if (["Select State", "Select Aggregate"].includes(name)) return;
+		if (["Select State", "Select Aggregate", "Select Option"].includes(name))
+			return;
 		if (arrayFields.includes(field)) {
 			setFormData((prev) => {
 				const updatedField = [...prev[field]];

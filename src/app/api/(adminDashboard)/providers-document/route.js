@@ -20,8 +20,9 @@ export async function GET(request) {
     const { data, error } = await supabase
       .from("provider_documents")
       .select("*") // Select all columns
-      .eq("provider_id", provider_id);
-
+      .eq("provider_id", provider_id)
+      .is('deleted_at',null);
+      
     if (error) throw error;
 
     console.log(data);

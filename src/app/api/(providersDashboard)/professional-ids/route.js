@@ -137,17 +137,31 @@ export async function POST(request) {
 		}
 
 		// Insert web portal credentials
-		const insertPortalCredential = async (type, username, password) => {
+		const insertPortalCredential = async (
+			type,
+			username,
+			password,
+			obj = {}
+		) => {
 			if (!username || !password) return null;
+
+			console.log("inserting -> ", type, " with ", username, password);
+
+			const insertData = {
+				professional_id: professionalId.uuid,
+				username,
+				password,
+				type,
+			};
+
+			if (type === "caqh" && obj.userId) insertData.user_id = obj.userId;
+
+			if (type === "other" && obj.platformName)
+				insertData.platform_name = obj.platformName;
 
 			const { data, error } = await supabase
 				.from("web_portals")
-				.insert({
-					professional_id: professionalId.uuid,
-					username,
-					password,
-					type,
-				})
+				.insert(insertData)
 				.select("uuid")
 				.single();
 
@@ -158,39 +172,42 @@ export async function POST(request) {
 			}
 			return data.uuid;
 		};
-
 		// Insert all portal credentials
 		await Promise.all(
 			[
-				insertPortalCredential(
+				...[
 					"pecos",
-					formData.pecosUsername,
-					formData.pecosPassword
-				),
-				insertPortalCredential(
 					"uhc",
-					formData.uhcUsername,
-					formData.uhcPassword
-				),
-				insertPortalCredential(
 					"optum",
-					formData.optumUsername,
-					formData.optumPassword
-				),
-				insertPortalCredential(
 					"availity",
-					formData.availityUsername,
-					formData.availityPassword
-				),
-				insertPortalCredential(
 					"medicaid",
-					formData.medicaidUsername,
-					formData.medicaidPassword
-				),
+					"bankLogin",
+					"echo",
+					"payspan",
+					"billing",
+					"edi",
+					"fax",
+					"molina",
+				].map((type) => {
+					const username = formData[`${type}Username`];
+					const password = formData[`${type}Password`];
+					return insertPortalCredential(type, username, password);
+				}),
 				insertPortalCredential(
 					"caqh",
 					formData.caqhUsername,
-					formData.caqhPassword
+					formData.caqhPassword,
+					{
+						userId: formData.caqhUserId,
+					}
+				),
+				insertPortalCredential(
+					"other",
+					formData.otherUsername,
+					formData.otherPassword,
+					{
+						platformName: formData.otherPlatformName,
+					}
 				),
 			].filter(Boolean)
 		);
@@ -211,4 +228,199 @@ export async function POST(request) {
 			{ status: 500 }
 		);
 	}
+}
+
+export async function GET(request) {
+	try {
+		const searchParams = request.nextUrl.searchParams;
+		const provider_id = searchParams.get("provider_id");
+
+		if (!provider_id) {
+			return new Response(
+				JSON.stringify({ message: "Provider ID is required" }),
+				{ status: 400 }
+			);
+		}
+
+		// 1. Get professional IDs basic info
+		const { data: professionalData, error: professionalError } = await supabase
+			.from("professional_ids")
+			.select(
+				`
+		  *,
+		  professional_malpractice:professional_malpractice_info(
+			insurance_name,
+			policy_number,
+			effective_date,
+			expiry_date,
+			aggregate
+		  ),
+		  general_malpractice:general_malpractice_info(
+			insurance_name,
+			policy_number,
+			effective_date,
+			expiry_date,
+			aggregate
+		  )
+		`
+			)
+			.eq("provider_id", provider_id);
+
+		// Handle no data found case
+		if (!professionalData || professionalData.length === 0) {
+			return new Response(
+				JSON.stringify({ message: "No data found for this provider" }),
+				{ status: 404 }
+			);
+		}
+
+		const professionalRecord = professionalData[professionalData.length - 1];
+
+		const { data: infoNumbers, error: infoError } = await supabase
+			.from("info_numbers")
+			.select("*")
+			.eq("professional_id", professionalRecord.uuid);
+
+		if (infoError) {
+			throw new Error(`Error fetching info numbers: ${infoError.message}`);
+		}
+
+		// 3. Get web portal credentials
+		const { data: portalCredentials, error: portalError } = await supabase
+			.from("web_portals")
+			.select("*")
+			.eq("professional_id", professionalRecord.uuid);
+
+		if (portalError) {
+			throw new Error(
+				`Error fetching portal credentials: ${portalError.message}`
+			);
+		}
+
+		const transformedData = {
+			hasNPI:
+				professionalRecord?.npi_1 || professionalRecord?.npi_2 ? "Yes" : "No",
+			npi1: professionalRecord?.npi_1 || "",
+			npi2: professionalRecord?.npi_2 || "",
+			taxId: professionalRecord?.tax_id || "",
+			upin: professionalRecord?.upin || "",
+
+			medicare: transformInfoNumbers(infoNumbers || [], "medicare"),
+			medicaid: transformInfoNumbers(infoNumbers || [], "medicaid"),
+			stateLicense: transformInfoNumbers(infoNumbers || [], "state_license"),
+			clia: transformInfoNumbers(infoNumbers || [], "clia"),
+			dea: transformInfoNumbers(infoNumbers || [], "dea"),
+			cds: transformInfoNumbers(infoNumbers || [], "cds"),
+
+			professionalLiabilityPolicyName:
+				professionalRecord?.professional_malpractice?.insurance_name || "",
+			professionalLiabilityPolicyNumber:
+				professionalRecord?.professional_malpractice?.policy_number || "",
+			professionalLiabilityEffectiveDate:
+				professionalRecord?.professional_malpractice?.effective_date || "",
+			professionalLiabilityExpiryDate:
+				professionalRecord?.professional_malpractice?.expiry_date || "",
+			professionalLiabilityAggregate:
+				professionalRecord?.professional_malpractice?.aggregate || "",
+
+			generalLiabilityPolicyName:
+				professionalRecord?.general_malpractice?.insurance_name || "",
+			generalLiabilityPolicyNumber:
+				professionalRecord?.general_malpractice?.policy_number || "",
+			generalLiabilityEffectiveDate:
+				professionalRecord?.general_malpractice?.effective_date || "",
+			generalLiabilityExpiryDate:
+				professionalRecord?.general_malpractice?.expiry_date || "",
+			generalLiabilityAggregate:
+				professionalRecord?.general_malpractice?.aggregate || "",
+
+			...transformPortalCredentials(portalCredentials || []),
+		};
+
+		return new Response(JSON.stringify(transformedData), { status: 200 });
+	} catch (error) {
+		console.error("Error fetching professional information:", error);
+		return new Response(
+			JSON.stringify({
+				message: error.message || "Failed to fetch professional information",
+			}),
+			{ status: 500 }
+		);
+	}
+}
+function transformInfoNumbers(infoNumbers, type) {
+	const typeData = infoNumbers?.filter((item) => item.type === type) || [];
+	if (typeData.length === 0) {
+		return [
+			{
+				number: "",
+				state: "",
+				effectiveDate: "",
+				expiryDate: "",
+				[`has${type.charAt(0).toUpperCase() + type.slice(1)}`]: "Select Option",
+			},
+		];
+	}
+
+	return typeData.map((item) => ({
+		number: item.value,
+		state: item.issue_state,
+		effectiveDate: item.effective_date,
+		expiryDate: item.expiry_date,
+		[`has${type.charAt(0).toUpperCase() + type.slice(1)}`]: "Yes",
+	}));
+}
+
+function transformPortalCredentials(credentials) {
+	const portalData = {
+		caqhUserId: "",
+		caqhUsername: "",
+		caqhPassword: "",
+
+		otherPlatformName: "",
+		otherUsername: "",
+		otherPassword: "",
+
+		pecosUsername: "",
+		pecosPassword: "",
+		uhcUsername: "",
+		uhcPassword: "",
+		optumUsername: "",
+		optumPassword: "",
+		availityUsername: "",
+		availityPassword: "",
+		medicaidUsername: "",
+		medicaidPassword: "",
+		bankLoginUsername: "",
+		bankLoginPassword: "",
+		echoUsername: "",
+		echoPassword: "",
+		payspanUsername: "",
+		payspanPassword: "",
+		billingUsername: "",
+		billingPassword: "",
+		ediUsername: "",
+		ediPassword: "",
+		faxUsername: "",
+		faxPassword: "",
+		molinaUsername: "",
+		molinaPassword: "",
+	};
+
+	credentials?.forEach((cred) => {
+		if (cred.type === "caqh") {
+			portalData.caqhUserId = cred.user_id || "";
+			portalData.caqhUsername = cred.username || "";
+			portalData.caqhPassword = cred.password || "";
+		} else if (cred.type === "other") {
+			portalData.otherPlatformName = cred.platform_name || "";
+			portalData.otherUsername = cred.username || "";
+			portalData.otherPassword = cred.password || "";
+		} else {
+			portalData[`${cred.type}Username`] = cred.username || "";
+			portalData[`${cred.type}Password`] = cred.password || "";
+		}
+	});
+
+	return portalData;
 }

@@ -18,13 +18,30 @@ export default function DocumentCenter() {
   const [loading, setLoading] = useState(true); // Handle loading state
   const [error, setError] = useState(""); // Store any errors
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
-  const [uuid,setuuid]=useState("");
+  const [uuid, setuuid] = useState("");
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
+  const handleView = (doc) => {
+    if (!doc.url) {
+      toast.error("No document file available");
+      return;
+    }
+
+    if (doc.url.endsWith(".pdf")) {
+      const urlParts = doc.url.split("/");
+      const docId = urlParts[urlParts.length - 1].replace(".pdf", "");
+      const folder = urlParts[urlParts.length - 2];
+      const viewUrl = `https://res.cloudinary.com/db7z9hknv/image/upload/f_auto,q_auto/v1/${folder}/${docId}`;
+      window.open(viewUrl, "_blank");
+    } else {
+      window.open(doc.url, "_blank");
+    }
+  };
+
   const fetchDocuments = async () => {
-    setuuid( localStorage.getItem("user_uuid"));
+    setuuid(localStorage.getItem("user_uuid"));
     const userUuid = localStorage.getItem("user_uuid");
     if (!userUuid) {
       setError("User UUID not found");
@@ -106,11 +123,13 @@ export default function DocumentCenter() {
         {/* Apply date format */}
         <td className={`p-3 ${getStatusColor(doc.status)}`}>{doc.status}</td>
         <td className="p-3 flex flex-row justify-start items-center gap-2">
-          <a href={doc.url} target="_blank">
+          <button onClick={() => handleView(doc)}>
             <FaEye className="text-secondary" />
-          </a>
+          </button>
           /
-          <CiEdit className="text-primary" /> /
+          <Link href={`/document/${uuid}`}>
+            <CiEdit className="text-primary cursor-pointer" />
+          </Link>/
           <MdDeleteOutline className="text-red-400" />
         </td>
       </tr>

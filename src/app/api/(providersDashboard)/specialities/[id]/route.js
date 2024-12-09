@@ -50,13 +50,14 @@ export async function DELETE(request, { params }) {
 
 export async function PUT(request, { params }) {
 	try {
-		const { id } = params;
-
+		// Await params before accessing id
+		const { id } = await params;
 		const formData = await request.json();
 
+		// Handle address
 		if (formData.address_line_1) {
 			const { data: speciality } = await supabase
-				.from("speciality")
+				.from("specialities")
 				.select("address_id")
 				.eq("uuid", id)
 				.single();
@@ -75,17 +76,42 @@ export async function PUT(request, { params }) {
 					.eq("uuid", speciality.address_id);
 
 				if (addressError) throw addressError;
+			} else {
+				// Create new address if none exists
+				const { data: newAddress, error: createAddressError } = await supabase
+					.from("addresses")
+					.insert({
+						address_line_1: formData.address_line_1,
+						address_line_2: formData.address_line_2,
+						city: formData.city,
+						state: formData.state,
+						zip_code: formData.zip_code,
+						country: formData.country,
+					})
+					.select()
+					.single();
+
+				if (createAddressError) throw createAddressError;
+
+				// Update specialty with new address_id
+				const { error: addressIdUpdateError } = await supabase
+					.from("specialities")
+					.update({ address_id: newAddress.uuid })
+					.eq("uuid", id);
+
+				if (addressIdUpdateError) throw addressIdUpdateError;
 			}
 		}
 
+		// Update specialty
 		const { error: specialityError } = await supabase
-			.from("speciality")
+			.from("specialities")
 			.update({
 				name: formData.speciality,
 				is_board_certified: formData.is_board_certified,
 				name_of_board: formData.name_of_board,
-				effective_date: formData.start_date,
-				expiry_date: formData.end_date,
+				effective_date: formData.effective_date,
+				expiry_date: formData.expiry_date,
 				type: formData.type,
 			})
 			.eq("uuid", id);
@@ -103,6 +129,7 @@ export async function PUT(request, { params }) {
 		return new Response(
 			JSON.stringify({
 				message: "Error updating speciality",
+				error: error.message,
 			}),
 			{ status: 500 }
 		);

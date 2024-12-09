@@ -112,8 +112,10 @@ function Specialities() {
 			city: speciality.address?.city || "",
 			state: speciality.address?.state || "",
 			zip_code: speciality.address?.zipCode || "",
-			effective_date: formatDate(speciality.effectiveDate),
-			expiry_date: formatDate(speciality.expiryDate),
+			effective_date: speciality.effectiveDate,
+			expiry_date: speciality.expiryDate,
+			// effective_date: formatDate(speciality.effectiveDate),
+			// expiry_date: formatDate(speciality.expiryDate),
 		});
 	};
 
@@ -365,7 +367,7 @@ function Specialities() {
 					</div>
 				)}
 			</div>
-			<NavBottom/>
+			<NavBottom />
 		</>
 	);
 }

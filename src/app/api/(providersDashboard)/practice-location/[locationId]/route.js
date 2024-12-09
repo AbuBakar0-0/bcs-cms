@@ -74,6 +74,7 @@ export async function PUT(request, { params }) {
 
 	try {
 		const locationId = params.locationId;
+		console.log("location id ----------------------> ", locationId);
 		let data;
 		try {
 			data = await request.json();
@@ -88,7 +89,7 @@ export async function PUT(request, { params }) {
 		}
 
 		const { data: existingLocation, error: fetchError } = await supabase
-			.from("practice_location")
+			.from("practice_locations")
 			.select(
 				`
                 *,
@@ -167,7 +168,7 @@ export async function PUT(request, { params }) {
 
 						if (type === "practice") {
 							contactData = {
-								name: data.practice_contact_name || null,
+								contact_name: data.practice_contact_name || null,
 								email: data.practice_contact_email || null,
 								work_email: data.practice_contact_email || null,
 								work_phone: data.practice_contact_work_phone || null,
@@ -217,7 +218,7 @@ export async function PUT(request, { params }) {
 				};
 
 				const { data: practiceLocationResult, error } = await supabase
-					.from("practice_location")
+					.from("practice_locations")
 					.update(practiceLocationData)
 					.eq("uuid", locationId)
 					.select()

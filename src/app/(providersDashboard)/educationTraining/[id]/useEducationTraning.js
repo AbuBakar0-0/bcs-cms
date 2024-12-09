@@ -111,7 +111,7 @@ export const useEducationAndTraining = () => {
 
 			if (editEducationId) {
 				response = await fetch("/api/education", {
-					method: "POST",
+					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
 					},
