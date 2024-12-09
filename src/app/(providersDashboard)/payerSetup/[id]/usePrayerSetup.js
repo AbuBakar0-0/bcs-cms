@@ -96,6 +96,34 @@ export const usePayerSetup = () => {
 		}
 	};
 
+	const fetchBusiness = async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const response = await fetch(
+				`/api/payer-setup?provider_id=${provider_id_params}`
+				// `/api/payer-setup`
+			);
+			if (!response.ok) {
+				throw new Error(
+					`Failed to fetch payer setups. Status: ${response.status}`
+				);
+			}
+			const data = await response.json();
+			const formattedData = data.map((record) => ({
+				...record,
+				provider: getProviderNameByUuid(record.provider_id),
+			}));
+			console.log(formattedData);
+			setPayerSetups(formattedData);
+		} catch (error) {
+			setError(error.message);
+			console.error("Error fetching payer setups:", error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	const handleSubmit = async () => {
 		setLoading(true);
 		setError(null);
@@ -234,4 +262,6 @@ export const usePayerSetup = () => {
 		handleEdit,
 		handleDelete,
 	};
+
+
 };

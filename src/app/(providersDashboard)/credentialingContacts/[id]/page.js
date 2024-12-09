@@ -37,13 +37,14 @@ const initialFormData = {
 };
 
 const relationshipOptions = [
-  "Select Relationship",
   "Son",
   "Daughter",
   "Husband",
   "Spouse",
   "Father",
   "Mother",
+  "CFO",
+  "Others"
 ];
 
 const titleOptions = [

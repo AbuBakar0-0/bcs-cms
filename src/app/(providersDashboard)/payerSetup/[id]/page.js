@@ -89,6 +89,7 @@ export default function PairSetup() {
 									/>
 									<Dropdown
 										title={"Status"}
+										required={false}
 										options={DROPDOWN_OPTIONS.statuses}
 										name="status"
 										value={formData.status}
@@ -97,12 +98,14 @@ export default function PairSetup() {
 									<DateInput
 										title={"Application Date"}
 										name="application_date"
+										required={false}
 										value={formData.application_date}
 										onChange={handleChange}
 									/>
 									<TextInput
 										title={"Application Notes"}
 										name="note"
+										required={false}
 										width={"w-full"}
 										value={formData.note}
 										onChange={handleChange}

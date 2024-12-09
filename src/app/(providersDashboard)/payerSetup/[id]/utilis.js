@@ -15,7 +15,7 @@ export const DROPDOWN_OPTIONS = {
 	],
 	businesses: [
 		"Select Business",
-		"CHN Medical Support",
+		"CHN Medical Support System",
 		"Home Health Care",
 		"Pharmacy",
 		"Urgent Care",
@@ -43,7 +43,4 @@ export const defaultFormData = {
 	business: "",
 	provider: "",
 	payer_name: "",
-	status: "",
-	application_date: "",
-	note: "",
 };
