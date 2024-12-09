@@ -349,9 +349,13 @@ function Specialities() {
 									key={index}
 									className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
 								>
-									<div className="flex flex-col justify-center items-start">
+									<div className="w-1/3 flex flex-col justify-center items-start">
 										<p>{speciality.name}</p>
 										<p>{speciality.type}</p>
+									</div>
+									<div className="w-1/3 flex flex-col justify-center items-start">
+										<p>{speciality.name_of_board}</p>
+										<p>{speciality.expiry_date}</p>
 									</div>
 									<div className="flex flex-row justify-center items-center gap-4">
 										<CiEdit
