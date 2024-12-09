@@ -200,6 +200,7 @@ function EducationAndTraining() {
 								<TextInput
 									title={"Affiliated University"}
 									name="affiliated_university"
+									required={false}
 									value={newTrainingEntry.affiliated_university}
 									onChange={handleTrainingChange}
 								/>
@@ -207,6 +208,7 @@ function EducationAndTraining() {
 								<EmailInput
 									title={"Email"}
 									name="email"
+									required={false}
 									value={newTrainingEntry.email}
 									onChange={handleTrainingChange}
 								/>
@@ -227,6 +229,7 @@ function EducationAndTraining() {
 								<TextInput
 									title={"Type of Program"}
 									name={"type_of_program"}
+									required={false}
 									value={newTrainingEntry.type_of_program}
 									onChange={handleTrainingChange}
 								/>
