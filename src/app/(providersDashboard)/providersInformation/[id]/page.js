@@ -543,6 +543,8 @@ function ProvidersInformation() {
 								"Spouse",
 								"Father",
 								"Mother",
+								"CFO",
+								"Other",								
 							]}
 							title={"Relation"}
 							name={"emergencyContactRelation"}
