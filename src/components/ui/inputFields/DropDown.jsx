@@ -59,6 +59,19 @@ const Dropdown = ({
 		setSearchQuery(e.target.value);
 	};
 
+	// Get the display value for the selected option
+	const getDisplayValue = () => {
+		if (isTaxonomy && value) {
+			const selectedOption = options.find(
+				(option) => option.code === value || option.name === value
+			);
+			return selectedOption
+				? `${selectedOption.code} : ${selectedOption.name}`
+				: "Select an option";
+		}
+		return value || "Select an option";
+	};
+
 	return (
 		<div className={`relative flex flex-col gap-2 ${width}`}>
 			<label className="block text-sm font-medium text-black">
@@ -68,7 +81,7 @@ const Dropdown = ({
 				className="border border-gray-300 rounded px-3 py-2 text-gray-700 relative cursor-pointer"
 				onClick={toggleDropdown}
 			>
-				{value || "Select an option"}
+				{getDisplayValue()}
 			</div>
 			{isDropdownOpen && (
 				<div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded mt-1 shadow-lg z-10">
