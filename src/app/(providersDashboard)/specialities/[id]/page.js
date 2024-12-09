@@ -271,6 +271,7 @@ function Specialities() {
 											<TextInput
 												title={"Address Line 1"}
 												width="w-[25%]"
+												required={false}
 												name="address_line_1"
 												value={formData.address_line_1}
 												onChange={handleInputChange}
@@ -287,6 +288,7 @@ function Specialities() {
 												title={"Country"}
 												options={["USA"]}
 												width="w-[13%]"
+												required={false}
 												name="country"
 												value={formData.country}
 												onChange={handleInputChange}
@@ -294,6 +296,7 @@ function Specialities() {
 											<TextInput
 												title={"City"}
 												width="w-[10%]"
+												required={false}
 												name="city"
 												value={formData.city}
 												onChange={handleInputChange}
@@ -302,6 +305,7 @@ function Specialities() {
 												title={"State"}
 												options={stateAbbreviations}
 												width="w-[8%]"
+												required={false}
 												name="state"
 												value={formData.state}
 												onChange={handleInputChange}
@@ -310,6 +314,7 @@ function Specialities() {
 												title={"ZipCode"}
 												width="w-[8%]"
 												name="zip_code"
+												required={false}
 												value={formData.zip_code}
 												onChange={handleInputChange}
 											/>
