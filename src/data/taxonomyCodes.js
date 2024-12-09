@@ -1,4 +1,4 @@
-const specialties = [
+const taxonomyCodes = [
     { name: "Multi-Specialty", code: "193200000X" },
     { name: "Single Specialty", code: "193400000X" },
     { name: "Allergy & Immunology", code: "207K00000X" },
@@ -874,3 +874,5 @@ const specialties = [
     { name: "Transportation Broker", code: "347E00000X" },
     { name: "Transportation Network Company", code: "342000000X" }
 ];
+
+export default taxonomyCodes;
