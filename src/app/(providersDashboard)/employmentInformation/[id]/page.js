@@ -172,7 +172,7 @@ function EmploymentInformation() {
       cell_phone: employment.contact?.cell_phone || "",
       fax: employment.contact?.fax || "",
       start_date: employment.start_date,
-      end_date: employment.end_date || "",
+      end_date: employment.end_date,
       current_employer: employment.current_employer ? "Yes" : "No",
     });
     setEditingId(employment.uuid);
@@ -312,6 +312,7 @@ function EmploymentInformation() {
           <button
             type="submit"
             disabled={loading}
+			onClick={handleSubmit}
             className="border-4 border-primary rounded-lg px-6 py-2 font-semibold disabled:opacity-50"
           >
             {loading ? <BarLoader /> : editingId ? "Update" : "Submit"}

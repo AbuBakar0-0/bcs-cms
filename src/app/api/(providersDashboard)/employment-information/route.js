@@ -4,6 +4,10 @@ import insertAddress from "../util";
 export async function POST(request) {
 	try {
 		const formData = await request.json();
+		if(formData.end_date==''){
+			formData.end_date='1950-01-01';
+		}
+		console.log(formData);
 		const { provider_id } = formData;
 		const homeAddress = await insertAddress(formData, "Location");
 		const { data: contact, error: contactError } = await supabase
