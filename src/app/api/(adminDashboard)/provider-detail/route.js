@@ -33,10 +33,7 @@ export async function GET(request) {
 
     if (!providerInfo || providerInfo.length === 0) {
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: "No provider info found for the given added_by",
-        }),
+        JSON.stringify([]),
         {
           headers: { "Content-Type": "application/json" },
           status: 200,

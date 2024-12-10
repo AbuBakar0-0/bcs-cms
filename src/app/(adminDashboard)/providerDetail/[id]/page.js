@@ -39,8 +39,8 @@ const ProviderDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(`/api/provider-detail?uuid=${uuid}`);
+        console.log(response.data);
         setDocumentData(response.data);
-        
       } catch (error) {
         console.error("Error fetching document details:", error);
       }
