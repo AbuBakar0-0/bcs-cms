@@ -39,8 +39,9 @@ const ProviderDetail = () => {
       try {
         setLoading(true);
         const response = await axios.get(`/api/provider-detail?uuid=${uuid}`);
-        setDocumentData(response.data);
-        setLoading(false);
+        if(response.data.success){
+          setDocumentData(response.data);
+        }
       } catch (error) {
         console.error("Error fetching document details:", error);
       }
@@ -77,7 +78,7 @@ const ProviderDetail = () => {
             </Link>
           </div>
           <div className="w-full flex flex-row justify-between items-start gap-4">
-            <div className="w-[48%] flex flex-col justify-start items-start gap-4">
+            <div className="w-[60%] flex flex-col justify-start items-start gap-4">
               <div className="w-full h-auto border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
                 <span className="text-lg font-semibold">Documents</span>
                 {loading ? (

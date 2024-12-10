@@ -40,7 +40,7 @@ export async function GET(request) {
         }),
         {
           headers: { "Content-Type": "application/json" },
-          status: 404,
+          status: 200,
         }
       );
     }

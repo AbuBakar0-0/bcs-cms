@@ -3,15 +3,16 @@ import { format, parse } from "date-fns";
 export const formatSSN = (value) => {
 	value = value.replace(/\D/g, ""); // Remove all non-numeric characters
 	const length = value.length;
-
-	// Hide all but the last 4 digits with *
-	if (length > 8) {
-		return `***-**-${value.slice(-4)}`;
+  
+	// If the length is 9, format the SSN as xxx-xx-xxxx
+	if (length === 9) {
+	  return `${value.slice(0, 3)}-${value.slice(3, 5)}-${value.slice(5)}`;
 	}
-
-	// If the length is less than or equal to 4, return the input as is
+  
+	// If the length is less than 9, return the value as is
 	return value;
-};
+  };
+  
 
 export const formatDOB = (value) => {
 	value = value.replace(/\D/g, "");

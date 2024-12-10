@@ -16,7 +16,7 @@ export const usePayerSetup = () => {
   const [error, setError] = useState(null);
   const [profiles, setProfiles] = useState([]);
   const [fullProfile, setFullProfile] = useState([]);
-  
+
   const { id: provider_id_params } = useParams();
 
   const { getProviderByName, providers, getProviderNameByUuid } =
@@ -204,14 +204,14 @@ export const usePayerSetup = () => {
   };
 
   const handleLegalBusinessName = (e) => {
-	const { value } = e.target; // Extract the value from the event
-	const uuid = getUuidByName(value); // Get the UUID corresponding to the name
-  
-	setFormData((prev) => ({
-	  ...prev,
-	  business: value, // Update the selected legal business name
-	  practice_id: uuid, // Set the practice_id based on the UUID
-	}));
+    const { value } = e.target; // Extract the value from the event
+    const uuid = getUuidByName(value); // Get the UUID corresponding to the name
+
+    setFormData((prev) => ({
+      ...prev,
+      business: value, // Update the selected legal business name
+      practice_id: uuid, // Set the practice_id based on the UUID
+    }));
   };
 
   const handleEdit = (setup) => {
@@ -287,13 +287,13 @@ export const usePayerSetup = () => {
     application,
     payerSetups,
     formData,
-	profiles,
+    profiles,
     isEditing,
     loading,
     error,
 
     // handle
-	handleLegalBusinessName,
+    handleLegalBusinessName,
     toggleApplication,
     handleChange,
     handleSubmit,

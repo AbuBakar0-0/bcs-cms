@@ -31,6 +31,64 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(false);
   const [payersData, setPayersData] = useState([]);
 
+  function formatNotification(data) {
+    let notifications = [];
+    data.forEach((item) => {
+      const { name, type, days } = item;
+      let notificationMessage = "";
+      let isExpiringToday = false;
+
+      if (days === 0) {
+        notificationMessage = `${name}'s ${type} is expiring today.`;
+        setDocsExpiringtoday((prev) => prev + 1);
+        isExpiringToday = true; // Mark as expiring today
+      } else if (days > 0) {
+        notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
+      } else if (days < 0) {
+        notificationMessage = `${name}'s ${type} expired ${Math.abs(days)} days ago.`;
+      }
+
+      notifications.push({
+        message: notificationMessage,
+        isExpiringToday, // Add this property to track if it's expiring today
+      });
+    });
+
+    // Sort notifications: Place expiring today at the top
+    notifications.sort((a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0));
+
+    return notifications;
+  }
+
+
+  function formatTasks(data) {
+    let tasks = [];
+    data.forEach((item) => {
+      const { name, type, days } = item;
+      let taskMessage = "";
+      let isExpiringToday = false;
+
+      if (days === 0) {
+        taskMessage = `Update ${name}'s ${type}`;
+        isExpiringToday = true; // Mark as expiring today
+      } else if (days > 0) {
+        taskMessage = `Update ${name}'s ${type}`;
+      } else if (days < 0) {
+        taskMessage = `Update ${name}'s ${type}`;
+      }
+
+      tasks.push({
+        message: taskMessage,
+        isExpiringToday, // Add this property to track if it's expiring today
+      });
+    });
+
+    // Sort notifications: Place expiring today at the top
+    tasks.sort((a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0));
+
+    return tasks;
+  }
+
   useEffect(() => {
     const uuid = localStorage.getItem("user_uuid");
 
@@ -39,60 +97,75 @@ export default function AdminDashboard() {
         setLoading(true);
         const response = await axios.get(`/api/admin-dashboard?uuid=${uuid}`);
         setDocumentData(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching document details:", error);
       }
     };
 
-    const fetchNotifications = async () => {
-      const response = await axios.get(
-        `/api/admin-dashboard/get-notifications?uuid=${uuid}`
-      );
-
-      const formattedNotifications = response.data.map((item) => {
-        const expiryDate = new Date(item.expiry_date);
-        const currentDate = new Date();
-
-        // Calculate the time difference in days
-        const timeDifference = Math.ceil(
-          (expiryDate - currentDate) / (1000 * 60 * 60 * 24)
+    const fetchExpiredLicense = async () => {
+      try {
+        const response = await axios.get(
+          `/api/admin-dashboard/get-expired-license?uuid=${uuid}`
         );
-        if (timeDifference == 0) {
-          setDocsExpiringtoday(docsExpiringtoday + 1);
-        }
-        const message =
-          timeDifference >= 0
-            ? `${item.providers_info.first_name} ${
-                item.providers_info.middle_initial || ""
-              } ${item.providers_info.last_name}'s document "${
-                item.title || "Unknown Title"
-              }" expires in ${timeDifference} day${
-                timeDifference !== 1 ? "s" : ""
-              }.`
-            : `${item.providers_info.first_name} ${
-                item.providers_info.middle_initial || ""
-              } ${item.providers_info.last_name}'s document "${
-                item.title || "Unknown Title"
-              }" expired ${Math.abs(timeDifference)} day${
-                Math.abs(timeDifference) !== 1 ? "s" : ""
-              } ago.`;
+        const formattedNotifications = formatNotification(response.data);
+        
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          ...formattedNotifications,
+        ]);
+        
+        const formattedTasks = formatTasks(response.data);
+        setTasks((prevTasks) => [
+          ...prevTasks,
+          ...formattedTasks,
+        ]);
+        
+      } catch (error) {
+        console.error("Error fetching expired licenses:", error);
+      }
+    };
 
-        return message;
-      });
+    const fetchExpiredIds = async () => {
+      try {
+        const response = await axios.get(
+          `/api/admin-dashboard/get-expired-ids?uuid=${uuid}`
+        );
+        const formattedNotifications = formatNotification(response.data);
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          ...formattedNotifications,
+        ]);
 
-      const formattedTasks = response.data.map((item) => {
-        const providerInfo = item.providers_info || {};
-        const firstName = providerInfo.first_name || "Unknown";
-        const middleInitial = providerInfo.middle_initial?.trim() || "";
-        const lastName = providerInfo.last_name || "Unknown";
+        const formattedTasks = formatTasks(response.data);
+        setTasks((prevTasks) => [
+          ...prevTasks,
+          ...formattedTasks,
+        ]);
+      } catch (error) {
+        console.error("Error fetching expired IDs:", error);
+      }
+    };
 
-        const message = `Get ${firstName} ${middleInitial} ${lastName}'s document "${item.title}"`;
+    const fetchExpiredDocuments = async () => {
+      try {
+        const response = await axios.get(
+          `/api/admin-dashboard/get-expired-documents?uuid=${uuid}`
+        );
+        const formattedNotifications = formatNotification(response.data);
+        setNotifications((prevNotifications) => [
+          ...prevNotifications,
+          ...formattedNotifications,
+        ]);
 
-        return message;
-      });
-
-      setNotifications(formattedNotifications);
-      setTasks(formattedTasks);
+        const formattedTasks = formatTasks(response.data);
+        setTasks((prevTasks) => [
+          ...prevTasks,
+          ...formattedTasks,
+        ]);
+      } catch (error) {
+        console.error("Error fetching expired documents:", error);
+      }
     };
 
     const fetchPayers = async () => {
@@ -103,12 +176,14 @@ export default function AdminDashboard() {
         setPayersData(response.data);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching document details:", error);
+        console.error("Error fetching payers:", error);
       }
     };
 
     fetchDocumentDetails();
-    fetchNotifications();
+    fetchExpiredDocuments();
+    fetchExpiredIds();
+    fetchExpiredLicense();
     fetchPayers();
   }, []);
 
@@ -151,9 +226,13 @@ export default function AdminDashboard() {
               notifications.map((notification, index) => (
                 <div
                   key={index}
-                  className="w-full flex flex-row justify-between items-center rounded-lg bg-gray-300 p-2 text-sm"
+                  className={`uppercase w-full flex flex-row justify-between items-center rounded-lg p-2 text-sm ${
+                    notification.isExpiringToday
+                      ? "bg-red-400 text-white"
+                      : "bg-gray-300"
+                  }`}
                 >
-                  <span>{notification}</span>
+                  <span>{notification.message}</span>
                 </div>
               ))
             )}
@@ -170,12 +249,16 @@ export default function AdminDashboard() {
                 <ClipLoader />
               </div>
             ) : (
-              tasks.map((notification, index) => (
+              tasks.map((task, index) => (
                 <div
                   key={index}
-                  className="w-full flex flex-row justify-between items-center rounded-lg bg-gray-300 p-2 text-sm"
+                  className={`uppercase w-full flex flex-row justify-between items-center rounded-lg p-2 text-sm ${
+                    task.isExpiringToday
+                      ? "bg-red-400 text-white"
+                      : "bg-gray-300"
+                  }`}
                 >
-                  <span>{notification}</span>
+                  <span>{task.message}</span>
                 </div>
               ))
             )}
@@ -183,8 +266,8 @@ export default function AdminDashboard() {
         </div>
 
         <div className="w-full flex flex-row justify-between items-start gap-4">
-          <div className="w-[48%] flex flex-col justify-start items-start gap-4">
-            <div className="w-full h-auto border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
+          <div className="w-[60%] flex flex-col justify-start items-start gap-4">
+            <div className="w-full h-auto border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-2">
               <span className="text-lg font-semibold">Documents</span>
               {loading ? (
                 <div className="w-full flex justify-center">
@@ -210,7 +293,7 @@ export default function AdminDashboard() {
                 <PayersChart data={payersData} />
               )}
             </div>
-            <div className="w-full border-4 border-primary flex flex-col justify-start items-start gap-4 rounded-lg p-4">
+            <div className="w-full h-72 border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
               <span className="text-lg font-semibold">HR Status</span>
               <HrChart />
             </div>

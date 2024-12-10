@@ -138,7 +138,7 @@ export async function DELETE(request) {
 		if (!employment) {
 			return Response.json(
 				{ message: "Employment record not found" },
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

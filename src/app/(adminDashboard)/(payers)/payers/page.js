@@ -73,22 +73,28 @@ export default function Payers() {
       );
     });
 
-    return filteredDocs.map((doc, index) => (
-      <tr className="border-b" key={index}>
-        {activeTab === "provider" && (
-          <td className="p-3">
-            {doc.providers_info?.first_name} {doc.providers_info?.middle_initial}{" "}
-            {doc.providers_info?.last_name}
-          </td>
-        )}
-        <td className="p-3">{doc.business}</td>
-        <td className="p-3">{doc.payer_name}</td>
-        <td className="p-3">{doc.plan_type}</td>
-        <td className={`p-3 ${getColor(doc.status)}`}>{doc.status}</td>
-        <td className="p-3">{doc.application_date}</td>
-        <td className="p-3">{doc.note}</td>
+    return filteredDocs.length === 0 ? (
+      <tr>
+        <td colSpan="7" className="p-3 text-center">No payers found</td>
       </tr>
-    ));
+    ) : (
+      filteredDocs.map((doc, index) => (
+        <tr className="border-b" key={index}>
+          {activeTab === "provider" && (
+            <td className="p-3">
+              {doc.providers_info?.first_name} {doc.providers_info?.middle_initial}{" "}
+              {doc.providers_info?.last_name}
+            </td>
+          )}
+          <td className="p-3">{doc.business}</td>
+          <td className="p-3">{doc.payer_name}</td>
+          <td className="p-3">{doc.plan_type}</td>
+          <td className={`p-3 ${getColor(doc.status)}`}>{doc.status}</td>
+          <td className="p-3">{doc.application_date}</td>
+          <td className="p-3">{doc.note}</td>
+        </tr>
+      ))
+    );
   };
 
   return (
@@ -116,19 +122,13 @@ export default function Payers() {
 
       <div className="flex mb-4">
         <button
-          className={`px-4 py-2 mr-2 rounded-lg ${
-            activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"
-          }`}
+          className={`px-4 py-2 mr-2 rounded-lg ${activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"}`}
           onClick={() => toggleTab("provider")}
         >
           Provider Credentialing
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "organization"
-              ? "bg-primary text-white"
-              : "bg-gray-200"
-          }`}
+          className={`px-4 py-2 rounded-lg ${activeTab === "organization" ? "bg-primary text-white" : "bg-gray-200"}`}
           onClick={() => toggleTab("organization")}
         >
           Organization Credentialing

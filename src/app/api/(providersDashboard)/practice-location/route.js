@@ -326,7 +326,7 @@ export async function DELETE(request, { params }) {
 			return new Response(
 				JSON.stringify({ error: "Practice location not found" }),
 				{
-					status: 404,
+					status: 200,
 					headers: { "Content-Type": "application/json" },
 				}
 			);

@@ -108,7 +108,7 @@ export async function DELETE(request) {
 				JSON.stringify({
 					error: "Education entry not found or already deleted",
 				}),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 
@@ -146,7 +146,7 @@ export async function PUT(request) {
 		if (!currentEducation) {
 			return new Response(
 				JSON.stringify({ error: "Education entry not found" }),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

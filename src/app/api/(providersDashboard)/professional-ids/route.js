@@ -270,7 +270,7 @@ export async function GET(request) {
 		if (!professionalData || professionalData.length === 0) {
 			return new Response(
 				JSON.stringify({ message: "No data found for this provider" }),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

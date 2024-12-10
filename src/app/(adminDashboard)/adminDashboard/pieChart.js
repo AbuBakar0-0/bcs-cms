@@ -10,15 +10,22 @@ const statusColors = {
   "Rejected": "rgb(255, 49, 49)", // Red
   "Panel Closed": "rgb(115, 115, 115)", // Gray
   "Missing Information": "rgb(255, 165, 0)", // Orange
+  "Requested Application": "#FF6347", // Orange
 };
 
 const CustomPieChart = ({ data }) => {
-  // Format the incoming data with colors
-  const formattedData = data.map((entry) => ({
-    name: entry.status,
-    value: entry.count,
-    color: statusColors[entry.status] || "rgb(0, 0, 0)", // Default to black if not found
-  }));
+  // Handle empty or missing data
+  const hasData = Array.isArray(data) && data.length > 0;
+
+  const formattedData = hasData
+    ? data.map((entry) => ({
+        name: entry.status,
+        value: entry.count,
+        color: statusColors[entry.status] || "rgb(0, 0, 0)", // Default to black if not found
+      }))
+    : [
+        { name: "No Data", value: 1, color: "rgb(0, 0, 0)" }, // Single black slice for no data
+      ];
 
   return (
     <PieChart width={400} height={300}>

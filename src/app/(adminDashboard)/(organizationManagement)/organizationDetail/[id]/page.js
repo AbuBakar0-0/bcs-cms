@@ -3,14 +3,12 @@
 import { useEffect, useState } from "react";
 import AdminDashboardLayout from "@/app/(adminDashboard)/adminLayout";
 import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
-import Button from "@/components/ui/Button";
-import { CiEdit } from "react-icons/ci";
-import { IoAddCircleOutline } from "react-icons/io5";
 import axios from "axios";
 import { useParams } from "next/navigation";
+import { FaUserCircle } from "react-icons/fa";
 
 export default function OrganizationDetail() {
-  const { id:uuid } = useParams();
+  const { id: uuid } = useParams();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -19,7 +17,7 @@ export default function OrganizationDetail() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`/api/organization-detail?uuid=${uuid}`); // Replace with your endpoint
+        const response = await axios.get(`/api/organization-detail?uuid=${uuid}`);
         setData(response.data);
       } catch (err) {
         console.error("Error fetching data:", err);
@@ -30,21 +28,11 @@ export default function OrganizationDetail() {
     };
 
     fetchData();
-  }, []);
+  }, [uuid]);
 
   return (
     <AdminDashboardLayout barTitle="Organization Management">
       <OrganizationCard />
-      {/* <div className="flex flex-row justify-end items-center mt-4 mb-2 gap-4">
-        <Button
-          title={"Add"}
-          icon={<IoAddCircleOutline className="size-6" />}
-        />
-        <button className="px-4 py-2 border-primary border-4 flex flex-row justify-center items-center gap-2 rounded-lg">
-          <CiEdit />
-          <span>Edit</span>
-        </button>
-      </div> */}
       <div className="min-h-screen flex flex-col md:flex-row">
         <main className="flex-1 py-4">
           <div className="bg-white shadow rounded-lg overflow-hidden">
@@ -57,23 +45,51 @@ export default function OrganizationDetail() {
                 <table className="w-full table-auto">
                   <thead className="bg-gray-200 text-left">
                     <tr>
-                      <th className="p-3">Provider Info</th>
-                      <th className="p-3">NPI 2</th>
-                      <th className="p-3">Taxonomy Code</th>
-                      <th className="p-3">Address</th>
-                      <th className="p-3">Phone</th>
+                      <th className="p-3">Name</th>
+                      <th className="p-3">Gender</th>
+                      <th className="p-3">Birth City</th>
+                      <th className="p-3">Provider Title</th>
+                      <th className="p-3">License Id</th>
+                      <th className="p-3">Picture</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.map((item, index) => (
-                      <tr className="border-b" key={index}>
-                        <td className="p-3">{item.providers_info.first_name} {item.providers_info.middle_initial} {item.providers_info.last_name}</td>
-                        <td className="p-3">{item.npi_2}</td>
-                        <td className="p-3">{item.taxonomy_code_1}</td>
-                        <td className="p-3">{item.service_address.address_line_1} {item.service_address.address_line_2}</td>
-                        <td className="p-3">{item.service_contact.cell_phone}</td>
-                      </tr>
-                    ))}
+                    {data.map((location, index) =>
+                      location.practice_location_providers.map(
+                        (provider, subIndex) => (
+                          <tr className="border-b" key={`${index}-${subIndex}`}>
+                            <td className="p-3">
+                              {provider.providers_info.first_name}{" "}
+                              {provider.providers_info.middle_initial.trim()}{" "}
+                              {provider.providers_info.last_name}
+                            </td>
+                            <td className="p-3">
+                              {provider.providers_info.gender}
+                            </td>
+                            <td className="p-3">
+                              {provider.providers_info.birth_city}
+                            </td>
+                            <td className="p-3">
+                              {provider.providers_info.provider_title}
+                            </td>
+                            <td className="p-3">
+                              {provider.providers_info.license_id}
+                            </td>
+                            <td className="p-3">
+                              {provider.providers_info.picture_url ? (
+                                <img
+                                  src={provider.providers_info.picture_url}
+                                  alt={`${provider.providers_info.first_name} ${provider.providers_info.last_name}`}
+                                  className="w-16 h-16 rounded-full"
+                                />
+                              ) : (
+                                <FaUserCircle className="size-16"/>
+                              )}
+                            </td>
+                          </tr>
+                        )
+                      )
+                    )}
                   </tbody>
                 </table>
               )}

@@ -3,7 +3,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { FaAngleDoubleLeft, FaAngleDoubleRight } from 'react-icons/fa';
 import { IoSaveOutline } from 'react-icons/io5';
 
-export default function NavBottom({ onSave }) {
+export default function NavBottom({ onSave, submitting=false }) {
 	const router = useRouter();
 	const pathname = usePathname();  // Use this hook to get the current URL
 
@@ -47,13 +47,14 @@ export default function NavBottom({ onSave }) {
 			}
 
 			{/* Save Button */}
-			<div
+			<button
 				className="w-1/4 flex flex-row justify-center items-center gap-4 px-4 py-3 bg-secondary rounded-lg text-white hover:cursor-pointer"
 				onClick={onSave}
+				disabled={submitting}
 			>
 				<IoSaveOutline />
 				<span>Save</span>
-			</div>
+			</button>
 
 			{/* Save & Continue Button */}
 			<div

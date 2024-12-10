@@ -25,7 +25,7 @@ export async function DELETE(request, { params }) {
 			.single();
 		if (fetchError || !location) {
 			console.error("Practice location not found:", locationId);
-			return new Response(null, { status: 404 });
+			return new Response(null, { status: 200 });
 		}
 
 		const addressIds = [
@@ -110,7 +110,7 @@ export async function PUT(request, { params }) {
 				JSON.stringify({ error: "Practice location not found" }),
 				{
 					headers: { "Content-Type": "application/json" },
-					status: 404,
+					status: 200,
 				}
 			);
 		}

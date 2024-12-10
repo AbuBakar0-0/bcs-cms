@@ -26,6 +26,7 @@ function ProvidersInformation() {
 	const router = useRouter();
 
 	const [loading, setLoading] = useState(false);
+	const [submitting, setSubmitting] = useState(false);
 	const [apiLoading, setApiLoading] = useState(false);
 	const [formData, setFormData] = useState({
 		firstName: "",
@@ -109,6 +110,7 @@ function ProvidersInformation() {
 	const handleSubmit = async () => {
 		toast.loading("Submitting");
 		console.log("handleSubmit");
+		setSubmitting(true);
 		if (
 			formData.emergencyContactRelation === "Select Relation" ||
 			!formData.emergencyContactRelation
@@ -136,7 +138,7 @@ function ProvidersInformation() {
 			console.error("Error:", error);
 			toast.error("Failed to save provider information. Please try again.");
 		}
-
+		setSubmitting(false);
 		setLoading(false);
 	};
 
@@ -568,7 +570,7 @@ function ProvidersInformation() {
 					</div>
 						
 					{/* <Button title={"Save & Next"} onClick={handleSubmit} /> */}
-					<NavBottom onSave={handleSubmit}/>
+					<NavBottom onSave={handleSubmit} submitting={submitting}/>
 				</div>
 			)}
 		</>

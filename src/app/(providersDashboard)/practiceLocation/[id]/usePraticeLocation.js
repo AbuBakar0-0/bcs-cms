@@ -473,7 +473,8 @@ export const usePracticeLocations = () => {
         },
       });
       toast.dismiss();
-      toast.success("Linked Successfully")
+      toast.success("Linked Successfully");
+      fetchLocations();
       return response.data; // Return the response data if needed
     } catch (error) {
       toast.error("Error saving") 

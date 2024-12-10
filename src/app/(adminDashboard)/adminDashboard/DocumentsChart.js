@@ -22,40 +22,50 @@ const getStatusColor = (status) => {
       return "#004aac"; // Blue for On File
     case "Active":
       return "#00be62"; // Green for Active
-    case "Requested Provider":
-      return "#FF6347"; // Tomato color for Requested Provider
+    case "Requested":
+      return "#FF6347"; // Tomato color for Requested
     default:
       return "#000000"; // Default color (black)
   }
 };
 
 function DocumentChart({ data }) {
-  // Map the data to the format required by the BarChart
-  const renderData = data.map((item) => ({
-    name: item.status,   // The status (e.g., "Expiring", "Missing")
-    value: item.total_count, // The total count for the status
-    color: getStatusColor(item.status), // Color for the bar based on status
-  }));
+  const allStatuses = [
+    "Expiring",
+    "Missing",
+    "Expired",
+    "On File",
+    "Active",
+    "Requested Provider",
+  ];
+
+  const renderData = allStatuses.map((status) => {
+    const foundItem = data.find((item) => item.status === status);
+    return {
+      name: status === "Requested Provider" ? "Requested" : status, // Trim name
+      value: foundItem ? foundItem.total_count : 0, // Use 0 if no data is found
+      color: getStatusColor(status === "Requested Provider" ? "Requested" : status), // Match color for trimmed name
+    };
+  });
 
   return (
     <BarChart
-      width={500}
+      className="-ml-8"
+      width={650}
       height={348}
       data={renderData}
-      barSize={30} // Controls the thickness of the bars
+      barSize={30}
     >
-      <CartesianGrid strokeDasharray="4 4" />
-      
+      <CartesianGrid strokeDasharray="10 10" />
+
       {/* Set intervals for X-Axis */}
       <XAxis
         dataKey="name"
         interval={0} // Show all ticks (you can change this for intervals)
       />
-      
+
       {/* Set intervals for Y-Axis */}
-      <YAxis
-        ticks={[0, 3, 6, 9, 12]} // Manually set the tick intervals
-      />
+      <YAxis ticks={[0, 3, 6, 9, 12]} /> {/* Manually set the tick intervals */}
 
       <Tooltip />
       <Bar dataKey="value" name="Documents">

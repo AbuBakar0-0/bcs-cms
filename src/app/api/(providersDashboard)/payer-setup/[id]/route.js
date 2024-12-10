@@ -46,7 +46,7 @@ export async function DELETE(request, { params }) {
 					error: "Payer not found",
 				},
 				{
-					status: 404,
+					status: 200,
 				}
 			);
 		}

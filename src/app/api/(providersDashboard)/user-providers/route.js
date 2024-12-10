@@ -46,7 +46,7 @@ export async function GET(request) {
 		console.error("Error fetching providers:", error);
 		return new Response(
 			JSON.stringify({ error: error.message || "Failed to fetch providers" }),
-			{ status: 404 }
+			{ status: 200 }
 		);
 	}
 }

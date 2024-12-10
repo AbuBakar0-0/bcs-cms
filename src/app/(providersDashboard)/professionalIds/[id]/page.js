@@ -31,7 +31,7 @@ const ProfessionalIds = () => {
         >
           <Dropdown
             title={`Do you have ${title}?`}
-            options={["Select Option", "Yes", "No"]}
+            options={["Yes", "No"]}
             width="w-1/6"
             name={`has${capitalize(field)}`}
             value={entry[`has${capitalize(field)}`]}
@@ -52,6 +52,7 @@ const ProfessionalIds = () => {
             title="Issue State"
             options={stateAbbreviations}
             name="state"
+            required={!(entry[`has${capitalize(field)}`] === "No")}
             value={entry.state}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
@@ -61,6 +62,7 @@ const ProfessionalIds = () => {
             name="effectiveDate"
             value={entry.effectiveDate}
             width="w-1/8"
+            required={!(entry[`has${capitalize(field)}`] === "No")}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
           />
@@ -68,6 +70,7 @@ const ProfessionalIds = () => {
             title="Expiry Date"
             name="expiryDate"
             width="w-1/8"
+            required={!(entry[`has${capitalize(field)}`] === "No")}
             value={entry.expiryDate}
             onChange={(e) => handleChange(e, index, field)}
             readonly={entry[`has${capitalize(field)}`] !== "Yes"}
@@ -136,7 +139,6 @@ const ProfessionalIds = () => {
           title="Aggregate"
           width="w-[23.9%]"
           options={[
-            "Select Aggregate",
             "1,000,000 - 2,000,000",
             "1,000,000 - 3,000,000",
             "2,000,000 - 4,000,000",
@@ -215,7 +217,7 @@ const ProfessionalIds = () => {
       <div className="w-full flex flex-wrap justify-start gap-4 items-end">
         <Dropdown
           title="Do you have an individual NPI #"
-          options={["Select Option", "Yes", "No"]}
+          options={["Yes", "No"]}
           width="w-1/6"
           name="hasNPI"
           value={formData.hasNPI}

@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { BarLoader } from "react-spinners";
 import ProvidersNavbar from "./ProvidersNavbar";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { FaUserCircle } from "react-icons/fa";
 
-const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {
+const ProvidersCard = ({ id }) => {
   const [provider, setProvider] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,11 +50,16 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {
       <div className="w-full flex flex-row justify-start items-center gap-4">
         <div className="w-1/3 flex flex-col justify-center items-center gap-2">
           <div className="w-full flex flex-row gap-4">
-            <img
-              src={provider.picture_url}
-              alt="Provider"
-              className="size-28 rounded-full"
-            />
+            {provider.picture_url ? (
+              <img
+                src={provider.picture_url}
+                alt="Provider"
+                className="size-28 rounded-full"
+              />
+            ) : (
+              <FaUserCircle className="size-16" />
+            )}
+
             <div className="flex flex-col justify-center items-start gap-1">
               <h2 className="text-lg font-semibold text-center">
                 {provider?.first_name} {provider?.middle_initial || ""}{" "}
@@ -89,7 +95,7 @@ const ProvidersCard = ({ id = "2d72b894-f3e2-4f13-9c2a-05b6852befbf" }) => {
               onClick={() => setSsnVisible((prev) => !prev)}
               className="text-sm text-blue-500"
             >
-              {ssnVisible ? <FaEyeSlash className="text-white"/> : <FaEye className="text-white"/>}
+              {ssnVisible ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
             </button>
           </p>
           <p>NPI-1: {provider?.npi || "-"}</p>

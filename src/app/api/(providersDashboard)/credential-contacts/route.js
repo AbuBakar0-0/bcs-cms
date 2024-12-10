@@ -231,7 +231,7 @@ export async function DELETE(request) {
 		if (!contact) {
 			return NextResponse.json(
 				{ error: "Credentialing contact not found" },
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

@@ -23,7 +23,7 @@ export async function GET(request) {
     const { data, error } = await supabase
       .from("payers_setup")
       .select("status, providers_info!inner(uuid)")
-      .eq("providers_info.added_by", addedBy);
+      .eq("providers_info.added_by", addedBy).is("deleted_at",null);
 
     if (error) {
       throw new Error(`Failed to retrieve data: ${error.message}`);
@@ -31,13 +31,10 @@ export async function GET(request) {
 
     if (!data || data.length === 0) {
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: "No data found for the given added_by parameter",
-        }),
+        JSON.stringify([]),
         {
           headers: { "Content-Type": "application/json" },
-          status: 404,
+          status: 200,
         }
       );
     }

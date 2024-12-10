@@ -25,7 +25,7 @@ export async function GET(request) {
 		console.log(data);	
 		// Check if data is empty
 		if (!data || data.length === 0) {
-			return NextResponse.json({ message: "No Data Found" }, { status: 404 });
+			return NextResponse.json([], { status: 200 });
 		}
 
 		return NextResponse.json(data);

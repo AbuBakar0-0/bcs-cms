@@ -56,7 +56,7 @@ export async function GET(request) {
 					message: "No hospital affiliations found",
 					hospitalAffiliations,
 				}),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

@@ -137,7 +137,7 @@ export async function DELETE(request) {
 				JSON.stringify({
 					error: "Training entry not found or already deleted",
 				}),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

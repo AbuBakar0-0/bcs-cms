@@ -142,7 +142,7 @@ export async function DELETE(req) {
     if (checkError) throw checkError;
 
     if (!existingDoc) {
-      return Response.json({ error: "Document not found" }, { status: 404 });
+      return Response.json({ error: "Document not found" }, { status: 200 });
     }
 
     if (existingDoc.deleted_at) {

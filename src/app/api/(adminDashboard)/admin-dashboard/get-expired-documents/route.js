@@ -33,30 +33,27 @@ export async function GET(request) {
 
     if (!providerInfo || providerInfo.length === 0) {
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: "No provider info found for the given added_by",
-        }),
+        JSON.stringify([]),
         {
           headers: { "Content-Type": "application/json" },
-          status: 404,
+          status: 200,
         }
       );
     }
 
-    // Calculate the date 30 days from now
+    // Calculate the date 30 days from now and strip the time part
     const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0); // Set to the start of the day (midnight)
+
     const expiryDate = new Date();
     expiryDate.setDate(currentDate.getDate() + 30);
+    expiryDate.setHours(0, 0, 0, 0); // Set to the start of the day (midnight)
 
     // Fetch provider_documents with the required conditions
     const { data: documents, error: documentsError } = await supabase
       .from("provider_documents")
       .select(
-        `
-        *,
-        providers_info!inner(*)
-      `
+        `*, providers_info!inner(*)`
       )
       .in(
         "provider_id",
@@ -79,16 +76,44 @@ export async function GET(request) {
         }),
         {
           headers: { "Content-Type": "application/json" },
-          status: 404,
+          status: 200,
         }
       );
     }
 
-    // Return the documents
-    return new Response(JSON.stringify(documents), {
-      headers: { "Content-Type": "application/json" },
-      status: 200,
+    // Process documents and create an array of results
+    const result = documents.map((document) => {
+      const { first_name, middle_initial, last_name } = document.providers_info;
+      const expiry_date = document.expiry_date; // Get expiry_date from provider_documents table
+
+      // Strip the time part from expiry_date for comparison
+      const documentExpiryDate = new Date(expiry_date);
+      documentExpiryDate.setHours(0, 0, 0, 0); // Set to the start of the day (midnight)
+
+      const daysUntilExpiry = Math.floor(
+        (documentExpiryDate - currentDate) / (1000 * 60 * 60 * 24)
+      ); // Difference in days
+
+      let name = `${first_name} ${middle_initial.trim()}. ${last_name}`;
+      let type = document.title; // Using title as the type
+      let days = daysUntilExpiry;
+
+      // Return the formatted object with name, type, and days
+      return {
+        name,
+        type, // Added type field
+        days,
+      };
     });
+
+    // Return the list of results in JSON format
+    return new Response(
+      JSON.stringify(result),
+      {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      }
+    );
   } catch (error) {
     console.error("Error in GET handler:", error);
     return new Response(

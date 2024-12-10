@@ -161,7 +161,7 @@ export default function ProvidersDashboard() {
                       {provider.dob.split("-")[2] || "N/A"}-
                       {provider.dob.split("-")[0] || "N/A"}
                     </td>
-                    <td className="px-4 py-2">{provider.ssn || "Unknown"}</td>
+                    <td className="px-4 py-2">***-**-{provider.ssn.split("-")[2] || "Unknown"}</td>
                     <td className="px-4 py-2">
                       {provider.license_id || "Unknown"}
                     </td>

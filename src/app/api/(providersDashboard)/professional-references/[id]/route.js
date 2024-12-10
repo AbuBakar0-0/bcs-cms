@@ -107,7 +107,7 @@ export async function DELETE(request, { params }) {
 				JSON.stringify({
 					error: "Reference not found",
 				}),
-				{ status: 404 }
+				{ status: 200 }
 			);
 		}
 

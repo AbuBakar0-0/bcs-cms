@@ -63,7 +63,7 @@ export const usePracticeProfile = () => {
   const { id: provider_id } = useParams();
 
   async function fetchPracticeProfile() {
-    const loadingToastId = toast.loading("Fetching practice profile...");
+    toast.loading("Fetching practice profile...");
 
     try {
       const response = await fetch(`/api/practice-profile?uuid=${provider_id}`);
@@ -82,7 +82,7 @@ export const usePracticeProfile = () => {
         doing_business_name: data.doing_business_name || "",
         taxonomy_code_1: data.taxonomy_code_1 || "",
         taxonomy_code_2: data.taxonomy_code_2 || "",
-    
+
         // Service Address
         service_address1: data.service_address?.address_line_1 || "",
         service_address2: data.service_address?.address_line_2 || "",
@@ -93,7 +93,7 @@ export const usePracticeProfile = () => {
         service_appointment_phone: data.service_contact?.cell_phone || "",
         service_fax: data.service_contact?.fax || "",
         service_email: data.service_contact?.email || "",
-    
+
         // Mailing Address
         mailing_address1: data.mailing_address?.address_line_1 || "",
         mailing_address2: data.mailing_address?.address_line_2 || "",
@@ -103,39 +103,37 @@ export const usePracticeProfile = () => {
         mailing_phone: data.mailing_contact?.home_phone || "",
         mailing_fax: data.mailing_contact?.fax || "",
         mailing_email: data.mailing_contact?.email || "",
-    
+
         // Correspondence Address
-        correspondence_address1: data.correspondence_address?.address_line_1 || "",
-        correspondence_address2: data.correspondence_address?.address_line_2 || "",
+        correspondence_address1:
+          data.correspondence_address?.address_line_1 || "",
+        correspondence_address2:
+          data.correspondence_address?.address_line_2 || "",
         correspondence_city: data.correspondence_address?.city || "",
         correspondence_state: data.correspondence_address?.state || "",
         correspondence_zipcode: data.correspondence_address?.zip_code || "",
         correspondence_phone: data.correspondence_contact?.home_phone || "",
         correspondence_fax: data.correspondence_contact?.fax || "",
         correspondence_email: data.correspondence_contact?.email || "",
-    
+
         // Additional Information
         ptan_medicare_number: data.ptan_medicare_number || "",
         medicaid_number: data.medicaid_number || "",
         start_date: data.start_date || "",
-    
+
         // Practice Contact
         practice_contact_role: "", // No role provided in the JSON, you can modify this if needed
         practice_contact_name: data.service_contact?.contact_name || "",
         practice_contact_email: data.service_contact?.work_email || "",
         practice_contact_work_phone: data.service_contact?.work_phone || "",
         practice_contact_cell_phone: data.service_contact?.cell_phone || "",
-    });
-    
-
-      toast.success("Practice profile fetched successfully!", {
-        id: loadingToastId,
       });
+
+      toast.dismiss();
+      toast.success("Practice profile fetched successfully!");
     } catch (error) {
       console.error("Error fetching practice profile:", error);
-      toast.error("Error fetching practice profile", error.message, {
-        id: loadingToastId,
-      });
+      toast.error("Error fetching practice profile", error.message);
     }
   }
 
@@ -183,7 +181,6 @@ export const usePracticeProfile = () => {
     if (formData.tax_id && !validateNumber(formData.tax_id, 9, "Tax ID")) {
       return false;
     }
-
 
     // Validate Required Addresses
     const validateAddress = (prefix, required = true) => {
@@ -340,7 +337,6 @@ export const usePracticeProfile = () => {
       toast.success("Practice profile saved successfully!", {
         id: loadingToastId,
       });
-      setFormData(DEFAULT_STATE);
     } catch (error) {
       console.error("Error:", error);
       toast.error("Error saving practice profile", error.message, {
