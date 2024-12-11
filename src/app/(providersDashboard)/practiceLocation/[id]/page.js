@@ -390,7 +390,6 @@ function PracticeLocations() {
                   <TextInput
                     title={"Location PTAN/Medicare number"}
                     name="ptan_medicare_number"
-                    is_number={true}
                     maxLength={10}
                     value={formData.ptan_medicare_number}
                     onChange={handleInputChange}
