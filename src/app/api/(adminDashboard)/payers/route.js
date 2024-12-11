@@ -21,7 +21,6 @@ export async function GET(request) {
                 providers_info(*)
             `)
             .eq("providers_info.added_by", added_by) // Filter where providers_info.added_by matches
-            .eq("providers_info.provider_id", "payers_setup.provider_id"); // Join condition
 
         if (error) throw error;
 

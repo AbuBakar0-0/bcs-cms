@@ -24,7 +24,7 @@ function Specialities() {
   const defaultState = {
     speciality: "",
     type: "",
-    is_board_certified: "",
+    is_board_certified: "Yes",
     name_of_board: "",
     address_line_1: "",
     address_line_2: "",
@@ -258,14 +258,21 @@ function Specialities() {
                       onChange={handleInputChange}
                     />
 
-                    <Dropdown
-                      title={"Name of Certifying Board"}
-                      options={certifyingBoards}
-                      width="w-1/2"
-                      name="name_of_board"
-                      value={formData.name_of_board}
-                      onChange={handleInputChange}
-                    />
+                    <div
+                      className={`${
+                        formData.is_board_certified == "Yes" ? "flex" : "hidden"
+                      } w-1/2`}
+                    >
+                      <Dropdown
+                        title={"Name of Certifying Board"}
+                        options={certifyingBoards}
+                        width="w-full"
+                        name="name_of_board"
+                        required={formData.is_board_certified == "Yes"}
+                        value={formData.name_of_board}
+                        onChange={handleInputChange}
+                      />
+                    </div>
 
                     <div className="w-full flex flex-wrap justify-start gap-4 items-start">
                       <TextInput
@@ -327,14 +334,18 @@ function Specialities() {
                       value={formData.effective_date}
                       onChange={handleInputChange}
                     />
-                    <div className={`${formData.is_expire=="Yes"?"flex":"hidden"}`}>
-                    <DateInput
-                      title={"Expiry Date"}
-                      name="expiry_date"
-                      value={formData.expiry_date}
-                      required={formData.is_expire=="Yes"}
-                      onChange={handleInputChange}
-                    />
+                    <div
+                      className={`${
+                        formData.is_expire == "Yes" ? "flex" : "hidden"
+                      }`}
+                    >
+                      <DateInput
+                        title={"Expiry Date"}
+                        name="expiry_date"
+                        value={formData.expiry_date}
+                        required={formData.is_expire == "Yes"}
+                        onChange={handleInputChange}
+                      />
                     </div>
                     <RadioButton
                       title={"Does your board certificate have expiry?"}
@@ -364,8 +375,17 @@ function Specialities() {
                     <p>{speciality.type}</p>
                   </div>
                   <div className="w-1/3 flex flex-col justify-center items-start">
-                    <p>{speciality.boardName}</p>
-                    <p>{speciality.expiryDate}</p>
+                    <p>
+                      {speciality.isBoardCertified
+                        ? speciality.boardName
+                        : "Not Board Certified"}
+                    </p>
+                    <p>Effective Date : {speciality.effectiveDate}</p>
+                    <p>
+                      {speciality.expiryDate != null
+                        ? "Expiry Date : " + speciality.expiryDate
+                        : "Does Not Expire"}
+                    </p>
                   </div>
                   <div className="flex flex-row justify-center items-center gap-4">
                     <CiEdit
