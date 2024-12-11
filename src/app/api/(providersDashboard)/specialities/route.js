@@ -2,46 +2,50 @@ import insertAddress from "@/hooks/insertAddress";
 import { supabase } from "@/lib/supabase";
 
 export async function POST(request) {
-	try {
-		const formData = await request.json();
+    try {
+        const formData = await request.json();
 
-		const address = await insertAddress(formData);
+        const address = await insertAddress(formData);
 
-		const { data: speciality, error: specialityError } = await supabase
-			.from("specialities")
-			.insert({
-				name: formData.speciality,
-				is_board_certified: formData.is_board_certified,
-				name_of_board: formData.name_of_board,
-				address_id: address?.uuid,
-				effective_date: formData.effective_date,
-				expiry_date: formData.expiry_date,
-				type: formData.type,
-				provider_id: formData.provider_id,
-				deleted_at: null,
-			})
-			.select("uuid")
-			.single();
+        const { data: speciality, error: specialityError } = await supabase
+            .from("specialities")
+            .insert({
+                name: formData.speciality,
+                is_board_certified: formData.is_board_certified,
+                name_of_board: formData.name_of_board,
+                address_id: address?.uuid,
+                effective_date: formData.effective_date,
+                expiry_date: formData.expiry_date || null, // Use null instead of an empty string
+                type: formData.type,
+                provider_id: formData.provider_id,
+                deleted_at: null,
+            })
+            .select("uuid")
+            .single();
 
-		if (specialityError) throw specialityError;
-		console.log(speciality);
-		return new Response(
-			JSON.stringify({
-				message: "Speciality saved successfully",
-				speciality_id: speciality?.uuid,
-			}),
-			{ status: 201 }
-		);
-	} catch (error) {
-		console.error("Error saving Speciality:", error);
-		return new Response(
-			JSON.stringify({
-				message: "Error Saving Speciality",
-			}),
-			{ status: 500 }
-		);
-	}
+        if (specialityError) throw specialityError;
+
+        console.log(speciality);
+        return new Response(
+            JSON.stringify({
+                message: "Speciality saved successfully",
+                speciality_id: speciality?.uuid,
+            }),
+            { status: 201 }
+        );
+    } catch (error) {
+        console.error("Error saving Speciality:", error);
+        return new Response(
+            JSON.stringify({
+                message: "Error Saving Speciality",
+            }),
+            { status: 500 }
+        );
+    }
 }
+
+
+
 export async function GET(request) {
 	try {
 		const searchParams = request.nextUrl.searchParams;

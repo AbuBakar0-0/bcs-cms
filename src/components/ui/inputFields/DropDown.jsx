@@ -12,7 +12,7 @@ const Dropdown = ({
 	name,
 	value,
 }) => {
-	const isTaxonomy = title.toLowerCase().includes("taxonomy");
+	const isTaxonomy = title.toLowerCase().includes("taxonomy") || title.toLowerCase().includes("speciality");
 
 	const [showOther, setShowOther] = useState(false);
 	const [searchQuery, setSearchQuery] = useState("");

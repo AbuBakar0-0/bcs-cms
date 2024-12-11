@@ -64,9 +64,9 @@ export const validateForm = (formData) => {
 		const username = formData[`${portal}Username`];
 		const password = formData[`${portal}Password`];
 
-		if (username && !password) {
-			missingFields.push(`${capitalize(portal)} Password`);
-		}
+		// if (username && !password) {
+		// 	missingFields.push(`${capitalize(portal)} Password`);
+		// }
 	});
 
 	return missingFields;

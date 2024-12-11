@@ -40,9 +40,7 @@ export const useDocuments = () => {
 			if (!value || value === "Select Status") return "Status is required";
 			if (!statusOptions.includes(value)) return "Invalid Status";
 		},
-		file: (value) => {
-			if (!value) return "Please select a document";
-		},
+		
 	};
 
 	const validateForm = () => {

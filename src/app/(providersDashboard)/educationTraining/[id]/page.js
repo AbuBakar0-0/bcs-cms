@@ -14,6 +14,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { useEducationAndTraining } from "./useEducationTraning";
 import { degrees, eduOptions } from "./utilis";
+import taxonomyCodes from "@/data/taxonomyCodes";
 
 function EducationAndTraining() {
 	const {
@@ -236,13 +237,14 @@ function EducationAndTraining() {
 								<TextInput
 									title={"Department"}
 									name={"department"}
+									required={false}
 									value={newTrainingEntry.department}
 									onChange={handleTrainingChange}
 								/>
 
 								<Dropdown
 									title={"Speciality"}
-									options={specialities}
+									options={taxonomyCodes}
 									name="speciality"
 									value={newTrainingEntry.speciality}
 									onChange={handleTrainingChange}

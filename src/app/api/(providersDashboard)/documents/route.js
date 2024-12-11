@@ -67,7 +67,16 @@ export async function POST(req) {
     const provider_id = formData.get("provider_id");
     const file = formData.get("file");
     if (!file || file.size === 0) {
-      return Response.json({ error: "File is required" }, { status: 400 });
+      const title = formData.get("title");
+      const status = formData.get("status");
+      console.log("HERE");
+      const { error } = await supabase.from("provider_documents").insert({
+        title,
+        status,
+        provider_id,
+      });
+      console.log(error);
+      return Response.json({ message: "Document created successfully" });
     }
 
     let url = null;

@@ -162,6 +162,7 @@ const ProfessionalIds = () => {
         <TextInput
           title="CAQH User Id"
           width="w-[22%]"
+          required={false}
           name={`${prefix}UserId`}
           value={formData[`${prefix}UserId`] || ""}
           onChange={(e) => handleChange(e)}
@@ -181,7 +182,7 @@ const ProfessionalIds = () => {
         title={`${title} Username`}
         width={prefix === "caqh" || prefix === "other" ? "w-[28%]" : "w-[40%]"}
         name={`${prefix}Username`}
-        required={prefix !== "other"}
+        required={false}
         value={formData[`${prefix}Username`] || ""}
         onChange={(e) => handleChange(e)}
       />
@@ -189,7 +190,7 @@ const ProfessionalIds = () => {
         title={`${title} Password`}
         width={prefix === "caqh" || prefix === "other" ? "w-[28%]" : "w-[40%]"}
         name={`${prefix}Password`}
-        required={prefix !== "other"}
+        required={false}
         value={formData[`${prefix}Password`] || ""}
         onChange={(e) => handleChange(e)}
       />
