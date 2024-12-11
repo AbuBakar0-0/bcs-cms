@@ -136,6 +136,11 @@ export default function DocumentPage() {
 									Effective: {new Date(doc.effective_date).toLocaleDateString()}
 								</p>
 							)}
+							{doc.effective_date && (
+								<p className="text-sm text-gray-500">
+									Expiry Date: {new Date(doc.expiry_date).toLocaleDateString()}
+								</p>
+							)}
 						</div>
 						<div className="flex gap-3">
 							<button

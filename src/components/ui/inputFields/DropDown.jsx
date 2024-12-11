@@ -67,9 +67,9 @@ const Dropdown = ({
 			);
 			return selectedOption
 				? `${selectedOption.code} : ${selectedOption.name}`
-				: "Select an option";
+				: `Select ${title}`;
 		}
-		return value || "Select an option";
+		return value || `Select ${title}`;
 	};
 
 	return (
