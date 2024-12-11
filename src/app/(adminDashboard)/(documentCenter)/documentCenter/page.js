@@ -26,7 +26,6 @@ export default function DocumentCenter() {
     setActiveTab(tab);
   };
 
-  const searchParams = useSearchParams();
 
   const handleView = (doc) => {
     if (!doc.url) {
@@ -61,7 +60,7 @@ export default function DocumentCenter() {
       // Set the documents state with the fetched data
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially, set filtered docs to all docs
-
+      const searchParams = useSearchParams();
       const documentType = searchParams.get("type");
       setType(documentType); // Set the type state
 

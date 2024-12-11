@@ -47,7 +47,7 @@ export default function AdminDashboard() {
           setDocsExpiringWeek((prev) => prev + 1);
         }
         notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
-      } else if (days < 0) {
+      } else if (days < 31) {
         notificationMessage = `${name}'s ${type} expired ${Math.abs(
           days
         )} days ago.`;
@@ -84,7 +84,7 @@ export default function AdminDashboard() {
           isExpiringWeek = true;
         }
         taskMessage = `Update ${name}'s ${type}`;
-      } else if (days < 0) {
+      } else if (days < 31) {
         taskMessage = `Update ${name}'s ${type}`;
       }
 
