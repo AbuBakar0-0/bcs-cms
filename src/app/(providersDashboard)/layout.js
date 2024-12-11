@@ -3,11 +3,37 @@
 import { sidenavLinks } from "@/data/sideNavLinks";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 
 export default function DashboardLayout({ children }) {
   const { id } = useParams();
+
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true); // Set initial loading state to true
+
+  // Fetch data from API when the component mounts
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/providers/${id}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUserData(data.provider); // Set the fetched data into the state
+        } else {
+          setUserData({first_name:"Welcome",middle_initial:"to",last_name:"BCS-CMS"}); // Set the fetched data into the state
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false); // Set loading to false once the fetch is complete
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -16,19 +42,19 @@ export default function DashboardLayout({ children }) {
           <Link href={"/"}>
             <img
               src="/assets/BCS Logo billingcaresolutions.com.svg"
-              alt=""
+              alt="BCS Logo"
               className="bg-white p-2 h-[5rem] w-full"
             />
           </Link>
           <div className="px-5">
-            <Link href={'/adminDashboard'}>
-            <div className="w-full flex flex-col justify-center items-center gap-3">
-                  <div className="w-full flex flex-row justify-start items-center gap-4 pt-2">
-                    <FaArrowCircleRight />
-                    <span>Admin Dashboard</span>
-                  </div>
-                  <div className="bg-primary w-full h-[2px]"></div>
+            <Link href={"/adminDashboard"}>
+              <div className="w-full flex flex-col justify-center items-center gap-3">
+                <div className="w-full flex flex-row justify-start items-center gap-4 pt-2">
+                  <FaArrowCircleRight />
+                  <span>Admin Dashboard</span>
                 </div>
+                <div className="bg-primary w-full h-[2px]"></div>
+              </div>
             </Link>
             {sidenavLinks.map((item, index) => (
               <Link
@@ -54,19 +80,13 @@ export default function DashboardLayout({ children }) {
         {/* Top Bar */}
         <header className="w-full h-[5rem] bg-secondary text-white p-4 flex flex-row justify-between items-center gap-2">
           <div className="flex flex-col justify-center items-start">
-            <h1 className="text-xl font-semibold">Welcome to BCS-CMS</h1>
+            <h1 className="text-xl font-semibold">
+              {loading
+                ? "Welcome to BCS-CMS"
+                : `${userData.first_name} ${userData.middle_initial || ""} ${userData.last_name}`}
+            </h1>
             <p>Let's take a look at your credentials today!</p>
           </div>
-          {/* <div className="flex flex-row justify-end items-center gap-4">
-            <input
-              type="text"
-              className="bg-white w-full rounded-full px-4 py-2 text-black"
-              placeholder="Search Here..."
-            />
-            <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
-              <CiSearch className="size-8" />
-            </div>
-          </div> */}
           <Link href={"/signin"}>
             <FiLogOut className="size-6" />
           </Link>

@@ -57,15 +57,14 @@ function PracticeLocations() {
           <p className="w-full text-lg">Practice Location</p>
           <div className="flex justify-end items-center gap-2">
             <Button
+              title={"Add Location"}
+              icon={<IoAddCircleOutline className="size-6" />}
+              onClick={handleLocation}
+            />
+            <Button
               title={"Link Provider"}
               icon={<IoAddCircleOutline className="size-6" />}
               onClick={handleSetLink}
-            />
-
-            <Button
-              title={"Add"}
-              icon={<IoAddCircleOutline className="size-6" />}
-              onClick={handleLocation}
             />
           </div>
         </div>
@@ -93,7 +92,7 @@ function PracticeLocations() {
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start items-end gap-4">
                 <Dropdown
-                  title="Doing Business Name"
+                  title="Location Name"
                   width="w-[49%]"
                   options={dropLocations}
                   name="business_id" // Updated to match the state key
@@ -125,13 +124,6 @@ function PracticeLocations() {
           {showLocationForm && (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
               <div className="w-full flex flex-wrap justify-start items-end gap-4">
-                {/* <TextInput
-                  title={"Legal Business Name"}
-                  width={"w-[49%]"}
-                  name="legal_business_name"
-                  value={formData.legal_business_name}
-                  onChange={handleInputChange}
-                /> */}
                 <Dropdown
                   title={"Legal Business Name"}
                   width="w-[49%]"
@@ -148,12 +140,20 @@ function PracticeLocations() {
                   onChange={handleInputChange}
                 />
                 <TextInput
+                  title={"Location Name"}
+                  width={"w-full"}
+                  name="location_name"
+                  value={formData.location_name}
+                  onChange={handleInputChange}
+                />
+                <TextInput
                   title={"NPI 2 (if applicable)"}
                   type="text"
                   is_number={true}
                   maxLength={10}
                   required={false}
                   name="npi_2"
+                  width={"w-[19%]"}
                   value={formData.npi_2}
                   onChange={handleInputChange}
                 />
@@ -163,6 +163,7 @@ function PracticeLocations() {
                   type="text"
                   is_number={true}
                   name="tax_id"
+                  width={"w-[20%]"}
                   value={formData.tax_id}
                   onChange={handleInputChange}
                   maxLength={9}
@@ -171,7 +172,7 @@ function PracticeLocations() {
                   title={"Taxonomy Code (if applicable)"}
                   options={taxonomyCodes}
                   required={false}
-                  width="w-1/4"
+                  width="w-[28%]"
                   name="taxonomy_code_1"
                   value={formData.taxonomy_code_1}
                   onChange={handleInputChange}
@@ -180,7 +181,7 @@ function PracticeLocations() {
                   title={"Taxonomy Code 2 (if applicable)"}
                   options={taxonomyCodes}
                   required={false}
-                  width="w-1/4"
+                  width="w-[28%]"
                   name="taxonomy_code_2"
                   value={formData.taxonomy_code_2}
                   onChange={handleInputChange}
@@ -500,21 +501,26 @@ function PracticeLocations() {
                   key={item.uuid}
                   className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
                 >
+                  <span>{item.legal_business_name}</span>
                   <span>{item.doing_business_name}</span>
+                  <span>{item.location_name}</span>
+
                   <span>
                     {
                       item.practice_location_providers[0].providers_info
                         .first_name
-                    }{" "}
+                      }{" "}
                     {
                       item.practice_location_providers[0].providers_info
                         .middle_initial
-                    }{" "}
+                      }{" "}
                     {
                       item.practice_location_providers[0].providers_info
-                        .last_name
+                      .last_name
                     }
                   </span>
+                    <span>NPI 2: {item.npi_2}</span>
+                    <span>Tax ID: {item.tax_id}</span>
                 </div>
               ))
             )}

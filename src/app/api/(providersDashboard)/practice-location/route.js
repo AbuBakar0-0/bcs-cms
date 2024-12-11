@@ -61,6 +61,8 @@ export async function GET(request) {
 			);
 		}
 
+		console.log(practiceLocations);
+
 		const transformedData = practiceLocations.map((location) => ({
 			uuid: location.uuid,
 			legal_business_name: location.legal_business_name,
@@ -71,7 +73,7 @@ export async function GET(request) {
 			taxonomy_code_2: location.taxonomy_code_2,
 			ptan_medicare_number: location.ptan_medicare_number,
 			medicaid_number: location.medicaid_number,
-
+			location_name:location.location_name,
 			// Service Address
 			service_address_1: location.service_address?.address_line_1,
 			service_address_2: location.service_address?.address_line_2,
@@ -253,6 +255,7 @@ export async function POST(request) {
 					ptan_medicare_number: data.ptan_medicare_number || null,
 					medicaid_number: data.medicaid_number || null,
 					practice_id:data.practice_id||"",
+					location_name:data.location_name||""
 				};
 
 				const { data: practiceLocationResult, error } = await supabase

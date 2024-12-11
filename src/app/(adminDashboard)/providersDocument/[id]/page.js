@@ -52,6 +52,24 @@ export default function ProvidersDocument() {
     }
   }, [searchQuery, documents]);
 
+
+  const handleView = (doc) => {
+    if (!doc.url) {
+      toast.error("No document file available");
+      return;
+    }
+
+    if (doc.url.endsWith(".pdf")) {
+      const urlParts = doc.url.split("/");
+      const docId = urlParts[urlParts.length - 1].replace(".pdf", "");
+      const folder = urlParts[urlParts.length - 2];
+      const viewUrl = `https://res.cloudinary.com/db7z9hknv/image/upload/f_auto,q_auto/v1/${folder}/${docId}`;
+      window.open(viewUrl, "_blank");
+    } else {
+      window.open(doc.url, "_blank");
+    }
+  };
+
   return (
     <AdminDashboardLayout>
       <ProvidersCard id={id} />
@@ -144,9 +162,9 @@ export default function ProvidersDocument() {
                         </td>
 
                         <td className="p-3 flex flex-row justify-start items-center gap-2">
-                          <Link href={document.url}>
+                          <button onClick={()=>handleView(document)}>
                             <FaEye className="text-secondary cursor-pointer" />
-                          </Link>
+                          </button>
                           /
                           <Link href={`/document/${id}`}>
                             <CiEdit className="text-primary cursor-pointer" />

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Button from "@/components/ui/Button";
 import axios from "axios"; // Import axios for HTTP requests
@@ -10,6 +10,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
+import { useSearchParams } from "next/navigation";
 
 export default function DocumentCenter() {
   const [activeTab, setActiveTab] = useState("provider");
@@ -19,9 +20,13 @@ export default function DocumentCenter() {
   const [error, setError] = useState(""); // Store any errors
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
   const [uuid, setuuid] = useState("");
+
+  const [type, setType] = useState();
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
+
+  const searchParams = useSearchParams();
 
   const handleView = (doc) => {
     if (!doc.url) {
@@ -56,6 +61,16 @@ export default function DocumentCenter() {
       // Set the documents state with the fetched data
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially, set filtered docs to all docs
+
+      const documentType = searchParams.get("type");
+      setType(documentType); // Set the type state
+
+      if (documentType) {
+        // Filter documents based on the type from the query params
+        const filtered = response.data.filter((doc) => doc.status === documentType);
+        setFilteredDocuments(filtered); // Update filtered documents
+      }
+
       setLoading(false);
     } catch (err) {
       setError("Failed to fetch documents");
@@ -129,7 +144,8 @@ export default function DocumentCenter() {
           /
           <Link href={`/document/${uuid}`}>
             <CiEdit className="text-primary cursor-pointer" />
-          </Link>/
+          </Link>
+          /
           <MdDeleteOutline className="text-red-400" />
         </td>
       </tr>
@@ -162,19 +178,13 @@ export default function DocumentCenter() {
       {/* Tabs for toggling */}
       <div className="flex mb-4">
         <button
-          className={`px-4 py-2 mr-2 rounded-lg ${
-            activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"
-          }`}
+          className={`px-4 py-2 mr-2 rounded-lg ${activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"}`}
           onClick={() => toggleTab("provider")}
         >
           Provider Documents
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${
-            activeTab === "organization"
-              ? "bg-primary text-white"
-              : "bg-gray-200"
-          }`}
+          className={`px-4 py-2 rounded-lg ${activeTab === "organization" ? "bg-primary text-white" : "bg-gray-200"}`}
           onClick={() => toggleTab("organization")}
         >
           Organization Documents

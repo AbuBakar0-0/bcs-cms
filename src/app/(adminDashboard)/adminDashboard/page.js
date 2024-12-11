@@ -27,7 +27,7 @@ export default function AdminDashboard() {
   const [documentData, setDocumentData] = useState([]); // State to hold the document data
   const [notifications, setNotifications] = useState([]); // State to hold the notifications
   const [tasks, setTasks] = useState([]); // State to hold the notifications
-  const [docsExpiringtoday, setDocsExpiringtoday] = useState(0);
+  const [docsExpiringWeek, setDocsExpiringWeek] = useState(0);
   const [loading, setLoading] = useState(false);
   const [payersData, setPayersData] = useState([]);
 
@@ -37,29 +37,36 @@ export default function AdminDashboard() {
       const { name, type, days } = item;
       let notificationMessage = "";
       let isExpiringToday = false;
-
+      let isExpiringWeek = false;
       if (days === 0) {
         notificationMessage = `${name}'s ${type} is expiring today.`;
-        setDocsExpiringtoday((prev) => prev + 1);
         isExpiringToday = true; // Mark as expiring today
       } else if (days > 0) {
+        if (days <= 7) {
+          isExpiringWeek = true;
+          setDocsExpiringWeek((prev) => prev + 1);
+        }
         notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
       } else if (days < 0) {
-        notificationMessage = `${name}'s ${type} expired ${Math.abs(days)} days ago.`;
+        notificationMessage = `${name}'s ${type} expired ${Math.abs(
+          days
+        )} days ago.`;
       }
 
       notifications.push({
         message: notificationMessage,
-        isExpiringToday, // Add this property to track if it's expiring today
+        isExpiringToday,
+        isExpiringWeek, // Add this property to track if it's expiring today
       });
     });
 
     // Sort notifications: Place expiring today at the top
-    notifications.sort((a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0));
+    notifications.sort(
+      (a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0)
+    );
 
     return notifications;
   }
-
 
   function formatTasks(data) {
     let tasks = [];
@@ -67,11 +74,15 @@ export default function AdminDashboard() {
       const { name, type, days } = item;
       let taskMessage = "";
       let isExpiringToday = false;
+      let isExpiringWeek = false;
 
       if (days === 0) {
         taskMessage = `Update ${name}'s ${type}`;
         isExpiringToday = true; // Mark as expiring today
       } else if (days > 0) {
+        if (days <= 7) {
+          isExpiringWeek = true;
+        }
         taskMessage = `Update ${name}'s ${type}`;
       } else if (days < 0) {
         taskMessage = `Update ${name}'s ${type}`;
@@ -79,12 +90,15 @@ export default function AdminDashboard() {
 
       tasks.push({
         message: taskMessage,
-        isExpiringToday, // Add this property to track if it's expiring today
+        isExpiringToday,
+        isExpiringWeek
       });
     });
 
     // Sort notifications: Place expiring today at the top
-    tasks.sort((a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0));
+    tasks.sort(
+      (a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0)
+    );
 
     return tasks;
   }
@@ -109,18 +123,14 @@ export default function AdminDashboard() {
           `/api/admin-dashboard/get-expired-license?uuid=${uuid}`
         );
         const formattedNotifications = formatNotification(response.data);
-        
+
         setNotifications((prevNotifications) => [
           ...prevNotifications,
           ...formattedNotifications,
         ]);
-        
+
         const formattedTasks = formatTasks(response.data);
-        setTasks((prevTasks) => [
-          ...prevTasks,
-          ...formattedTasks,
-        ]);
-        
+        setTasks((prevTasks) => [...prevTasks, ...formattedTasks]);
       } catch (error) {
         console.error("Error fetching expired licenses:", error);
       }
@@ -138,10 +148,7 @@ export default function AdminDashboard() {
         ]);
 
         const formattedTasks = formatTasks(response.data);
-        setTasks((prevTasks) => [
-          ...prevTasks,
-          ...formattedTasks,
-        ]);
+        setTasks((prevTasks) => [...prevTasks, ...formattedTasks]);
       } catch (error) {
         console.error("Error fetching expired IDs:", error);
       }
@@ -159,10 +166,7 @@ export default function AdminDashboard() {
         ]);
 
         const formattedTasks = formatTasks(response.data);
-        setTasks((prevTasks) => [
-          ...prevTasks,
-          ...formattedTasks,
-        ]);
+        setTasks((prevTasks) => [...prevTasks, ...formattedTasks]);
       } catch (error) {
         console.error("Error fetching expired documents:", error);
       }
@@ -194,10 +198,10 @@ export default function AdminDashboard() {
           <SubNavbar />
 
           <button className="flex flex-row justify-center px-6 items-center bg-gray-300 rounded-lg gap-2 py-2">
-            <span className="text-lg">{docsExpiringtoday}</span>
+            <span className="text-lg">{docsExpiringWeek}</span>
             <span className="text-xs text-red-500">
               <span className="text-secondary">Documents</span> <br />
-              Expiring Today
+              Expiring in a Week
             </span>
           </button>
 
@@ -230,7 +234,13 @@ export default function AdminDashboard() {
                     notification.isExpiringToday
                       ? "bg-red-400 text-white"
                       : "bg-gray-300"
-                  }`}
+                  }
+                  ${
+                    notification.isExpiringWeek
+                      ? "bg-yellow-400 text-white"
+                      : "bg-gray-300"
+                  }
+                  `}
                 >
                   <span>{notification.message}</span>
                 </div>
@@ -256,7 +266,13 @@ export default function AdminDashboard() {
                     task.isExpiringToday
                       ? "bg-red-400 text-white"
                       : "bg-gray-300"
-                  }`}
+                  }
+                  ${
+                    task.isExpiringWeek
+                      ? "bg-yellow-400 text-white"
+                      : "bg-gray-300"
+                  }
+                  `}
                 >
                   <span>{task.message}</span>
                 </div>
@@ -284,7 +300,7 @@ export default function AdminDashboard() {
           </div>
           <div className="w-[48%] flex flex-col justify-start items-center gap-4">
             <div className="w-full h-96 border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
-              <span className="text-lg font-semibold">Status</span>
+              <span className="text-lg font-semibold">Payers Status</span>
               {loading ? (
                 <div className="w-full flex justify-center">
                   <ClipLoader />

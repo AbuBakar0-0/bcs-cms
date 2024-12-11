@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from 'next/navigation'; // Import useRouter from next/router
 import {
   Bar,
   BarChart,
@@ -30,6 +31,8 @@ const getStatusColor = (status) => {
 };
 
 function DocumentChart({ data }) {
+  const router = useRouter(); // Initialize the useRouter hook
+
   const allStatuses = [
     "Expiring",
     "Missing",
@@ -47,6 +50,12 @@ function DocumentChart({ data }) {
       color: getStatusColor(status === "Requested Provider" ? "Requested" : status), // Match color for trimmed name
     };
   });
+
+  // Handle click event for a cell to navigate
+  const handleClick = (status) => {
+    console.log("CALLED");
+    router.push(`/documentCenter?type=${status}`); // Use router.push for navigation
+  };
 
   return (
     <BarChart
@@ -70,7 +79,11 @@ function DocumentChart({ data }) {
       <Tooltip />
       <Bar dataKey="value" name="Documents">
         {renderData.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={entry.color} />
+          <Cell
+            key={`cell-${index}`}
+            fill={entry.color}
+            onClick={() => handleClick(entry.name)} // Add click event
+          />
         ))}
       </Bar>
     </BarChart>

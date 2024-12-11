@@ -140,7 +140,7 @@ export const useDocuments = () => {
 		console.log(doc)
 		setFormData({
 			title: doc.title || "",
-			provider: doc.providers || "",
+			provider: doc.providers_info.first_name+" "+doc.providers_info.last_name || "",
 			status: doc.status || "",
 			effective_date: doc.effective_date || "",
 			expiry_date: doc.expiry_date || "",

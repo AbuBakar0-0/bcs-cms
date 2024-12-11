@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 const DEFAULT_STATE = {
   legal_business_name: "",
   doing_business_name: "",
+  location_name:"",
   npi_2: "",
   tax_id: "",
   taxonomy_code_1: "",
@@ -99,12 +100,12 @@ export const usePracticeLocations = () => {
       if (!response.ok) throw new Error("Failed to fetch");
       const { data } = await response.json();
       setLocations(data || []);
-
-      const formattedLocations = data.map((item) => item.doing_business_name);
+      
+      const formattedLocations = data.map((item) => item.location_name || "");
       setDropLocations(formattedLocations || []);
 
       const formattedDropFullLocations = data.map((item) => ({
-        name: item.doing_business_name,
+        name: item.location_name,
         uuid: item.uuid,
       }));
       setDropFullLocations(formattedDropFullLocations);
@@ -299,6 +300,7 @@ export const usePracticeLocations = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(name,"========",value);
     if (["Select Code", "Select State", "Select Person"].includes(value))
       return;
     setFormData((prev) => ({
@@ -375,7 +377,7 @@ export const usePracticeLocations = () => {
       return;
     }
     const loadingToast = toast.loading("Saving location...");
-
+    console.log(formData);
     try {
       const url = editingId
         ? `/api/practice-location/${editingId}`
