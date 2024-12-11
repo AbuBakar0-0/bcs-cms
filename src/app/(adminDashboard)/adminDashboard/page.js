@@ -41,13 +41,16 @@ export default function AdminDashboard() {
       if (days === 0) {
         notificationMessage = `${name}'s ${type} is expiring today.`;
         isExpiringToday = true; // Mark as expiring today
-      } else if (days > 0) {
+      } 
+      else if (days > 0) {
         if (days <= 7) {
           isExpiringWeek = true;
           setDocsExpiringWeek((prev) => prev + 1);
         }
         notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
-      } else if (days < 31) {
+      } 
+      else if (days < 31 && days > -31) {
+        console.log(days);
         notificationMessage = `${name}'s ${type} expired ${Math.abs(
           days
         )} days ago.`;
@@ -91,7 +94,7 @@ export default function AdminDashboard() {
       tasks.push({
         message: taskMessage,
         isExpiringToday,
-        isExpiringWeek
+        isExpiringWeek,
       });
     });
 

@@ -28,12 +28,12 @@ const initialFormData = {
   mailingZipCode: "",
   homePhone: "",
   cellPhone: "",
-  personalEmail: "",
+  fax: "",
   workEmail: "",
-  emergencyContactName: "",
-  emergencyContactRelation: "Select Relationship",
-  emergencyContactPhone: "",
-  emergencyContactEmail: "",
+  // emergencyContactName: "",
+  // emergencyContactRelation: "Select Relationship",
+  // emergencyContactPhone: "",
+  // emergencyContactEmail: "",
 };
 
 const relationshipOptions = [
@@ -277,7 +277,7 @@ export default function CredentialingContacts() {
 
           <div className="w-full flex flex-wrap justify-start gap-4 items-start">
             <PhoneInput
-              title={"Home Ph."}
+              title={"Work Ph."}
               name={"homePhone"}
               value={formData.homePhone}
               onChange={handleChange}
@@ -288,10 +288,10 @@ export default function CredentialingContacts() {
               value={formData.cellPhone}
               onChange={handleChange}
             />
-            <EmailInput
-              title={"Personal Email"}
-              name={"personalEmail"}
-              value={formData.personalEmail}
+            <PhoneInput
+              title={"Fax"}
+              name={"fax"}
+              value={formData.fax}
               onChange={handleChange}
             />
             <EmailInput
@@ -303,7 +303,7 @@ export default function CredentialingContacts() {
           </div>
 
           {/* Emergency Contact Information */}
-          <HeadingLine title={"Emergency Contact Information"} />
+          {/* <HeadingLine title={"Emergency Contact Information"} />
 
           <div className="w-full flex flex-wrap justify-start gap-4 items-start">
             <TextInput
@@ -333,7 +333,7 @@ export default function CredentialingContacts() {
               value={formData.emergencyContactEmail}
               onChange={handleChange}
             />
-          </div>
+          </div> */}
           <div className="w-full flex flex-row justify-end items-center">
             <Button title={"Save"} onClick={handleSubmit} />
           </div>

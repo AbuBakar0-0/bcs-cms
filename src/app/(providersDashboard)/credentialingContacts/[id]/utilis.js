@@ -23,21 +23,21 @@ export const validateCredsContactForm = (data) => {
 	if (data.personalEmail && !emailRegex.test(data.personalEmail))
 		return "Invalid personal email format";
 
-	if (!data.emergencyContactName?.trim())
-		return "Emergency contact name is required";
+	// if (!data.emergencyContactName?.trim())
+	// 	return "Emergency contact name is required";
 
-	if (data.emergencyContactRelation === "Select Relationship")
-		return "Relationship is required";
+	// if (data.emergencyContactRelation === "Select Relationship")
+	// 	return "Relationship is required";
 
-	if (!data.emergencyContactPhone?.trim()) return "Emergency phone is required";
+	// if (!data.emergencyContactPhone?.trim()) return "Emergency phone is required";
 
-	if (!data.emergencyContactEmail?.trim()) return "Emergency email is required";
+	// if (!data.emergencyContactEmail?.trim()) return "Emergency email is required";
 
-	if (
-		data.emergencyContactEmail &&
-		!emailRegex.test(data.emergencyContactEmail)
-	)
-		return "Invalid emergency contact email format";
+	// if (
+	// 	data.emergencyContactEmail &&
+	// 	!emailRegex.test(data.emergencyContactEmail)
+	// )
+	// 	return "Invalid emergency contact email format";
 
 	return "";
 };

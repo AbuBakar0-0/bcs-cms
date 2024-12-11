@@ -53,7 +53,6 @@ function DocumentChart({ data }) {
 
   // Handle click event for a cell to navigate
   const handleClick = (status) => {
-    console.log("CALLED");
     if(status=="Requested"){
       router.push(`/documentCenter?type=Requested Provider`); // Use router.push for navigation
 

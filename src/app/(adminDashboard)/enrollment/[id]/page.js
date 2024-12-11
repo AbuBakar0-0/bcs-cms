@@ -37,12 +37,12 @@ export default function Enrollment() {
 
   function getColor(status) {
     const statusClasses = {
-      Submitted: "text-blue-500", // Blue
-      "In-Progress": "text-yellow-500", // Yellow
-      Approved: "text-green-500", // Green
-      Rejected: "text-red-500", // Red
-      "Panel Closed": "text-purple-500", // Purple
-      "Missing Information": "text-orange-500", // Orange
+      Submitted: "bg-blue-500 text-white", // Blue
+      "In-Progress": "bg-yellow-500 text-white", // Yellow
+      Approved: "bg-green-500 text-white", // Green
+      Rejected: "bg-red-500 text-white", // Red
+      "Panel Closed": "bg-purple-500 text-white", // Purple
+      "Missing Information": "bg-orange-500 text-white", // Orange
     };
 
     // Return the classes for the given status or default classes
