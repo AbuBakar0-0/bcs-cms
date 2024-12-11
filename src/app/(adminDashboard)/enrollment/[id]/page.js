@@ -37,16 +37,16 @@ export default function Enrollment() {
 
   function getColor(status) {
     const statusClasses = {
-      Submitted: "bg-blue-500 text-white", // Blue
-      "In-Progress": "bg-yellow-500 text-white", // Yellow
-      Approved: "bg-green-500 text-white", // Green
-      Rejected: "bg-red-500 text-white", // Red
-      "Panel Closed": "bg-purple-500 text-white", // Purple
-      "Missing Information": "bg-orange-500 text-white", // Orange
+      Submitted: "text-blue-500", // Blue
+      "In-Progress": "text-yellow-500", // Yellow
+      Approved: "text-green-500", // Green
+      Rejected: "text-red-500", // Red
+      "Panel Closed": "text-purple-500", // Purple
+      "Missing Information": "text-orange-500", // Orange
     };
 
     // Return the classes for the given status or default classes
-    return statusClasses[status] || "bg-gray-500 text-white"; // Default: Gray
+    return statusClasses[status] || "text-gray-500"; // Default: Gray
   }
 
   // Filter the provider data based on the search query
