@@ -3,29 +3,36 @@
 import Button from "@/components/ui/Button";
 import axios from "axios"; // Import axios for HTTP requests
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation"; // Import the correct hooks
 
-export default function DocumentCenter() {
+// Component for Document Center
+const DocumentCenterContent = () => {
   const [activeTab, setActiveTab] = useState("provider");
   const [documents, setDocuments] = useState([]); // Store documents in state
   const [filteredDocuments, setFilteredDocuments] = useState([]); // Store filtered documents for search
   const [loading, setLoading] = useState(true); // Handle loading state
   const [error, setError] = useState(""); // Store any errors
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
-  const [uuid, setuuid] = useState("");
+  const [uuid, setUuid] = useState("");
 
   const [type, setType] = useState();
+
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
+  const searchParams = useSearchParams(); // Use the correct hook for search params
+  const router = useRouter();
+  const { query } = router; // Get query parameters using router
+
+  console.log(query);  // Debug: Log the query parameters
 
   const handleView = (doc) => {
     if (!doc.url) {
@@ -45,7 +52,7 @@ export default function DocumentCenter() {
   };
 
   const fetchDocuments = async () => {
-    setuuid(localStorage.getItem("user_uuid"));
+    setUuid(localStorage.getItem("user_uuid"));
     const userUuid = localStorage.getItem("user_uuid");
     if (!userUuid) {
       setError("User UUID not found");
@@ -54,18 +61,18 @@ export default function DocumentCenter() {
     }
 
     try {
-      // Make an Axios request to get the documents
+      // Fetch documents from API
       const response = await axios.get(`/api/document-center?uuid=${userUuid}`);
 
-      // Set the documents state with the fetched data
+      // Set documents state
       setDocuments(response.data);
-      setFilteredDocuments(response.data); // Initially, set filtered docs to all docs
-      const searchParams = useSearchParams();
-      const documentType = searchParams.get("type");
-      setType(documentType); // Set the type state
+      setFilteredDocuments(response.data); // Initially set filtered docs to all docs
+
+      const documentType = searchParams.get("type"); // Get the 'type' query parameter from URL
+      setType(documentType); // Update the type state
 
       if (documentType) {
-        // Filter documents based on the type from the query params
+        // If 'type' query parameter exists, filter the documents based on 'status'
         const filtered = response.data.filter((doc) => doc.status === documentType);
         setFilteredDocuments(filtered); // Update filtered documents
       }
@@ -98,15 +105,15 @@ export default function DocumentCenter() {
   }
 
   useEffect(() => {
-    fetchDocuments();
-  }, []); // Fetch documents on component mount
+    fetchDocuments(); // Fetch documents when component mounts
+  }, []); // Empty dependency array ensures it only runs once
 
   // Filter documents based on search term
   const handleSearch = (e) => {
     const term = e.target.value.toLowerCase();
     setSearchTerm(term);
 
-    // Filter the documents based on the search term
+    // Filter documents based on the search term
     const filtered = documents.filter((doc) => {
       return (
         doc.providers_info.first_name.toLowerCase().includes(term) ||
@@ -134,7 +141,6 @@ export default function DocumentCenter() {
         </td>
         <td className="p-3">{doc.title}</td>
         <td className="p-3">{formatDate(doc.expiry_date)}</td>
-        {/* Apply date format */}
         <td className={`p-3 ${getStatusColor(doc.status)}`}>{doc.status}</td>
         <td className="p-3 flex flex-row justify-start items-center gap-2">
           <button onClick={() => handleView(doc)}>
@@ -224,4 +230,13 @@ export default function DocumentCenter() {
       </div>
     </AdminDashboardLayout>
   );
-}
+};
+
+// Wrap the DocumentCenterContent with Suspense
+const DocumentCenter = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <DocumentCenterContent />
+  </Suspense>
+);
+
+export default DocumentCenter;
