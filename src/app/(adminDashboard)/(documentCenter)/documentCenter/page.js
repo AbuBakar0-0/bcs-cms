@@ -246,6 +246,33 @@ const DocumentCenterContent = () => {
       setLoading(false);
     }
   };
+  const handleDelete = async (doc) => {
+    if (!window.confirm("Are you sure you want to delete this document?")) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch("/api/documents", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uuid: doc.uuid,
+          file_public_id: doc.file_public_id,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to delete document");
+
+      await fetchDocuments();
+      toast.success("Document deleted successfully");
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error("Failed to delete document");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Inside renderDocuments function
   const renderDocuments = () => {
@@ -268,7 +295,13 @@ const DocumentCenterContent = () => {
             onClick={() => handleEdit(doc)}
           />
           /
-          <MdDeleteOutline className="text-red-400" />
+          <button
+            type="button"
+            onClick={() => handleDelete(doc)}
+            className="text-red-600 hover:text-red-800"
+          >
+            <MdDeleteOutline className="size-5" />
+          </button>
         </td>
       </tr>
     ));
