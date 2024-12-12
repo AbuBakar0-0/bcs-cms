@@ -11,6 +11,7 @@ const Dropdown = ({
 	onChange,
 	name,
 	value,
+	disabled = false
 }) => {
 	const isTaxonomy = title.toLowerCase().includes("taxonomy") || title.toLowerCase().includes("speciality");
 
@@ -52,7 +53,9 @@ const Dropdown = ({
 	};
 
 	const toggleDropdown = () => {
-		setIsDropdownOpen((prev) => !prev);
+		if (!disabled) {
+			setIsDropdownOpen((prev) => !prev);
+		}
 	};
 
 	const handleSearch = (e) => {
@@ -78,12 +81,16 @@ const Dropdown = ({
 				{title} {required ? <span className="text-red-500">*</span> : null}
 			</label>
 			<div
-				className="border border-gray-300 rounded px-3 py-2 text-gray-700 relative cursor-pointer"
+				className={`border rounded px-3 py-2 relative cursor-pointer text-gray-700 ${
+					disabled
+						? "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed"
+					: "border-gray-300"
+				}`}
 				onClick={toggleDropdown}
 			>
 				{getDisplayValue()}
 			</div>
-			{isDropdownOpen && (
+			{isDropdownOpen && !disabled && (
 				<div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded mt-1 shadow-lg z-10">
 					<input
 						type="text"
@@ -91,6 +98,7 @@ const Dropdown = ({
 						value={searchQuery}
 						onChange={handleSearch}
 						className="border-b border-gray-300 w-full px-3 py-2 text-gray-700 focus:outline-none"
+						disabled={disabled}
 					/>
 					<ul className="max-h-40 overflow-y-auto">
 						{filteredOptions.map((option, index) => (
@@ -118,6 +126,7 @@ const Dropdown = ({
 					width={"w-full"}
 					onChange={handleOtherChange}
 					name={`${name}-other`}
+					disabled={disabled}
 				/>
 			) : null}
 		</div>

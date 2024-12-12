@@ -141,7 +141,7 @@ export default function PairSetup() {
 								<p>{new Date(setup.application_date).toLocaleDateString()}</p>
 							</div>
 							<div className="w-1/4">
-								<p>{setup.note}</p>
+								<p className="truncate max-w-96">{setup.note}</p>
 							</div>
 							<div className="flex flex-row justify-center items-center gap-4">
 								<CiEdit

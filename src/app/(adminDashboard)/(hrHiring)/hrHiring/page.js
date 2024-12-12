@@ -7,10 +7,10 @@ import dynamic from "next/dynamic";
 export default function page() {
   const hrData = [
     { name: "Total Employee", value: 100, type: "Employees", link: "" },
-    { name: "On Boarding", value: 90, type: "Employees", link: "" },
+    { name: "On Boarding", value: 90, type: "Employees", link: "/applyNow" },
     { name: "Probation", value: 5, type: "Employees", link: "" },
     { name: "Resigned Employees", value: 5, type: "Employees", link: "" },
-    { name: "Open Vacancies", value: 15, type: "Vacancies", link: "/applyNow" },
+    { name: "Open Vacancies", value: 15, type: "Vacancies", link: "" },
   ];
 
   const EmployeeChart = dynamic(() => import("./employeeChart.js"), {

@@ -99,8 +99,8 @@ export default function Page() {
                   <tbody>
                     {filteredData.map((item, index) => (
                       <tr className="border-b" key={index}>
-                        <td className="p-3">{item.doing_business_name}</td>
                         <td className="p-3">{item.legal_business_name}</td>
+                        <td className="p-3">{item.doing_business_name}</td>
                         <td className="p-3">{item.npi_2}</td>
                         <td className="p-3">{item.taxonomy_code_1}</td>
                         <td className="p-3">

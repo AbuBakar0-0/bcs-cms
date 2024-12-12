@@ -105,19 +105,30 @@ export default function Enrollment() {
                         <td colSpan={5}></td>
                       </tr>
                     ) : (
-                      (filteredProviderData?.length > 0 ? filteredProviderData : providerData)?.map(
-                        (payer, index) => (
-                          <tr className="border-b" key={index}>
-                            <td className="w-1/5 p-3">{payer.payer_name}</td>
-                            <td className="w-1/5 p-3">{payer.plan_type}</td>
-                            <td className="w-1/5 p-3">{payer.business}</td>
-                            <td className={`w-1/5 p-3 ${getColor(payer.status)}`}>
-                              {payer.status}
-                            </td>
-                            <td className="w-1/5 p-3">{payer.note}</td>
-                          </tr>
-                        )
-                      ) || (
+                      (filteredProviderData?.length > 0
+                        ? filteredProviderData
+                        : providerData
+                      )?.map((payer, index) => (
+                        <tr className="border-b" key={index}>
+                          <td className="w-1/5 p-3">{payer.payer_name}</td>
+                          <td className="w-1/5 p-3">{payer.plan_type}</td>
+                          <td className="w-1/5 p-3">{payer.business}</td>
+                          <td className={`w-1/5 p-3 ${getColor(payer.status)}`}>
+                            {payer.status}
+                          </td>
+                          <td
+                            className="w-1/5 p-3 truncate max-w-80 relative group"
+                            title={payer.note}
+                          >
+                            <span className="overflow-hidden">
+                              {payer.note}
+                            </span>
+                            <div className="tooltip absolute hidden group-hover:block">
+                              {payer.note}
+                            </div>
+                          </td>
+                        </tr>
+                      )) || (
                         <tr>
                           <td
                             colSpan="3"

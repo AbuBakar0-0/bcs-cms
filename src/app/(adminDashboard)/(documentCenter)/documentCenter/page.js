@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Button from "@/components/ui/Button";
 import axios from "axios"; // Import axios for HTTP requests
@@ -11,8 +11,55 @@ import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
 import { useRouter, useSearchParams } from "next/navigation"; // Import the correct hooks
+import Dropdown from "@/components/ui/inputFields/DropDown";
+import DateInput from "@/components/ui/inputFields/DateInput";
+import BaseInput from "@/components/ui/inputFields/BaseInput";
+import { useProviders } from "@/hooks/useProvider";
+import toast from "react-hot-toast";
 
-// Component for Document Center
+const documentsList = [
+  "IRS Letter (It could be your SS-4, CP 575 or 147C)",
+  "Professional State License or Business License",
+  "State Release",
+  "Professional Liability Insurance Certificate (Malpractice COI)",
+  "General Liability Insurance",
+  "Voided Check or Bank Letter (Must contain Exact Name as it is on IRS Letter)",
+  "Board Certification",
+  "DEA Certification",
+  "DEA Waiver",
+  "CLIA Certification",
+  "Business Registration",
+  "Lease Agreement",
+  "Utility bill",
+  "W9 Form",
+  "Professional Degree",
+  "Provider Resume in MM/YYYY format",
+  "Hospital Affiliation",
+  "Hospital Privileges Letter",
+  "Pharmacy Certificate",
+  "BLC Certificate",
+  "Accreditation",
+  "Background Screening",
+];
+
+const initialFormData = {
+  documentTitle: documentsList[0],
+  provider: "",
+  status: "",
+  issueDate: "",
+  expiryDate: "",
+  file: null,
+};
+
+const statusOptions = [
+  "Active",
+  "Missing",
+  "Expiring",
+  "Expired",
+  "On File",
+  "Requested Provider",
+];
+
 const DocumentCenterContent = () => {
   const [activeTab, setActiveTab] = useState("provider");
   const [documents, setDocuments] = useState([]); // Store documents in state
@@ -21,6 +68,11 @@ const DocumentCenterContent = () => {
   const [error, setError] = useState(""); // Store any errors
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
   const [uuid, setUuid] = useState("");
+  const [formData, setFormData] = useState(initialFormData);
+  const [isEditing, setIsEditing] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const { providers, getProviderByName } = useProviders();
 
   const toggleTab = (tab) => {
     setActiveTab(tab);
@@ -62,11 +114,13 @@ const DocumentCenterContent = () => {
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially set filtered docs to all docs
 
-      const documentType = searchParams.get("type"); 
+      const documentType = searchParams.get("type");
 
       if (documentType) {
         // If 'type' query parameter exists, filter the documents based on 'status'
-        const filtered = response.data.filter((doc) => doc.status === documentType);
+        const filtered = response.data.filter(
+          (doc) => doc.status === documentType
+        );
         setFilteredDocuments(filtered); // Update filtered documents
       }
 
@@ -124,6 +178,75 @@ const DocumentCenterContent = () => {
     return date.toLocaleDateString("en-US");
   };
 
+  const handleEdit = (doc) => {
+    console.log(doc);
+    setFormData({
+      title: doc.title || "",
+      provider:
+        doc.providers_info.first_name + " " + doc.providers_info.last_name ||
+        "",
+      status: doc.status || "",
+      effective_date: doc.effective_date || "",
+      expiry_date: doc.expiry_date || "",
+      file: doc.url || "",
+      existing_url: doc.url || "",
+      existing_file_public_id: doc.file_public_id || "",
+      uuid: doc.uuid || "",
+    });
+    setIsEditing(true);
+    setShowDialog(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (
+      ["Select Provider", "Select Document", "Select Status"].includes(value)
+    ) {
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    toast.loading("Please Wait");
+    setLoading(true);
+    try {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== "") {
+          if (key === "provider") {
+            const provider = getProviderByName(value);
+            formDataToSend.append("provider_id", provider.uuid);
+          } else {
+            formDataToSend.append(key, value);
+          }
+        }
+      });
+      const response = await fetch("/api/documents", {
+        method: isEditing ? "PUT" : "POST",
+        body: formDataToSend,
+      });
+
+      if (!response.ok) throw new Error("Failed to save document");
+      toast.dismiss();
+      await fetchDocuments();
+      setShowDialog(false);
+      toast.success(
+        `Document ${isEditing ? "updated" : "created"} successfully`
+      );
+    } catch (error) {
+      console.error("Error saving document:", error);
+      toast.error("Failed to save document");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Inside renderDocuments function
   const renderDocuments = () => {
     return filteredDocuments.map((doc, index) => (
@@ -140,9 +263,10 @@ const DocumentCenterContent = () => {
             <FaEye className="text-secondary" />
           </button>
           /
-          <Link href={`/document/${uuid}`}>
-            <CiEdit className="text-primary cursor-pointer" />
-          </Link>
+          <CiEdit
+            className="text-primary cursor-pointer"
+            onClick={() => handleEdit(doc)}
+          />
           /
           <MdDeleteOutline className="text-red-400" />
         </td>
@@ -173,16 +297,133 @@ const DocumentCenterContent = () => {
         </Link>
       </div>
 
+      {showDialog ? (
+        <>
+          <div className="w-full bg-white rounded-lg shadow-lg p-6 my-4">
+            <div className="w-full flex flex-wrap justify-between items-center">
+              <Dropdown
+                title="Document Type"
+                name="title"
+                options={documentsList}
+                value={formData.title}
+                onChange={handleChange}
+                width="w-[48%]"
+              />
+              <Dropdown
+                title="Provider"
+                name="provider"
+                options={providers}
+                value={formData.provider}
+                width="w-[48%]"
+                onChange={handleChange}
+                disabled={true}
+              />
+              <Dropdown
+                title="Status"
+                name="status"
+                options={statusOptions}
+                value={formData.status}
+                width="w-[48%]"
+                onChange={handleChange}
+              />
+              <div
+                className={`${
+                  formData.status == "Missing" ||
+                  formData.status == "Requested Provider"
+                    ? "hidden"
+                    : "flex w-[48%]"
+                }`}
+              >
+                <DateInput
+                  title="Effective Date"
+                  required={
+                    formData.status == "Missing" ||
+                    formData.status == "Requested Provider"
+                      ? false
+                      : true
+                  }
+                  name="effective_date"
+                  value={formData.effective_date}
+                  onChange={handleChange}
+                  width="w-full"
+                />
+              </div>
+
+              <div
+                className={`${
+                  formData.status == "Missing" ||
+                  formData.status == "Requested Provider"
+                    ? "hidden"
+                    : "flex w-full justify-between "
+                }`}
+              >
+                <DateInput
+                  title="Expiry Date"
+                  name="expiry_date"
+                  value={formData.expiry_date}
+                  width="w-[48%]"
+                  onChange={handleChange}
+                  required={
+                    formData.status == "Missing" ||
+                    formData.status == "Requested Provider"
+                      ? false
+                      : true
+                  }
+                />
+                <BaseInput
+                  required={
+                    formData.status == "Missing" ||
+                    formData.status == "Requested Provider"
+                      ? false
+                      : true
+                  }
+                  title="Upload File"
+                  type="file"
+                  name="file"
+                  width="w-[48%]"
+                  onChange={handleChange}
+                  accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                />
+              </div>
+            </div>
+            <div className="mt-6 flex justify-end gap-4">
+              <Button
+                type="button"
+                title="Cancel"
+                variant="outline"
+                onClick={() => {
+                  setShowForm(false);
+                  resetForm();
+                }}
+              />
+              <Button
+                type="submit"
+                onClick={handleSubmit}
+                title={isEditing ? "Update" : "Save"}
+                disabled={loading}
+              />
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
       {/* Tabs for toggling */}
       <div className="flex mb-4">
         <button
-          className={`px-4 py-2 mr-2 rounded-lg ${activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 mr-2 rounded-lg ${
+            activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"
+          }`}
           onClick={() => toggleTab("provider")}
         >
           Provider Documents
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${activeTab === "organization" ? "bg-primary text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded-lg ${
+            activeTab === "organization"
+              ? "bg-primary text-white"
+              : "bg-gray-200"
+          }`}
           onClick={() => toggleTab("organization")}
         >
           Organization Documents
