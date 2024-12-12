@@ -25,7 +25,6 @@ export async function POST(request) {
 
         if (specialityError) throw specialityError;
 
-        console.log(speciality);
         return new Response(
             JSON.stringify({
                 message: "Speciality saved successfully",

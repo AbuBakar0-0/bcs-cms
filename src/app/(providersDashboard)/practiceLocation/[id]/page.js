@@ -509,11 +509,11 @@ function PracticeLocations() {
                     {
                       item.practice_location_providers[0].providers_info
                         .first_name
-                      }{" "}
+                      }
                     {
                       item.practice_location_providers[0].providers_info
                         .middle_initial
-                      }{" "}
+                      }
                     {
                       item.practice_location_providers[0].providers_info
                       .last_name

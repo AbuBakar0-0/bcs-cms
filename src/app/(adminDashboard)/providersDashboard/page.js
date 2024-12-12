@@ -45,12 +45,12 @@ export default function ProvidersDashboard() {
     }
 
     try {
-      const response = await fetch(`/api/providersDashboard?uuid=${userUuid}`);
+      const response = await fetch(`/api/providers-dashboard?uuid=${userUuid}`);
       if (!response.ok) throw new Error("Failed to fetch providers");
 
       const data = await response.json();
-      setProviders(data.providers);
-      setFilteredProviders(data.providers); // Set initial filtered providers
+      setProviders(data.data);
+      setFilteredProviders(data.data); // Set initial filtered providers
     } catch (error) {
       console.error("Error fetching providers:", error);
     } finally {
@@ -134,12 +134,14 @@ export default function ProvidersDashboard() {
             <thead className="bg-gray-100">
               <tr>
                 <th className="px-4 py-2 text-left">Name</th>
-                <th className="px-4 py-2 text-left">Gender</th>
                 <th className="px-4 py-2 text-left">DOB</th>
-                <th className="px-4 py-2 text-left">SSN</th>
+                <th className="px-4 py-2 text-left">Cell Phone</th>
                 <th className="px-4 py-2 text-left">License ID</th>
-                <th className="px-4 py-2 text-left">Issue Date</th>
-                <th className="px-4 py-2 text-center">Actions</th>
+                <th className="px-4 py-2 text-left">SSN</th>
+                <th className="px-4 py-2 text-left">NPI</th>
+                <th className="px-4 py-2 text-left">Tax ID</th>
+                <th className="px-4 py-2 text-left">UPIN</th>
+                <th className="px-4 py-2 text-left">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -155,19 +157,43 @@ export default function ProvidersDashboard() {
                         {provider.middle_initial} - {provider.provider_title}
                       </Link>
                     </td>
-                    <td className="px-4 py-2 uppercase">{provider.gender}</td>
                     <td className="px-4 py-2">
                       {provider.dob.split("-")[1] || "N/A"}-
                       {provider.dob.split("-")[2] || "N/A"}-
                       {provider.dob.split("-")[0] || "N/A"}
                     </td>
-                    <td className="px-4 py-2">***-**-{provider.ssn.split("-")[2] || "Unknown"}</td>
+                    <td className="px-4 py-2 uppercase">
+                      {provider.contact.cell_phone}
+                    </td>
+                    <td className="px-4 py-2 uppercase">
+                      {provider.license_id}
+                    </td>
+
                     <td className="px-4 py-2">
-                      {provider.license_id || "Unknown"}
+                      ***-**-{provider.ssn.split("-")[2] || "Unknown"}
                     </td>
                     <td className="px-4 py-2">
-                      {provider.issue_date || "Unknown"}
+                      {provider.professional_ids.length != 0
+                        ? provider.professional_ids[
+                            provider?.professional_ids.length - 1
+                          ].npi_1
+                        : "N/A"}
                     </td>
+                    <td className="px-4 py-2">
+                      {provider.professional_ids.length != 0
+                        ? provider.professional_ids[
+                            provider?.professional_ids.length - 1
+                          ].tax_id
+                        : "N/A"}
+                    </td>
+                    <td className="px-4 py-2">
+                      {provider.professional_ids.length != 0
+                        ? provider.professional_ids[
+                            provider?.professional_ids.length - 1
+                          ].upin
+                        : "N/A"}
+                    </td>
+
                     <td className="px-4 py-2 flex justify-center items-center gap-2">
                       <Link
                         href={`/providerDetail/${provider.uuid}`}

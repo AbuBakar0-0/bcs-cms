@@ -22,17 +22,11 @@ const DocumentCenterContent = () => {
   const [searchTerm, setSearchTerm] = useState(""); // Search term state
   const [uuid, setUuid] = useState("");
 
-  const [type, setType] = useState();
-
   const toggleTab = (tab) => {
     setActiveTab(tab);
   };
 
   const searchParams = useSearchParams(); // Use the correct hook for search params
-  const router = useRouter();
-  const { query } = router; // Get query parameters using router
-
-  console.log(query);  // Debug: Log the query parameters
 
   const handleView = (doc) => {
     if (!doc.url) {
@@ -68,8 +62,7 @@ const DocumentCenterContent = () => {
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially set filtered docs to all docs
 
-      const documentType = searchParams.get("type"); // Get the 'type' query parameter from URL
-      setType(documentType); // Update the type state
+      const documentType = searchParams.get("type"); 
 
       if (documentType) {
         // If 'type' query parameter exists, filter the documents based on 'status'

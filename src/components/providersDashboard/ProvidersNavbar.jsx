@@ -12,8 +12,8 @@ const ProvidersNavbar = ({ id }) => {
         { title: "Verification", link: "/verification" },
         { title: "Credentialing Status", link: "/credentialingStatus" },
         { title: "Documents", link: "/providersDocument" },
-        { title: "Privilege Declineation", link: "/privilege" },
         { title: "Location Setup", link: "/locationSetup" },
+        { title: "Privilege Declineation", link: "/privilege" },
     ];
 
     return (

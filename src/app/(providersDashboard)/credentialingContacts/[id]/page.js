@@ -44,7 +44,7 @@ const relationshipOptions = [
   "Father",
   "Mother",
   "CFO",
-  "Others"
+  "Others",
 ];
 
 const titleOptions = [
@@ -165,7 +165,7 @@ export default function CredentialingContacts() {
     try {
       const res = await fetch("/api/credential-contacts");
       const { data, error } = await res.json();
-
+     
       if (error) {
         toast.error("Failed to fetch contacts");
         return;
@@ -379,7 +379,7 @@ export default function CredentialingContacts() {
           </div>
         ))
       )}
-      <NavBottom/>
+      <NavBottom />
     </div>
   );
 }

@@ -30,6 +30,7 @@ export default function AdminDashboard() {
   const [docsExpiringWeek, setDocsExpiringWeek] = useState(0);
   const [loading, setLoading] = useState(false);
   const [payersData, setPayersData] = useState([]);
+  const [expiringWeek,setExpiringWeek]=useState([]);
 
   function formatNotification(data) {
     let notifications = [];
@@ -41,32 +42,26 @@ export default function AdminDashboard() {
       if (days === 0) {
         notificationMessage = `${name}'s ${type} is expiring today.`;
         isExpiringToday = true; // Mark as expiring today
-      } 
-      else if (days > 0) {
+      } else if (days > 0) {
         if (days <= 7) {
           isExpiringWeek = true;
           setDocsExpiringWeek((prev) => prev + 1);
         }
         notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
-      } 
-      else if (days < 31 && days > -31) {
-        console.log(days);
+      } else if (days < 31 && days > -31) {
         notificationMessage = `${name}'s ${type} expired ${Math.abs(
           days
         )} days ago.`;
       }
 
-      notifications.push({
-        message: notificationMessage,
-        isExpiringToday,
-        isExpiringWeek, // Add this property to track if it's expiring today
-      });
+      if (notificationMessage != "") {
+        notifications.push({
+          message: notificationMessage,
+          isExpiringToday,
+          isExpiringWeek, // Add this property to track if it's expiring today
+        });
+      }
     });
-
-    // Sort notifications: Place expiring today at the top
-    notifications.sort(
-      (a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0)
-    );
 
     return notifications;
   }
@@ -87,21 +82,17 @@ export default function AdminDashboard() {
           isExpiringWeek = true;
         }
         taskMessage = `Update ${name}'s ${type}`;
-      } else if (days < 31) {
+      } else if (days < 31 && days > -31) {
         taskMessage = `Update ${name}'s ${type}`;
       }
-
-      tasks.push({
-        message: taskMessage,
-        isExpiringToday,
-        isExpiringWeek,
-      });
+      if (taskMessage != "") {
+        tasks.push({
+          message: taskMessage,
+          isExpiringToday,
+          isExpiringWeek,
+        });
+      }
     });
-
-    // Sort notifications: Place expiring today at the top
-    tasks.sort(
-      (a, b) => (b.isExpiringToday ? 1 : 0) - (a.isExpiringToday ? 1 : 0)
-    );
 
     return tasks;
   }
@@ -192,6 +183,7 @@ export default function AdminDashboard() {
     fetchExpiredIds();
     fetchExpiredLicense();
     fetchPayers();
+
   }, []);
 
   return (
@@ -252,7 +244,7 @@ export default function AdminDashboard() {
           </div>
           <div className="w-[48%] border-2 border-black h-40 rounded-lg flex flex-col justify-start items-start p-4 gap-2 overflow-auto">
             <div className="w-full flex flex-row justify-between items-center">
-              <span className="text-lg font-semibold">Tasks</span>
+              <span className="text-lg font-semibold">User Tasks</span>
               {/* <button className="text-lg font-semibold text-white bg-green-500 size-6 flex justify-center items-center">
                 +
               </button> */}
@@ -302,8 +294,8 @@ export default function AdminDashboard() {
             </div>
           </div>
           <div className="w-[48%] flex flex-col justify-start items-center gap-4">
-            <div className="w-full h-96 border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
-              <span className="text-lg font-semibold">Payers Status</span>
+            <div className="w-full h-auto border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
+              <span className="text-lg font-semibold">Payers Credentialing Status</span>
               {loading ? (
                 <div className="w-full flex justify-center">
                   <ClipLoader />

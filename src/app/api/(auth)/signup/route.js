@@ -17,7 +17,7 @@ export async function POST(request) {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
-    console.log(data);
+   
     return NextResponse.json({
       success: true,
       user: data, // Return the inserted user data

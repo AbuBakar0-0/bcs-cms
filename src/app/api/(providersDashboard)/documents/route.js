@@ -69,7 +69,6 @@ export async function POST(req) {
     if (!file || file.size === 0) {
       const title = formData.get("title");
       const status = formData.get("status");
-      console.log("HERE");
       const { error } = await supabase.from("provider_documents").insert({
         title,
         status,

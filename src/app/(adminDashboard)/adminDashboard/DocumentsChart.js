@@ -1,5 +1,5 @@
 "use client";
-import { useRouter } from 'next/navigation'; // Import useRouter from next/router
+import { useRouter } from "next/navigation"; // Import useRouter from next/router
 import {
   Bar,
   BarChart,
@@ -47,18 +47,18 @@ function DocumentChart({ data }) {
     return {
       name: status === "Requested Provider" ? "Requested" : status, // Trim name
       value: foundItem ? foundItem.total_count : 0, // Use 0 if no data is found
-      color: getStatusColor(status === "Requested Provider" ? "Requested" : status), // Match color for trimmed name
+      color: getStatusColor(
+        status === "Requested Provider" ? "Requested" : status
+      ), // Match color for trimmed name
     };
   });
 
   // Handle click event for a cell to navigate
   const handleClick = (status) => {
-    if(status=="Requested"){
+    if (status == "Requested") {
       router.push(`/documentCenter?type=Requested Provider`); // Use router.push for navigation
-
-    }else{
+    } else {
       router.push(`/documentCenter?type=${status}`); // Use router.push for navigation
-
     }
   };
 
@@ -71,16 +71,13 @@ function DocumentChart({ data }) {
       barSize={30}
     >
       <CartesianGrid strokeDasharray="10 10" />
-
       {/* Set intervals for X-Axis */}
       <XAxis
         dataKey="name"
         interval={0} // Show all ticks (you can change this for intervals)
       />
-
       {/* Set intervals for Y-Axis */}
       <YAxis ticks={[0, 3, 6, 9, 12]} /> {/* Manually set the tick intervals */}
-
       <Tooltip />
       <Bar dataKey="value" name="Documents">
         {renderData.map((entry, index) => (

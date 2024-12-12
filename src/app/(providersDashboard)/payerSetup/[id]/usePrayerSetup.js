@@ -90,7 +90,6 @@ export const usePayerSetup = () => {
         ...record,
         provider: getProviderNameByUuid(record.provider_id),
       }));
-      console.log(formattedData);
       setPayerSetups(formattedData);
 
       const userUuid = localStorage.getItem("user_uuid");
@@ -134,7 +133,6 @@ export const usePayerSetup = () => {
         ...record,
         provider: getProviderNameByUuid(record.provider_id),
       }));
-      console.log(formattedData);
       setPayerSetups(formattedData);
     } catch (error) {
       setError(error.message);
@@ -190,9 +188,7 @@ export const usePayerSetup = () => {
     } catch (error) {
       setError(error.message);
       console.error("Error submitting form:", error);
-      toast.error(`Error: ${error.message}`, {
-        id: loadingToast,
-      });
+      toast.error(`Error: ${error.message}`);
     } finally {
       setLoading(false);
     }

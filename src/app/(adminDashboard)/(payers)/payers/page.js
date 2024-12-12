@@ -8,6 +8,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
 import { CiSearch } from "react-icons/ci";
+import { useSearchParams } from "next/navigation";
 
 export default function Payers() {
   const [activeTab, setActiveTab] = useState("provider");
@@ -16,6 +17,10 @@ export default function Payers() {
   const [loading, setLoading] = useState(false);
   const [uuid, setUuid] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const searchParams = useSearchParams(); // Use the correct hook for search params
+
+  // Get the 'type' parameter from the URL query string
+  const typeFilter = searchParams.get("type");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +31,7 @@ export default function Payers() {
           `/api/payers?uuid=${localStorage.getItem("user_uuid")}`
         );
         setData(response.data);
-        console.log(response.data);
+        
       } catch (err) {
         setError(err.response?.data?.error || "An error occurred");
       } finally {
@@ -49,40 +54,44 @@ export default function Payers() {
       Rejected: "text-red-500",
       "Panel Closed": "text-purple-500",
       "Missing Information": "text-orange-500",
+      "Requested Application": "text-[#FF6347]",
     };
     return statusClasses[status] || "bg-gray-500 text-white";
   }
 
   const renderDocuments = () => {
-    const filteredDocs = data.filter((doc) => {
-      const searchFields = [
-        doc.plan_type,
-        doc.business,
-        doc.providers_info?.first_name,
-        doc.providers_info?.last_name,
-        doc.payer_name,
-        doc.status,
-        doc.application_date,
-        doc.note,
-      ];
+    const filteredDocs = data
+      .filter((doc) => {
+        const searchFields = [
+          doc.plan_type,
+          doc.business,
+          doc.providers_info?.first_name,
+          doc.providers_info?.last_name,
+          doc.payer_name,
+          doc.status,
+          doc.application_date,
+          doc.note,
+        ];
 
-      return searchFields.some(
-        (field) =>
-          field &&
-          field.toString().toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    });
+        // Filter based on search query
+        const searchMatch = searchFields.some(
+          (field) =>
+            field &&
+            field.toString().toLowerCase().includes(searchQuery.toLowerCase())
+        );
 
-    return filteredDocs.length === 0 ? (
-      <tr>
-        <td colSpan="7" className="p-3 text-center">No payers found</td>
-      </tr>
-    ) : (
-      filteredDocs.map((doc, index) => (
+        // Filter based on 'type' query if provided
+        const statusMatch =
+          !typeFilter || doc.status.toLowerCase() === typeFilter.toLowerCase();
+
+        return searchMatch && statusMatch;
+      })
+      .map((doc, index) => (
         <tr className="border-b" key={index}>
           {activeTab === "provider" && (
             <td className="p-3">
-              {doc.providers_info?.first_name} {doc.providers_info?.middle_initial}{" "}
+              {doc.providers_info?.first_name}{" "}
+              {doc.providers_info?.middle_initial}{" "}
               {doc.providers_info?.last_name}
             </td>
           )}
@@ -93,7 +102,16 @@ export default function Payers() {
           <td className="p-3">{doc.application_date}</td>
           <td className="p-3">{doc.note}</td>
         </tr>
-      ))
+      ));
+
+    return filteredDocs.length === 0 ? (
+      <tr>
+        <td colSpan="7" className="p-3 text-center">
+          No payers found
+        </td>
+      </tr>
+    ) : (
+      filteredDocs
     );
   };
 
@@ -122,13 +140,19 @@ export default function Payers() {
 
       <div className="flex mb-4">
         <button
-          className={`px-4 py-2 mr-2 rounded-lg ${activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 mr-2 rounded-lg ${
+            activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"
+          }`}
           onClick={() => toggleTab("provider")}
         >
           Provider Credentialing
         </button>
         <button
-          className={`px-4 py-2 rounded-lg ${activeTab === "organization" ? "bg-primary text-white" : "bg-gray-200"}`}
+          className={`px-4 py-2 rounded-lg ${
+            activeTab === "organization"
+              ? "bg-primary text-white"
+              : "bg-gray-200"
+          }`}
           onClick={() => toggleTab("organization")}
         >
           Organization Credentialing

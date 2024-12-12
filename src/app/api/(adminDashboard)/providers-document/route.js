@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
-    console.log("CALLED");
 
     // Extract the provider_id parameter from the request URL
     const searchParams = request.nextUrl.searchParams;
@@ -25,7 +24,6 @@ export async function GET(request) {
       
     if (error) throw error;
 
-    console.log(data);
 
     // Check if data is empty
     if (!data || data.length === 0) {

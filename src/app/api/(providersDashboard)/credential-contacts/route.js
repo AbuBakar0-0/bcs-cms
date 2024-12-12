@@ -36,7 +36,6 @@ export async function GET() {
           .select("*")
           .eq("uuid", contact.mailing_address_id)
           .single();
-
         return {
           uuid: contact.uuid,
           credentialingTitle: contact.title,
@@ -55,7 +54,6 @@ export async function GET() {
         };
       })
     );
-    console.log(enrichedData);
     return NextResponse.json({ data: enrichedData });
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -65,7 +63,6 @@ export async function GET() {
 export async function POST(request) {
   try {
     const body = await request.json();
-    console.log(body);
     const { data: contactData, error: contactError } = await supabase
       .from("contacts")
       .insert({
@@ -136,7 +133,6 @@ export async function PUT(request) {
   try {
     const body = await request.json();
     const { uuid } = body;
-    console.log(body.emergencyContactRelation);
     const { data: existing, error: fetchError } = await supabase
       .from("credentialing_contacts")
       .select("*")

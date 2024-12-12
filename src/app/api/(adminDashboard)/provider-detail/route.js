@@ -80,7 +80,6 @@ export async function GET(request) {
     const result = Object.values(groupedData);
 
     // Return the grouped data
-    console.log(result);
     return new Response(JSON.stringify(result), {
       headers: { "Content-Type": "application/json" },
       status: 200,

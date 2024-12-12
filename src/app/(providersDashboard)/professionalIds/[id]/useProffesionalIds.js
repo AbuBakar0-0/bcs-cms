@@ -83,6 +83,7 @@ const defaultState = {
 	caqhUserId: "",
 	caqhUsername: "",
 	caqhPassword: "",
+	caqhExpiryDate:"",
 
 	pecosUsername: "",
 	pecosPassword: "",
@@ -99,6 +100,7 @@ const defaultState = {
 	medicaidUsername: "",
 	medicaidPassword: "",
 
+	bankName:"",
 	bankLoginUsername: "",
 	bankLoginPassword: "",
 
@@ -220,7 +222,6 @@ export const useProfessionalIdsForm = () => {
 
 	const handleSubmit = async () => {
 		const missingFields = validateForm(formData);
-		console.log(formData);
 		if (missingFields.length > 0) {
 			toast.error(
 				`Please fill in the required fields: ${missingFields.join(", ")}`

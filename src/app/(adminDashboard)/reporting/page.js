@@ -39,7 +39,7 @@ export default function Reporting() {
           `/api/payers?uuid=${localStorage.getItem("user_uuid")}`
         );
         setData(response.data);
-        console.log(response.data);
+        
       } catch (err) {
         setError(err.response?.data?.error || "An error occurred");
       } finally {
@@ -127,7 +127,7 @@ export default function Reporting() {
         <td className="p-3">{doc.plan_type}</td>
         <td className="p-3">{doc.business}</td>
         <td className="p-3">
-          {doc.providers_info?.first_name} {doc.providers_info?.middle_initial}{" "}
+          {doc.providers_info?.first_name} {doc.providers_info?.middle_initial}
           {doc.providers_info?.last_name}
         </td>
         <td className="p-3">{doc.payer_name}</td>

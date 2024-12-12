@@ -148,14 +148,13 @@ const ProfessionalIds = () => {
           onChange={(e) => handleChange(e)}
         />
       </div>
-      
     </>
   );
 
   const renderPortalCredentials = (prefix, title, link) => (
     <div
       className={`${
-        prefix === "other" || prefix === "caqh" ? "w-[99%]" : "w-[49%]"
+        prefix === "other" || prefix === "caqh" || prefix=="bankLogin"? "w-[99%]" : "w-[49%]"
       } flex flex-wrap justify-start gap-4 items-end`}
     >
       {prefix === "caqh" && (
@@ -165,6 +164,16 @@ const ProfessionalIds = () => {
           required={false}
           name={`${prefix}UserId`}
           value={formData[`${prefix}UserId`] || ""}
+          onChange={(e) => handleChange(e)}
+        />
+      )}
+      {prefix.toLowerCase() === "banklogin" && (
+        <TextInput
+          title="Bank Name"
+          width="w-[22%]"
+          required={false}
+          name="bankName"
+          value={formData.bankName || ""}
           onChange={(e) => handleChange(e)}
         />
       )}
@@ -180,7 +189,7 @@ const ProfessionalIds = () => {
       )}
       <TextInput
         title={`${title} Username`}
-        width={prefix === "caqh" || prefix === "other" ? "w-[28%]" : "w-[40%]"}
+        width={prefix === "caqh" || prefix === "other" || prefix==="bankLogin"? "w-[28%]" : "w-[40%]"}
         name={`${prefix}Username`}
         required={false}
         value={formData[`${prefix}Username`] || ""}
@@ -194,6 +203,16 @@ const ProfessionalIds = () => {
         value={formData[`${prefix}Password`] || ""}
         onChange={(e) => handleChange(e)}
       />
+      {prefix === "caqh" && (
+        <DateInput
+          title="CAQH Expiry Date"
+          width="w-[10%]"
+          required={false}
+          name={`${prefix}ExpiryDate`}
+          value={formData[`${prefix}ExpiryDate`] || ""}
+          onChange={(e) => handleChange(e)}
+        />
+      )}
       {link && (
         <a
           href={link}
@@ -211,10 +230,7 @@ const ProfessionalIds = () => {
   );
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="w-full flex flex-col justify-center items-center gap-4"
-    >
+    <div className="w-full flex flex-col justify-center items-center gap-4">
       <HeadingLine title="Professional Information" />
 
       <div className="w-full flex flex-wrap justify-start gap-4 items-end">
@@ -314,7 +330,6 @@ const ProfessionalIds = () => {
           "https://apps.availity.com/web/onboarding/availity-fr-ui/#/login"
         )}
         {renderPortalCredentials("medicaid", "Medicaid")}
-        {renderPortalCredentials("bankLogin", "Bank Login")}
         {renderPortalCredentials("echo", "ECHO")}
         {renderPortalCredentials("payspan", "Payspan")}
         {renderPortalCredentials("billing", "Billing Software")}
@@ -326,12 +341,13 @@ const ProfessionalIds = () => {
           "CAQH",
           "https://proview.caqh.org/Login/Index?ReturnUrl=%2fpo"
         )}
+        {renderPortalCredentials("bankLogin", "Bank Login")}
         {renderPortalCredentials("other", "Other")}
       </div>
 
       <NavBottom onSave={handleSubmit} loading={loading} />
-    </form>
-  )
+    </div>
+  );
 };
 
 export default ProfessionalIds;

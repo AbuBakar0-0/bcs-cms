@@ -22,7 +22,7 @@ export default function OrgDocs() {
       try {
         const response = await axios.get(`/api/org-docs?uuid=${uuid}`);
         setDocuments(response.data);
-        console.log(response.data);
+        
       } catch (error) {
         console.error("Error fetching documents:", error);
       } finally {

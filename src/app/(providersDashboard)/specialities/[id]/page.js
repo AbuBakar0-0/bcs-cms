@@ -394,7 +394,6 @@ function Specialities() {
                     />
                     <MdDeleteOutline
                       onClick={() => {
-                        console.log(speciality);
                         handleDelete(speciality.uuid);
                       }}
                       className="size-6 text-red-400"

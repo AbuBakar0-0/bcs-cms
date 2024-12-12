@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
   try {
-    console.log("CALLED");
 
     // Extract the provider_id parameter from the request URL
     const searchParams = request.nextUrl.searchParams;

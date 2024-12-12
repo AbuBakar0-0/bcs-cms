@@ -149,8 +149,6 @@ export const usePracticeLocations = () => {
 
       const res=await axios.get(`/api/get-links?uuid=${localStorage.getItem("user_uuid")}`);
       setLinks(res.data);
-      console.log(res.data);
-
     } catch (error) {
       console.error("Error fetching data:", error.message);
     } finally {
@@ -300,7 +298,6 @@ export const usePracticeLocations = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,"========",value);
     if (["Select Code", "Select State", "Select Person"].includes(value))
       return;
     setFormData((prev) => ({
@@ -377,7 +374,6 @@ export const usePracticeLocations = () => {
       return;
     }
     const loadingToast = toast.loading("Saving location...");
-    console.log(formData);
     try {
       const url = editingId
         ? `/api/practice-location/${editingId}`

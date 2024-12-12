@@ -17,12 +17,11 @@ const ProvidersCard = ({ id }) => {
     // Fetch provider details when the component mounts
     const fetchProviderDetails = async () => {
       try {
-        const response = await fetch(`/api/providers/${id}`);
+        const response = await fetch(`/api/providers-card?uuid=${id}`);
         if (!response.ok) throw new Error("Failed to fetch provider details");
 
         const data = await response.json();
-        console.log(data);
-        setProvider(data.provider);
+        setProvider(data[0]);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -62,44 +61,53 @@ const ProvidersCard = ({ id }) => {
 
             <div className="flex flex-col justify-center items-start gap-1">
               <h2 className="text-lg font-semibold text-center">
-                {provider?.first_name} {provider?.middle_initial || ""}{" "}
+                {provider?.first_name} {provider?.middle_initial || ""}
                 {provider?.last_name}
               </h2>
               <p className="text-sm">
                 Provider type: {provider?.provider_title || "-"}
               </p>
               <p className="text-sm">Gender: {provider?.gender || "Female"}</p>
+              <p>Date of Birth: {provider?.dob || "-"}</p>
+              <p className="flex justify-start items-center gap-2">
+                SSN:
+                {ssnVisible
+                  ? provider?.ssn || "-"
+                  : provider?.ssn?.replace(/.(?=.{4})/g, "*") || "-"}
+                <button
+                  onClick={() => setSsnVisible((prev) => !prev)}
+                  className="text-sm text-blue-500"
+                >
+                  {ssnVisible ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
+                </button>
+              </p>
+
             </div>
           </div>
         </div>
-
+        {/* CONTACT INFO */}
         <div className="w-1/5 flex flex-col justify-start items-start gap-2">
           <p>Email: {provider?.contact?.email || "-"}</p>
-          <p>Date of Birth: {provider?.dob || "-"}</p>
+          <p>Cell Phone: {provider?.contact?.cell_phone || "-"}</p>
           <p>Birth City: {provider?.birth_city || "-"}</p>
           <p>Birth Country: {provider?.birth_country || "-"}</p>
         </div>
+
+        {/* License Info */}
         <div className="w-1/5 flex flex-col justify-start items-start gap-2">
           <p>License ID: {provider?.license_id || "-"}</p>
           <p>State Issued: {provider?.state_issued || "-"}</p>
           <p>Issue Date: {provider?.issue_date || "-"}</p>
           <p>Expiry Date: {provider?.expiry_date || "-"}</p>
         </div>
+
+
+        {/* ProfIds */}
         <div className="w-1/5 flex flex-col justify-start items-start gap-2">
-          <p className="flex justify-start items-center gap-2">
-            SSN:{" "}
-            {ssnVisible
-              ? provider?.ssn || "-"
-              : provider?.ssn?.replace(/.(?=.{4})/g, "*") || "-"}
-            <button
-              onClick={() => setSsnVisible((prev) => !prev)}
-              className="text-sm text-blue-500"
-            >
-              {ssnVisible ? <FaEyeSlash className="text-white" /> : <FaEye className="text-white" />}
-            </button>
-          </p>
-          <p>NPI-1: {provider?.npi || "-"}</p>
-          <p>Cell #: {provider?.contact?.phone || "-"}</p>
+          <p>NPI-1: {provider?.professional_ids.length != 0 ? provider?.professional_ids[provider?.professional_ids.length - 1].npi_1 : " - "}</p>
+          <p>NPI-2: {provider?.professional_ids.length != 0 ? provider?.professional_ids[provider?.professional_ids.length - 1].npi_2 : " - "}</p>
+          <p>Tax ID: {provider?.professional_ids.length != 0 ? provider?.professional_ids[provider?.professional_ids.length - 1].tax_id : " - "}</p>
+          <p>UPIN: {provider?.professional_ids.length != 0 ? provider?.professional_ids[provider?.professional_ids.length - 1].upin : " - "}</p>
         </div>
       </div>
       <ProvidersNavbar id={id} />
