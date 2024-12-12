@@ -34,7 +34,7 @@ export default function OrganizationDetail() {
   }, [uuid]);
 
   return (
-    <AdminDashboardLayout barTitle="Organization Management">
+    <AdminDashboardLayout barTitle="Location Details">
       <OrganizationCard />
       <div className="min-h-screen flex flex-col md:flex-row">
         <main className="flex-1 py-4">

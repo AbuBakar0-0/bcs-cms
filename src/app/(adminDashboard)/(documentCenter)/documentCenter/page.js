@@ -187,7 +187,7 @@ const DocumentCenterContent = () => {
         "",
       status: doc.status || "",
       effective_date: doc.effective_date || "",
-      expiry_date: doc.expiry_date || "",
+      expiry_date: formatDate(doc.expiry_date) || "",
       file: doc.url || "",
       existing_url: doc.url || "",
       existing_file_public_id: doc.file_public_id || "",

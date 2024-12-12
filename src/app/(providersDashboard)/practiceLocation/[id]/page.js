@@ -29,7 +29,16 @@ function PracticeLocations() {
     dropLocations,
     linkFormData,
     handleLink,
+    handleBusiness,
     links,
+    dropBusiness,
+    businessFormData,
+    businesses,
+
+    handleDropFullBusiness,
+    handleFullBusinessProviders,
+    handleSubmitBusiness,
+    handleSetBusiness,
     handleDropFullLocation,
     handleFullProviders,
     handleSetLink,
@@ -66,6 +75,12 @@ function PracticeLocations() {
               icon={<IoAddCircleOutline className="size-6" />}
               onClick={handleSetLink}
             />
+            <Button
+              width="w-max"
+              title={"Link Business to Provider"}
+              icon={<IoAddCircleOutline className="size-6" />}
+              onClick={handleSetBusiness}
+            />
           </div>
         </div>
         <div className="w-full flex justify-start items-center gap-4">
@@ -85,8 +100,62 @@ function PracticeLocations() {
           >
             Links
           </button>
+          <button
+            className={`px-4 py-2 border-green-400 border-4 rounded-lg  ${
+              active == "Business Links" ? "bg-green-400 text-white" : ""
+            }`}
+            onClick={() => handleSetActive("Business Links")}
+          >
+            Business Links
+          </button>
         </div>
 
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
+        {/* STATETTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT */}
+
+        <div className="w-full flex flex-col justify-center items-center gap-4">
+          {handleBusiness && (
+            <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
+              <div className="w-full flex flex-wrap justify-start items-end gap-4">
+                <Dropdown
+                  title="Business Name"
+                  width="w-[49%]"
+                  options={dropBusiness}
+                  name="business_id" // Updated to match the state key
+                  value={businessFormData.business_id}
+                  onChange={handleDropFullBusiness}
+                />
+                <Dropdown
+                  title="Provider Name"
+                  width="w-[49%]"
+                  options={providers}
+                  name="provider_id" // Updated to match the state key
+                  value={businessFormData.provider_id}
+                  onChange={handleFullBusinessProviders}
+                />
+
+                <div className="w-full mt-4 flex justify-end gap-4">
+                  <Button
+                    type="submit"
+                    title="Save"
+                    onClick={handleSubmitBusiness}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ENDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD */}
+        {/*  */}
+        {/*  */}
+        {/*  */}
         <div className="w-full flex flex-col justify-center items-center gap-4">
           {handleLink && (
             <div className="w-full min-h-20 shadow-xl rounded-lg border-l-8 border-primary flex flex-col justify-start items-center gap-4 p-10">
@@ -489,7 +558,7 @@ function PracticeLocations() {
               </div>
             ))
           )
-        ) : (
+        ) : active === "Links" ? (
           <>
             {loading ? (
               <div className="w-full flex justify-center items-center">
@@ -501,32 +570,55 @@ function PracticeLocations() {
                   key={item.uuid}
                   className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
                 >
-                  <span>{item.legal_business_name}</span>
-                  <span>{item.doing_business_name}</span>
-                  <span>{item.location_name}</span>
+                  <span className="w-1/6">{item.legal_business_name}</span>
+                  <span className="w-1/6">{item.doing_business_name}</span>
+                  <span className="w-1/6">{item.location_name}</span>
 
-                  <span>
+                  <span className="w-1/6">
                     {
                       item.practice_location_providers[0].providers_info
                         .first_name
-                      }
+                    }
                     {
                       item.practice_location_providers[0].providers_info
                         .middle_initial
-                      }
+                    }
                     {
                       item.practice_location_providers[0].providers_info
-                      .last_name
+                        .last_name
                     }
                   </span>
-                    <span>NPI 2: {item.npi_2}</span>
-                    <span>Tax ID: {item.tax_id}</span>
+                  <span className="w-1/6">NPI 2: {item.npi_2}</span>
                 </div>
               ))
             )}
           </>
+        ) : (
+          loading ? (
+            <div>
+              <BarLoader />
+            </div>
+          ) : businesses.length === 0 ? (
+            <div>No locations found</div>
+          ) : (
+            businesses.map((business) => (
+                business.practice_profile_provider.map((item,index) => (
+                  <div
+                  key={index}
+                  className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
+                >
+                  <p className="w-1/5">{business.legal_business_name}</p>
+                  <div className="w-1/2 flex flex-row justify-start items-start gap-1">
+                    <p>{item.providers_info.first_name}</p>
+                    <p>{item.providers_info.middle_initial}</p>
+                    <p>{item.providers_info.last_name}</p>
+                  </div>
+                </div>
+                ))
+                
+            ))
+          )
         )}
-
         <NavBottom />
       </div>
     </>

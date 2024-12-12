@@ -28,7 +28,7 @@ export default function Page() {
     const fetchData = async () => {
       try {
         const response = await axios.get("/api/organization-management", {
-          params: { added_by: userUuid },
+          params: { uuid: userUuid },
         });
         setData(response.data); // Assumes `data` is inside `response.data`
       } catch (err) {
@@ -108,7 +108,7 @@ export default function Page() {
                         </td>
                         <td className="p-3">{item.service_contact.cell_phone}</td>
                         <td className="p-3 flex flex-row justify-start items-center gap-2">
-                          <Link href={`/organizationDetail/${item.uuid}`}>
+                          <Link href={`/organizationLocation/${item.uuid}`}>
                             <FaEye className="text-secondary" />
                           </Link>
                           {/* /

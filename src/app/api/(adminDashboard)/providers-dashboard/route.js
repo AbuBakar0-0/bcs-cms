@@ -31,7 +31,6 @@ export async function GET(request) {
         contact:contacts!contact_id (*),
         emergency_contact:contacts!emergency_contact_id (*),
         professional_ids(*)`
-         // Select related data from professional_ids table
       )
       .eq("added_by", uuid); // Filter by UUID
 

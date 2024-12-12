@@ -25,7 +25,6 @@ export async function GET(request) {
       .select(
         `
         *,
-        providers_info(*),
         service_address:addresses!service_address_id(*),
         mailing_address:addresses!mailing_address_id(*),
         correspondance_address:addresses!correspondance_address_id(*),
@@ -35,7 +34,7 @@ export async function GET(request) {
         practice_contact:contacts!practice_contact_id(*)
       `
       )
-      .eq("providers_info.added_by", added_by) // Filter by `added_by`
+      .eq("uuid", added_by) // Filter by `added_by`
       .is("deleted_at", null); // WHERE deleted_at IS NULL
 
     // Handle potential query errors

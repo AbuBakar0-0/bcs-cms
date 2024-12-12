@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 const DEFAULT_STATE = {
   legal_business_name: "",
   doing_business_name: "",
-  location_name:"",
+  location_name: "",
   npi_2: "",
   tax_id: "",
   taxonomy_code_1: "",
@@ -54,6 +54,7 @@ export const usePracticeLocations = () => {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(DEFAULT_STATE);
 
+  ////////////////////////////////////////////////////////////////////////////////
   const [profiles, setProfiles] = useState([]);
   const [fullProfile, setFullProfile] = useState([]);
 
@@ -65,30 +66,89 @@ export const usePracticeLocations = () => {
 
   const [handleLink, setHandleLink] = useState(false);
 
-  const[links,setLinks]=useState([]);
+  const [links, setLinks] = useState([]);
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
+  const [dropBusiness, setDropBusiness] = useState([]);
+  const [dropFullBusiness, setDropFullBusiness] = useState([]);
+
+  const [handleBusiness, setHandleBusiness] = useState(false);
+
+  const [businesses, setBusiness] = useState([]); // FOR DISPLAYING LINKED PROVIDER AND BUSINESSES
+
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+
+  const handleLocation = () => {
+    resetForm();
+    setShowLocationForm(!showLocationForm);
+    setHandleLink(false);
+    setHandleBusiness(false);
+  };
 
   const handleSetLink = () => {
     setHandleLink(!handleLink);
+    setShowLocationForm(false);
+    setHandleBusiness(false);
   };
 
+  const handleSetBusiness = () => {
+    setShowLocationForm(false);
+    setHandleLink(false);
+    setHandleBusiness(!handleBusiness);
+  };
+
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
   const linkDefaultState = {
     business_id: "",
     provider_id: "",
   };
-
+  
   const [finalFormData, setFinalFormData] = useState({
     business_id: "",
     provider_id: "",
   });
-
+  
   const [linkFormData, setLinkFormData] = useState(linkDefaultState);
+  
+  //////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////
 
+
+  const businessDefaultState = {
+    business_id: "",
+    provider_id: "",
+  };
+  
+  const [finalBusinessData, setFinalBusinessData] = useState({
+    business_id: "",
+    provider_id: "",
+  });
+  
+  const [businessFormData, setBusinessFormData] = useState(businessDefaultState);
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   const { id: provider_id } = useParams();
   useEffect(() => {
     fetchLocations();
   }, []);
 
+
+  
   const fetchLocations = async () => {
     try {
       setLoading(true); // Ensure loading starts when fetching begins.
@@ -100,7 +160,8 @@ export const usePracticeLocations = () => {
       if (!response.ok) throw new Error("Failed to fetch");
       const { data } = await response.json();
       setLocations(data || []);
-      
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
       const formattedLocations = data.map((item) => item.location_name || "");
       setDropLocations(formattedLocations || []);
 
@@ -109,7 +170,7 @@ export const usePracticeLocations = () => {
         uuid: item.uuid,
       }));
       setDropFullLocations(formattedDropFullLocations);
-
+      
       // Fetch practice profiles
       const userUuid = localStorage.getItem("user_uuid");
       const { data: profileData } = await axios.get(
@@ -127,28 +188,55 @@ export const usePracticeLocations = () => {
       }));
       setFullProfile(formattedFullProfiles);
 
+
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      const formattedBusiness = profileData.map(
+        (item) => item.legal_business_name || ""
+      );
+      setDropBusiness(formattedBusiness || []);
+
+      const formattedDropFullBusiness = profileData.map((item) => ({
+        name: item.legal_business_name,
+        uuid: item.uuid,
+      }));
+      setDropFullBusiness(formattedDropFullBusiness);
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+      // ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
       const { data: providerData } = await axios.get(
-        `/api/providersDashboard`,
+        `/api/providers-dashboard`,
         { params: { uuid: userUuid } }
       );
 
-      const formattedProviders = providerData.providers.map(
+      const formattedProviders = providerData.data.map(
         (item) =>
           item.first_name + " " + item.middle_initial + " " + item.last_name
       );
       setProviders(formattedProviders || []);
 
-      const formattedFullProviders = providerData.providers.map((item) => ({
+      const formattedFullProviders = providerData.data.map((item) => ({
         name:
           item.first_name + " " + item.middle_initial + " " + item.last_name,
         uuid: item.uuid,
       }));
-
+      console.log("FORMATTED FULL PROVIDERS: ",formattedFullProviders);
       setFullProviders(formattedFullProviders);
 
+      const res = await axios.get(
+        `/api/get-links?uuid=${localStorage.getItem("user_uuid")}`
+      );
 
-      const res=await axios.get(`/api/get-links?uuid=${localStorage.getItem("user_uuid")}`);
       setLinks(res.data);
+      const res_bsns = await axios.get(
+        `/api/get-business?uuid=${localStorage.getItem("user_uuid")}`
+      );
+      setBusiness(res_bsns.data);
     } catch (error) {
       console.error("Error fetching data:", error.message);
     } finally {
@@ -327,11 +415,6 @@ export const usePracticeLocations = () => {
     setEditingId(null);
   };
 
-  const handleLocation = () => {
-    resetForm();
-    setShowLocationForm(!showLocationForm);
-  };
-
   const handleEdit = (locationId) => {
     const locationToEdit = locations.find((loc) => loc.uuid === locationId);
     if (locationToEdit) {
@@ -433,6 +516,9 @@ export const usePracticeLocations = () => {
     }));
   };
 
+
+  ///////////////////////////////////////////asdjadkljLAKSJdakldjsadjaldjadjkjadaslkdjas////////
+
   const handleDropFullLocation = (e) => {
     const { name, value } = e.target; // Extract name and value from the event
 
@@ -462,8 +548,49 @@ export const usePracticeLocations = () => {
     }));
   };
 
+
+  ///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+
+
+  const handleDropFullBusiness = (e) => {
+    const { name, value } = e.target; // Extract name and value from the event
+
+    const profile = dropFullBusiness.find((item) => item.name == value);
+    finalBusinessData.business_id = profile.uuid;
+    setFinalBusinessData((prev) => ({
+      ...prev,
+      business_id: profile ? profile.uuid : "", // Update provider_id with the found UUID or reset if not found
+    }));
+    setBusinessFormData((prev) => ({
+      ...prev,
+      [name]: value, // Dynamically update the state based on the input name
+    }));
+  };
+
+  const handleFullBusinessProviders = (e) => {
+    const { name, value } = e.target; // Extract name and value from the event
+
+    const profile = fullProviders.find((item) => item.name == value);
+    finalBusinessData.provider_id = profile.uuid;
+    setFinalBusinessData((prev) => ({
+      ...prev,
+      provider_id: profile ? profile.uuid : "", // Update provider_id with the found UUID or reset if not found
+    }));
+    setBusinessFormData((prev) => ({
+      ...prev,
+      [name]: value, // Dynamically update the state based on the input name
+    }));
+  };
+  ///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+
+
   const handleSubmitLink = async () => {
     try {
+      console.log(finalFormData);
       toast.loading("Submitting");
       const response = await axios.post("/api/handle-link", finalFormData, {
         headers: {
@@ -475,11 +602,38 @@ export const usePracticeLocations = () => {
       fetchLocations();
       return response.data; // Return the response data if needed
     } catch (error) {
-      toast.error("Error saving") 
+      toast.error("Error saving");
       console.error("Error submitting link data:", error);
       throw error; // Re-throw the error to handle it in the calling function
     }
   };
+
+
+  //////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
+
+  const handleSubmitBusiness = async () => {
+    try {
+      toast.loading("Submitting");
+      const response = await axios.post("/api/handle-business", finalBusinessData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      toast.dismiss();
+      toast.success("Linked Successfully");
+      fetchLocations();
+      return response.data; // Return the response data if needed
+    } catch (error) {
+      toast.error("Error saving");
+      console.error("Error submitting link data:", error);
+      throw error; // Re-throw the error to handle it in the calling function
+    }
+  };
+  
+  //////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
 
   return {
     locations,
@@ -487,14 +641,21 @@ export const usePracticeLocations = () => {
     showLocationForm,
     dropLocations,
     formData,
-    profiles,
     providers,
     editingId,
     profiles,
     linkFormData,
     handleLink,
     links,
+    handleBusiness,
+    dropBusiness,
+    businessFormData,
+    businesses,
 
+    handleFullBusinessProviders,
+    handleSubmitBusiness,
+    handleDropFullBusiness,
+    handleSetBusiness,
     handleDropFullLocation,
     handleFullProviders,
     handleSetLink,

@@ -21,21 +21,9 @@ export async function GET(request) {
 
     // Fetch practice profiles with providers_info, addresses, and contacts
     const { data: practiceProfiles, error } = await supabase
-      .from("practice_profiles")
-      .select(
-        `
-        *,
-        providers_info(*),
-        service_address:addresses!service_address_id(*),
-        mailing_address:addresses!mailing_address_id(*),
-        correspondance_address:addresses!correspondance_address_id(*),
-        service_contact:contacts!service_contact_id(*),
-        mailing_contact:contacts!mailing_contact_id(*),
-        correspondance_contact:contacts!correspondance_contact_id(*),
-        practice_contact:contacts!practice_contact_id(*)
-      `
-      )
-      .eq("providers_info.added_by", added_by) // Filter by `added_by`
+      .from("practice_locations")
+      .select(`*`)
+      .eq("practice_id", added_by) // Filter by `added_by`
       .is("deleted_at", null); // WHERE deleted_at IS NULL
 
     // Handle potential query errors
@@ -58,13 +46,10 @@ export async function GET(request) {
     }
 
     // Return the data
-    return new Response(
-      JSON.stringify(practiceProfiles),
-      {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      }
-    );
+    return new Response(JSON.stringify(practiceProfiles), {
+      headers: { "Content-Type": "application/json" },
+      status: 200,
+    });
   } catch (error) {
     // Handle general errors
     console.error("Error in GET handler:", error);

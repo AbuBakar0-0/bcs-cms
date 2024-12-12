@@ -2,14 +2,10 @@
 
 import AdminDashboardLayout from "@/app/(adminDashboard)/adminLayout";
 import OrganizationCard from "@/components/organizationManagement/OrganizationCard";
-import Button from "@/components/ui/Button";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CiEdit } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { MdDeleteOutline } from "react-icons/md";
 
 export default function OrgDocs() {
   const { id: uuid } = useParams(); // Get the id from the route params
