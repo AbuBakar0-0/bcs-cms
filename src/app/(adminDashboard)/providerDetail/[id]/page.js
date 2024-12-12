@@ -73,6 +73,21 @@ const ProviderDetail = () => {
     fetchCAQHExpiry();
   }, []);
 
+  const DisplayExpiry = () => {
+    const expiryDate = new Date(caqhExpiry?.expiry_date);
+    const currentDate = new Date();
+    const timeDifference = expiryDate - currentDate;
+
+    // Calculate the difference in days
+    const daysLeft = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+    if (daysLeft < 0) {
+      return `CAQH Expired ${daysLeft * -1} days ago`;
+    } else {
+      return `${daysLeft} days left until CAQH expiry`;
+    }
+  };
+
   return (
     <AdminDashboardLayout>
       <>
@@ -85,41 +100,11 @@ const ProviderDetail = () => {
             ) : (
               <>
                 <div className="w-1/2 border-2 border-secondary rounded-lg p-2">
-                  {caqhExpiry?.professional_ids == null
-                    ? "No Expiry Found"
-                    : () => {
-                        const expiryDate = new Date(caqhExpiry?.expiry_date);
-                        const currentDate = new Date();
-                        const timeDifference = expiryDate - currentDate;
-
-                        // Calculate the difference in days
-                        const daysLeft = Math.ceil(
-                          timeDifference / (1000 * 3600 * 24)
-                        );
-
-                        if (daysLeft < 0) {
-                          return (
-                            <span className="text-red-400">
-                              CAQH Expired {daysLeft * -1} days ago
-                            </span>
-                          );
-                        } else {
-                          return (
-                            <span
-                              className={`${
-                                daysLeft < 10
-                                  ? "text-orange-400"
-                                  : "text-primary"
-                              } font-semibold`}
-                            >
-                              {daysLeft} days{" "}
-                              <span className="text-black">
-                                left until CAQH expiry
-                              </span>
-                            </span>
-                          );
-                        }
-                      }}
+                  {caqhExpiry?.professional_ids == null ? (
+                    "No Expiry Found"
+                  ) : (
+                    <DisplayExpiry/>
+                  )}
                 </div>
               </>
             )}
