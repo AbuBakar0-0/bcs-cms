@@ -3,14 +3,14 @@
 import Button from "@/components/ui/Button";
 import axios from "axios";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
 import { CiSearch } from "react-icons/ci";
 import { useSearchParams } from "next/navigation";
 
-export default function Payers() {
+const PayersContent=()=> {
   const [activeTab, setActiveTab] = useState("provider");
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
@@ -192,3 +192,12 @@ export default function Payers() {
     </AdminDashboardLayout>
   );
 }
+
+
+const Payers = () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <PayersContent />
+  </Suspense>
+);
+
+export default Payers;
