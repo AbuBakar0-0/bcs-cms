@@ -64,47 +64,82 @@ export default function DropdownForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!html2pdf) return; // Ensure html2pdf is available
-
-    // Create a canvas with the signature to be added to the form
+  
+    if (!html2pdf) return;
+  
     const signatureCanvas = canvasRef.current;
     const signatureDataUrl = signatureCanvas.toDataURL();
-
-    // Now, let's create a form container
+  
     const formContentElement = document.getElementById("formContent");
+  
+    // Set up the options for the PDF generation
     const options = {
-      margin: 1,
+      margin: 0.2,
       filename: `${selectedTab}-form.pdf`,
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
     };
-
-    // Create the form with the signature appended
+  
+    // Create a new div to hold the form content and signature
     const formWithSignature = document.createElement("div");
-    formWithSignature.innerHTML = formContentElement.innerHTML; // Add the form's content
-
-    // Create the signature image element
+    formWithSignature.innerHTML = formContentElement.innerHTML;
+  
+    // Create an image element for the selected form image
+    const imageElement = document.createElement("img");
+    imageElement.src = file || '/forms/Authorization and Consent.jpg'; // Use the selected file's path
+    imageElement.style.width = "100%"; // Ensure the image covers the full width of the page
+  
+    // Add the image to the form
+    formWithSignature.appendChild(imageElement);
+  
+    // Get the current date and time
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.toLocaleDateString()} ${currentDate.toLocaleTimeString()}`;
+  
+    // Create a text element for the date and time
+    const dateTimeElement = document.createElement("div");
+    dateTimeElement.textContent = `${formattedDate}`;
+    dateTimeElement.style.position = "absolute";
+    dateTimeElement.style.top = "72%"; // Adjust the position as needed
+    dateTimeElement.style.left = "73%";
+    dateTimeElement.style.transform = "translateX(-50%)";
+    dateTimeElement.style.fontSize = "12px";
+    dateTimeElement.style.color = "black"; // Or any color you prefer
+  
+    // Add the date and time text to the form
+    formWithSignature.appendChild(dateTimeElement);
+  
+    // Now, add the signature image on top of the form
     const signatureImage = document.createElement("img");
     signatureImage.src = signatureDataUrl;
-    signatureImage.style.width = "200px"; // Adjust signature size if needed
-    signatureImage.style.marginTop = "10px"; // Adjust positioning
-    formWithSignature.appendChild(signatureImage); // Append signature to the form
-
-    // Generate the PDF with the form and the signature
-    html2pdf().from(formWithSignature).set(options).save();
+    signatureImage.style.position = "absolute";
+    signatureImage.style.top = "65%"; // Adjust as necessary for placement
+    signatureImage.style.left = "32%";
+    signatureImage.style.transform = "translateX(-50%)";
+    signatureImage.style.width = "200px";
+    signatureImage.style.zIndex = "1"; // Make sure it stays on top
+  
+    formWithSignature.appendChild(signatureImage);
+  
+    // Use html2pdf to generate the PDF
+    const { default: pdfLib } = await import("html2pdf.js");
+    pdfLib()
+      .from(formWithSignature)
+      .set(options)
+      .save();
   };
-
+  
+  
+  
   const handleFileChange = (e) => {
     const selectedValue = e.target.value;
     const selectedTabDetails = tabs.find((tab) => tab.title === selectedValue);
     if (selectedTabDetails) {
-      setFile(selectedTabDetails.path); // Set the file path to display
+      setFile(selectedTabDetails.path); // Ensure the path is correct
       setSelectedTab(selectedValue);
       setIsModalOpen(true); // Open the modal
     }
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
     setFile(null); // Clear file when closing modal
@@ -146,8 +181,8 @@ export default function DropdownForm() {
 
         {/* Modal to display the selected file */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg w-full md:w-2/3 lg:w-1/2 relative scale-75">
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 max-h-screen overflow-auto">
+            <div className="bg-white p-6 rounded-lg w-full md:w-2/3 lg:w-1/2 relative mt-52">
               <button
                 onClick={closeModal}
                 className="absolute top-4 right-4 text-red-500 text-2xl scale-100"
@@ -188,8 +223,8 @@ export default function DropdownForm() {
               onMouseMove={draw}
               onMouseUp={stopDrawing}
               onMouseLeave={stopDrawing}
-              width={400}
-              height={200}
+              width={200}
+              height={100}
               className="border border-gray-400"
             ></canvas>
             <div className="mt-2 flex justify-between">
@@ -205,9 +240,6 @@ export default function DropdownForm() {
 
         {/* Form content (this will be used for the PDF generation) */}
         <div id="formContent" style={{ display: "none" }}>
-          {/* Content for the form (you can include any dynamic content here) */}
-          <h2>{selectedTab}</h2>
-          <p>Additional form content can go here.</p>
         </div>
 
         {/* Submit button */}
