@@ -113,7 +113,7 @@ export default function DropdownForm() {
     const signatureImage = document.createElement("img");
     signatureImage.src = signatureDataUrl;
     signatureImage.style.position = "absolute";
-    signatureImage.style.top = "65%"; // Adjust as necessary for placement
+    signatureImage.style.top = "68%"; // Adjust as necessary for placement
     signatureImage.style.left = "32%";
     signatureImage.style.transform = "translateX(-50%)";
     signatureImage.style.width = "200px";
