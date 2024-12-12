@@ -425,8 +425,7 @@ const DocumentCenterContent = () => {
                 title="Cancel"
                 variant="outline"
                 onClick={() => {
-                  setShowForm(false);
-                  resetForm();
+                  setShowDialog(false);
                 }}
               />
               <Button
