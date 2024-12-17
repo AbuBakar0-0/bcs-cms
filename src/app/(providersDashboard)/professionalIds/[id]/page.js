@@ -205,7 +205,7 @@ const ProfessionalIds = () => {
       />
       {prefix === "caqh" && (
         <DateInput
-          title="CAQH Expiry Date"
+          title="CAQH ReAttestation Date"
           width="w-[10%]"
           required={false}
           name={`${prefix}ExpiryDate`}

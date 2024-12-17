@@ -46,10 +46,7 @@ export async function GET(request) {
     // Check if no data was found
     if (!practiceProfiles || practiceProfiles.length === 0) {
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: "No practice profiles found for the provided added_by",
-        }),
+        JSON.stringify([]),
         {
           headers: { "Content-Type": "application/json" },
           status: 200,

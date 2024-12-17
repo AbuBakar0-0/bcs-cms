@@ -44,11 +44,11 @@ export async function GET(request) {
       return new Response(
         JSON.stringify({
           success: false,
-          message: "No records found for the provided UUID",
+          data: [],
         }),
         {
           headers: { "Content-Type": "application/json" },
-          status: 404,
+          status: 200,
         }
       );
     }
@@ -77,5 +77,3 @@ export async function GET(request) {
     );
   }
 }
-
-

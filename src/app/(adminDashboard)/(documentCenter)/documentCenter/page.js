@@ -16,6 +16,7 @@ import DateInput from "@/components/ui/inputFields/DateInput";
 import BaseInput from "@/components/ui/inputFields/BaseInput";
 import { useProviders } from "@/hooks/useProvider";
 import toast from "react-hot-toast";
+import TextInput from "@/components/ui/inputFields/TextInput";
 
 const documentsList = [
   "IRS Letter (It could be your SS-4, CP 575 or 147C)",
@@ -73,8 +74,9 @@ const DocumentCenterContent = () => {
   const [showDialog, setShowDialog] = useState(false);
 
   const { providers, getProviderByName } = useProviders();
-
+  const [isProvider, setIsProvider] = useState(true);
   const toggleTab = (tab) => {
+    setShowDialog(false);
     setActiveTab(tab);
   };
 
@@ -108,9 +110,9 @@ const DocumentCenterContent = () => {
 
     try {
       // Fetch documents from API
-      const response = await axios.get(`/api/document-center?uuid=${userUuid}`);
+      const response = await axios.get(`/api/documents?uuid=${userUuid}`);
 
-      // Set documents state
+      console.log(response.data);
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially set filtered docs to all docs
 
@@ -179,11 +181,16 @@ const DocumentCenterContent = () => {
   };
 
   const handleEdit = (doc) => {
+    if (doc.type == "provider") {
+      setIsProvider(true);
+    } else {
+      setIsProvider(false);
+    }
     console.log(doc);
     setFormData({
       title: doc.title || "",
       provider:
-        doc.providers_info.first_name + " " + doc.providers_info.last_name ||
+        doc.providers_info?.first_name + " " + doc.providers_info?.last_name ||
         "",
       status: doc.status || "",
       effective_date: doc.effective_date || "",
@@ -192,6 +199,7 @@ const DocumentCenterContent = () => {
       existing_url: doc.url || "",
       existing_file_public_id: doc.file_public_id || "",
       uuid: doc.uuid || "",
+      organization: doc.practice_profiles?.legal_business_name,
     });
     setIsEditing(true);
     setShowDialog(true);
@@ -246,12 +254,33 @@ const DocumentCenterContent = () => {
       setLoading(false);
     }
   };
-  const handleDelete = async (doc) => {
-    if (!window.confirm("Are you sure you want to delete this document?")) {
-      return;
-    }
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [reason, setReason] = useState("");
+  const [selectedDoc, setSelectedDoc] = useState(null);
+
+  const handleDeleteClick = (doc) => {
+    setShowDeleteModal(true);
+    setSelectedDoc(doc);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedDoc) {
+      if (reason != "") {
+        handleDelete({ ...selectedDoc, reason });
+
+        setShowDeleteModal(false);
+        setReason("");
+        setSelectedDoc(null);
+      } else {
+        toast.error("Please Specify the reason");
+      }
+    }
+  };
+
+  const handleDelete = async (doc) => {
     setLoading(true);
+    toast.loading("Deleting");
     try {
       const response = await fetch("/api/documents", {
         method: "DELETE",
@@ -259,14 +288,17 @@ const DocumentCenterContent = () => {
         body: JSON.stringify({
           uuid: doc.uuid,
           file_public_id: doc.file_public_id,
+          reason_to_delete: doc.reason,
         }),
       });
 
       if (!response.ok) throw new Error("Failed to delete document");
 
       await fetchDocuments();
+      toast.dismiss();
       toast.success("Document deleted successfully");
     } catch (error) {
+      toast.dismiss();
       console.error("Error deleting document:", error);
       toast.error("Failed to delete document");
     } finally {
@@ -275,36 +307,43 @@ const DocumentCenterContent = () => {
   };
 
   // Inside renderDocuments function
-  const renderDocuments = () => {
-    return filteredDocuments.map((doc, index) => (
-      <tr className="border-b" key={index}>
-        <td className="p-3">
-          {doc.providers_info.first_name} {doc.providers_info.middle_initial}
-          {doc.providers_info.last_name}
-        </td>
-        <td className="p-3">{doc.title}</td>
-        <td className="p-3">{formatDate(doc.expiry_date)}</td>
-        <td className={`p-3 ${getStatusColor(doc.status)}`}>{doc.status}</td>
-        <td className="p-3 flex flex-row justify-start items-center gap-2">
-          <button onClick={() => handleView(doc)}>
-            <FaEye className="text-secondary" />
-          </button>
-          /
-          <CiEdit
-            className="text-primary cursor-pointer"
-            onClick={() => handleEdit(doc)}
-          />
-          /
-          <button
-            type="button"
-            onClick={() => handleDelete(doc)}
-            className="text-red-600 hover:text-red-800"
-          >
-            <MdDeleteOutline className="size-5" />
-          </button>
-        </td>
-      </tr>
-    ));
+  const renderDocuments = (type) => {
+
+    return filteredDocuments.map((doc, index) =>
+      doc.type == type ? (
+        <tr className="border-b" key={index}>
+          <td className="p-3">
+            {doc.providers_info?.first_name}
+            {doc.providers_info?.middle_initial}
+            {doc.providers_info?.last_name}
+            {doc.practice_profiles?.legal_business_name}
+          </td>
+          <td className="p-3">{doc.title}</td>
+          <td className="p-3">{formatDate(doc.expiry_date)}</td>
+          <td className={`p-3 ${getStatusColor(doc.status)}`}>{doc.status}</td>
+          <td className="p-3 flex flex-row justify-start items-center gap-2">
+            <button onClick={() => handleView(doc)}>
+              <FaEye className="text-secondary" />
+            </button>
+            /
+            <CiEdit
+              className="text-primary cursor-pointer"
+              onClick={() => handleEdit(doc)}
+            />
+            /
+            <button
+              type="button"
+              onClick={() => handleDeleteClick(doc)}
+              className="text-red-600 hover:text-red-800"
+            >
+              <MdDeleteOutline className="size-5" />
+            </button>
+          </td>
+        </tr>
+      ) : (
+        <tr key={index}></tr>
+      )
+    );
   };
 
   return (
@@ -342,15 +381,28 @@ const DocumentCenterContent = () => {
                 onChange={handleChange}
                 width="w-[48%]"
               />
-              <Dropdown
-                title="Provider"
-                name="provider"
-                options={providers}
-                value={formData.provider}
-                width="w-[48%]"
-                onChange={handleChange}
-                disabled={true}
-              />
+              {isProvider ? (
+                <Dropdown
+                  title="Provider"
+                  name="provider"
+                  options={providers}
+                  value={formData.provider}
+                  width="w-[48%]"
+                  onChange={handleChange}
+                  disabled={true}
+                />
+              ) : (
+                <Dropdown
+                  title="Organization"
+                  name="organization"
+                  options={[]}
+                  value={formData.organization}
+                  width="w-[48%]"
+                  onChange={handleChange}
+                  disabled={true}
+                />
+              )}
+
               <Dropdown
                 title="Status"
                 name="status"
@@ -486,7 +538,11 @@ const DocumentCenterContent = () => {
                       </td>
                     </tr>
                   ) : (
-                    <>{renderDocuments()}</>
+                    <>
+                      {activeTab == "provider"
+                        ? renderDocuments("provider")
+                        : renderDocuments("organization")}
+                    </>
                   )}
                 </tbody>
               </table>
@@ -494,6 +550,35 @@ const DocumentCenterContent = () => {
           </div>
         </main>
       </div>
+      {showDeleteModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg w-96">
+            <h2 className="text-lg font-semibold mb-4">Are you sure?</h2>
+            <TextInput
+              width={"w-full"}
+              title="Reason for deletion"
+              name="reason"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="Enter reason"
+            />
+            <div className="mt-6 flex justify-end gap-4">
+              <Button
+                title="Cancel"
+                variant="outline"
+                onClick={() => setShowDeleteModal(false)}
+                className="bg-secondary text-white"
+              />
+              <Button
+                title="Confirm"
+                onClick={handleConfirmDelete}
+                disabled={!reason}
+                className="bg-primary text-white"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </AdminDashboardLayout>
   );
 };

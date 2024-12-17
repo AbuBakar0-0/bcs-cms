@@ -19,7 +19,8 @@ export async function GET(request) {
       .select(
         `
 		  *,
-		  providers_info(*)
+		  providers_info(*),
+      practice_profiles(*)
 		`
       )
       .eq("providers_info.added_by", addedBy)
@@ -65,6 +66,8 @@ export async function POST(req) {
   try {
     const formData = await req.formData();
     const provider_id = formData.get("provider_id");
+    const profile_id = formData.get("organization_id");
+    const type = formData.get("type");
     const file = formData.get("file");
     if (!file || file.size === 0) {
       const title = formData.get("title");
@@ -73,6 +76,8 @@ export async function POST(req) {
         title,
         status,
         provider_id,
+        profile_id,
+        type,
       });
       console.log(error);
       return Response.json({ message: "Document created successfully" });
@@ -103,15 +108,9 @@ export async function POST(req) {
     const title = formData.get("title");
     const status = formData.get("status");
 
-    if (!title || !provider_id || !status) {
-      if (file_public_id) {
-        await cloudinary.uploader.destroy(file_public_id);
-      }
-      return Response.json(
-        { error: "Title, provider, and status are required" },
-        { status: 400 }
-      );
-    }
+    console.log(formData);
+    console.log("PROVIDER ID",provider_id);
+    console.log("PROVILE ID: ",profile_id);
 
     const { error } = await supabase.from("provider_documents").insert({
       title,
@@ -120,7 +119,8 @@ export async function POST(req) {
       expiry_date: formData.get("expiry_date") || null,
       url,
       file_public_id,
-      provider_id,
+      provider_id: provider_id || null,
+      profile_id: profile_id || null,
     });
 
     console.log(error);
@@ -137,9 +137,10 @@ export async function POST(req) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
+
 export async function DELETE(req) {
   try {
-    const { uuid } = await req.json();
+    const { uuid, reason_to_delete } = await req.json();
 
     const { data: existingDoc, error: checkError } = await supabase
       .from("provider_documents")
@@ -164,6 +165,7 @@ export async function DELETE(req) {
       .from("provider_documents")
       .update({
         deleted_at: new Date().toISOString(),
+        reason_to_delete: reason_to_delete,
       })
       .match({ uuid });
 
@@ -175,6 +177,7 @@ export async function DELETE(req) {
     return Response.json({ error: error.message }, { status: 500 });
   }
 }
+
 export async function PUT(req) {
   try {
     const formData = await req.formData();

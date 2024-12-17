@@ -34,7 +34,7 @@ function ProvidersInformation() {
 		lastName: "",
 		providerTitle: medicalTitles[0] || "0",
 		ssn: "",
-		gender: "male",
+		gender: "Male",
 		dob: "",
 		birthCity: "",
 		birthState: stateAbbreviations[0] || "",
@@ -144,6 +144,7 @@ function ProvidersInformation() {
 
 	useEffect(() => {
 		const fetchProviderInfo = async () => {
+			toast.loading("Fetching Data");
 			setApiLoading(true);
 			try {
 				const response = await fetch(`/api/providers-info?uuid=${uuid}`);
@@ -161,7 +162,7 @@ function ProvidersInformation() {
 					lastName: data.last_name || "",
 					providerTitle: data.provider_title || medicalTitles[0],
 					ssn: data.ssn || "",
-					gender: data.gender || "male",
+					gender: data.gender || "Male",
 					dob: data.dob || "",
 					birthCity: data.birth_city || "",
 					birthState: data.birth_state || stateAbbreviations[0],
@@ -201,7 +202,10 @@ function ProvidersInformation() {
 					emergencyContactPhone: data.emergency_contact?.cell_phone || "",
 					emergencyContactEmail: data.emergency_contact?.email || "",
 				}));
+				toast.dismiss();
+				toast.success("Fetched Successfully");
 			} catch (error) {
+				toast.dismiss();
 				console.error("Error fetching provider info:", error);
 				toast.error("Failed to fetch provider information.");
 			} finally {

@@ -72,6 +72,8 @@ export const usePracticeProfile = () => {
       }
 
       const data = await response.json();
+
+      console.log(data);
       setFormData({
         type: data.practice_type || "",
         type_of_service_provided: data.type_of_service_provided || "",
@@ -122,11 +124,11 @@ export const usePracticeProfile = () => {
         start_date: data.start_date || "",
 
         // Practice Contact
-        practice_contact_role: "", // No role provided in the JSON, you can modify this if needed
-        practice_contact_name: data.service_contact?.contact_name || "",
-        practice_contact_email: data.service_contact?.work_email || "",
-        practice_contact_work_phone: data.service_contact?.work_phone || "",
-        practice_contact_cell_phone: data.service_contact?.cell_phone || "",
+        practice_contact_role: data.practice_contact?.relation ||"",
+        practice_contact_name: data.practice_contact?.contact_name || "",
+        practice_contact_email: data.practice_contact?.work_email || "",
+        practice_contact_work_phone: data.practice_contact?.home_phone || "",
+        practice_contact_cell_phone: data.practice_contact?.cell_phone || "",
       });
 
       toast.dismiss();
@@ -141,7 +143,7 @@ export const usePracticeProfile = () => {
     if (provider_id != "new_user") {
       fetchPracticeProfile();
     }
-  }, [provider_id]);
+  }, []);
 
   const validateForm = () => {
     if (isEqual(formData.type, "Select Type") || !formData.type) {

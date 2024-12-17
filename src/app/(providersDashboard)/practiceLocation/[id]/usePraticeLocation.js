@@ -456,7 +456,7 @@ export const usePracticeLocations = () => {
     if (!validateForm()) {
       return;
     }
-    const loadingToast = toast.loading("Saving location...");
+    toast.loading("Saving location...");
     try {
       const url = editingId
         ? `/api/practice-location/${editingId}`
@@ -474,6 +474,7 @@ export const usePracticeLocations = () => {
         const errorData = await response.json();
         throw new Error(errorData.details || "Failed to save location");
       }
+      toast.dismiss();
       toast.success(`Location ${editingId ? "updated" : "added"} successfully`);
 
       await fetchLocations();
@@ -483,8 +484,7 @@ export const usePracticeLocations = () => {
       console.error("Error saving location:", error);
       toast.error(error.message || "Failed to save location");
     } finally {
-      setLoading(false);
-      toast.dismiss(loadingToast);
+      setLoading(false);      
     }
   };
 

@@ -90,8 +90,8 @@ const PayersContent=()=> {
         <tr className="border-b" key={index}>
           {activeTab === "provider" && (
             <td className="p-3">
-              {doc.providers_info?.first_name}{" "}
-              {doc.providers_info?.middle_initial}{" "}
+              {doc.providers_info?.first_name}
+              {doc.providers_info?.middle_initial}
               {doc.providers_info?.last_name}
             </td>
           )}

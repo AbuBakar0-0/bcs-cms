@@ -1,222 +1,292 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import {
-	documentsList,
-	initialFormData,
-	providerOptions,
-	statusOptions,
+  documentsList,
+  initialFormData,
+  providerOptions,
+  statusOptions,
 } from "./utilis";
 import { useParams } from "next/navigation";
 import { useProviders } from "@/hooks/useProvider";
 import { format, parse } from "date-fns";
 
 export function formatDate(date) {
-	const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+  const parsedDate = parse(date, "yyyy-MM-dd", new Date());
 
-	const formattedValue = format(parsedDate, "MM/dd/yyyy");
-	return formattedValue;
+  const formattedValue = format(parsedDate, "MM/dd/yyyy");
+  return formattedValue;
 }
 
 export const useDocuments = () => {
-	const [showForm, setShowForm] = useState(false);
-	const [documents, setDocuments] = useState([]);
-	const [formData, setFormData] = useState(initialFormData);
-	const [isEditing, setIsEditing] = useState(false);
-	const [loading, setLoading] = useState(false);
-	const { id: provider_id } = useParams();
+  const [showForm, setShowForm] = useState(false);
+  const [showOrganizationForm, setShowOrganizationForm] = useState(false);
+  const [documents, setDocuments] = useState([]);
+  const [formData, setFormData] = useState(initialFormData);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { id: provider_id } = useParams();
 
-	const { getProviderByName } = useProviders();
+  const [organizationList, setOrganizationList] = useState([]);
 
-	const validators = {
-		title: (value) => {
-			if (!value || value === "Select Document")
-				return "Document Type is required";
-			if (!documentsList.includes(value)) return "Invalid Document Type";
-		},
-		provider: (value) => {
-			if (!value || value === "Select Provider") return "Provider is required";
-		},
-		status: (value) => {
-			if (!value || value === "Select Status") return "Status is required";
-			if (!statusOptions.includes(value)) return "Invalid Status";
-		},
-		
-	};
+  const [organizationListWithName, setOrganizationListWithName] = useState([]);
 
-	const validateForm = () => {
-		const errors = [];
+  const { getProviderByName } = useProviders();
 
-		for (const [field, validator] of Object.entries(validators)) {
-			const error = validator(formData[field]);
-			if (error) errors.push(error);
-		}
-		console.log(errors);
-		return errors;
-	};
+  const validators = {
+    title: (value) => {
+      if (!value || value === "Select Document")
+        return "Document Type is required";
+      if (!documentsList.includes(value)) return "Invalid Document Type";
+    },
+    provider: (value) => {
+      if (!value || value === "Select Provider") return "Provider is required";
+    },
+    status: (value) => {
+      if (!value || value === "Select Status") return "Status is required";
+      if (!statusOptions.includes(value)) return "Invalid Status";
+    },
+  };
 
-	const fetchDocuments = async () => {
-		setLoading(true);
-		try {
-			const response = await fetch(
-				`/api/documents?uuid=${localStorage.getItem("user_uuid")}`
-			);
-			if (!response.ok) throw new Error("Failed to fetch documents");
-			const data = await response.json();
-			setDocuments(data);
-		} catch (error) {
-			console.error("Error fetching documents:", error);
-			toast.error("Failed to fetch documents");
-		} finally {
-			setLoading(false);
-		}
-	};
+  const validateForm = () => {
+    const errors = [];
 
-	useEffect(() => {
-		fetchDocuments();
-	}, []);
+    for (const [field, validator] of Object.entries(validators)) {
+      const error = validator(formData[field]);
+      if (error) errors.push(error);
+    }
+    console.log(errors);
+    return errors;
+  };
 
-	const resetForm = () => {
-		setFormData(initialFormData);
-		setIsEditing(false);
-	};
+  const fetchDocuments = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/documents?uuid=${localStorage.getItem("user_uuid")}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch documents");
+      const data = await response.json();
+      console.log(data);
+      setDocuments(data);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+      toast.error("Failed to fetch documents");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		if (
-			["Select Provider", "Select Document", "Select Status"].includes(value)
-		) {
-			return;
-		}
-		setFormData((prev) => ({
-			...prev,
-			[name]: value,
-		}));
-	};
+  const getOrganizations = async () => {
+    try {
+      const response = await fetch(
+        `/api/get-business?uuid=${localStorage.getItem("user_uuid")}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch documents");
+      const data = await response.json();
+      console.log(data);
+      const orgList = [];
+      data.map((item) => orgList.push(item.legal_business_name));
+      setOrganizationList(orgList);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
+      const orgListwithName = [];
+      data.map((item) =>
+        orgListwithName.push({
+          uuid: item.uuid,
+          name: item.legal_business_name,
+        })
+      );
 
-		const errors = validateForm();
-		if (errors.length > 0) {
-			toast.error(errors.join("\n"));
-			return;
-		}
-		toast.loading("Please Wait");
-		setLoading(true);
-		try {
-			const formDataToSend = new FormData();
-			Object.entries(formData).forEach(([key, value]) => {
-				if (value !== null && value !== "") {
-					if (key === "provider") {
-						const provider = getProviderByName(value);
-						formDataToSend.append("provider_id", provider.uuid);
-					} else {
-						formDataToSend.append(key, value);
-					}
-				}
-			});
-			const response = await fetch("/api/documents", {
-				method: isEditing ? "PUT" : "POST",
-				body: formDataToSend,
-			});
+      setOrganizationListWithName(orgListwithName);
+    } catch (error) {
+      console.error("Error fetching documents:", error);
+      toast.error("Failed to fetch documents");
+    } finally {
+    }
+  };
 
-			if (!response.ok) throw new Error("Failed to save document");
-			toast.dismiss();
-			await fetchDocuments();
-			setShowForm(false);
-			resetForm();
-			toast.success(
-				`Document ${isEditing ? "updated" : "created"} successfully`
-			);
-		} catch (error) {
-			console.error("Error saving document:", error);
-			toast.error("Failed to save document");
-		} finally {
-			setLoading(false);
-		}
-	};
+  useEffect(() => {
+    getOrganizations();
+    fetchDocuments();
+  }, []);
 
-	const handleEdit = (doc) => {
-		console.log(doc)
-		setFormData({
-			title: doc.title || "",
-			provider: doc.providers_info.first_name+" "+doc.providers_info.last_name || "",
-			status: doc.status || "",
-			effective_date: doc.effective_date || "",
-			expiry_date: doc.expiry_date || "",
-			file: doc.url || "",
-			existing_url: doc.url || "",
-			existing_file_public_id: doc.file_public_id || "",
-			uuid: doc.uuid || "",
-		});
-		setIsEditing(true);
-		setShowForm(true);
-	};
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setIsEditing(false);
+  };
 
-	const handleDelete = async (doc) => {
-		if (!window.confirm("Are you sure you want to delete this document?")) {
-			return;
-		}
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (
+      ["Select Provider", "Select Document", "Select Status"].includes(value)
+    ) {
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-		setLoading(true);
-		try {
-			const response = await fetch("/api/documents", {
-				method: "DELETE",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({
-					uuid: doc.uuid,
-					file_public_id: doc.file_public_id,
-				}),
-			});
+  const getUuidByName = (jsonList, targetName) => {
+    const foundItem = jsonList.find((item) => item.name === targetName);
+    return foundItem ? foundItem.uuid : null; // Return the uuid if found, else null
+  };
 
-			if (!response.ok) throw new Error("Failed to delete document");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-			await fetchDocuments();
-			toast.success("Document deleted successfully");
-		} catch (error) {
-			console.error("Error deleting document:", error);
-			toast.error("Failed to delete document");
-		} finally {
-			setLoading(false);
-		}
-	};
-	
-	const handleView = (doc) => {
-		if (!doc.url) {
-			toast.error("No document file available");
-			return;
-		}
+    toast.loading("Please Wait");
+    setLoading(true);
+    try {
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        // console.log("KEY :",key," =======> VALUE: ",value);
+        if (value !== null && value !== "") {
+          if (key === "provider" && value != undefined) {
+            const provider = getProviderByName(value);
+            formDataToSend.append("provider_id", provider.uuid);
+          } else if (key === "organization" && value != undefined) {
+            const organizationUuid = getUuidByName(
+              organizationListWithName,
+              value
+            );
+            formDataToSend.append("organization_id", organizationUuid);
+          } else {
+            formDataToSend.append(key, value);
+          }
+        }
+      });
 
-		if (doc.url.endsWith(".pdf")) {
-			const urlParts = doc.url.split("/");
-			const docId = urlParts[urlParts.length - 1].replace(".pdf", "");
-			const folder = urlParts[urlParts.length - 2];
-			const viewUrl = `https://res.cloudinary.com/db7z9hknv/image/upload/f_auto,q_auto/v1/${folder}/${docId}`;
-			window.open(viewUrl, "_blank");
-		} else {
-			window.open(doc.url, "_blank");
-		}
-	};
+      const response = await fetch("/api/documents", {
+        method: isEditing ? "PUT" : "POST",
+        body: formDataToSend,
+      });
 
-	const toggleForm = () => {
-		setShowForm(!showForm);
-		if (!showForm) {
-			resetForm();
-		}
-	};
+      if (!response.ok) throw new Error("Failed to save document");
+      toast.dismiss();
+      await fetchDocuments();
+      setShowForm(false);
+      resetForm();
+      toast.success(
+        `Document ${isEditing ? "updated" : "created"} successfully`
+      );
+      window.location.reload(true);
+    } catch (error) {
+      console.error("Error saving document:", error);
+      toast.error("Failed to save document");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-	return {
-		showForm,
-		documents,
-		formData,
-		isEditing,
-		loading,
-		handleChange,
-		handleSubmit,
-		handleEdit,
-		handleDelete,
-		handleView,
-		toggleForm,
-		resetForm,
-	};
+  const handleEdit = (doc) => {
+    console.log(doc);
+    setFormData({
+      title: doc.title || "",
+      provider:
+        doc.providers_info.first_name + " " + doc.providers_info.last_name ||
+        "",
+      status: doc.status || "",
+      effective_date: doc.effective_date || "",
+      expiry_date: doc.expiry_date || "",
+      file: doc.url || "",
+      existing_url: doc.url || "",
+      existing_file_public_id: doc.file_public_id || "",
+      uuid: doc.uuid || "",
+    });
+    setIsEditing(true);
+    setShowForm(true);
+  };
+
+  const handleEditOrganization = (doc) => {
+    setFormData({
+      title: doc.title || "",
+      organization: doc.practice_profiles.legal_business_name,
+      status: doc.status || "",
+      effective_date: doc.effective_date || "",
+      expiry_date: doc.expiry_date || "",
+      file: doc.url || "",
+      existing_url: doc.url || "",
+      existing_file_public_id: doc.file_public_id || "",
+      uuid: doc.uuid || "",
+    });
+    setIsEditing(true);
+    setShowOrganizationForm(true);
+  };
+
+  const handleDelete = async (doc) => {
+    setLoading(true);
+    toast.loading("Deleting");
+    try {
+      const response = await fetch("/api/documents", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          uuid: doc.uuid,
+          file_public_id: doc.file_public_id,
+          reason_to_delete: doc.reason,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to delete document");
+      toast.dismiss();
+      await fetchDocuments();
+      toast.success("Document deleted successfully");
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      toast.error("Failed to delete document");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleView = (doc) => {
+    if (!doc.url) {
+      toast.error("No document file available");
+      return;
+    }
+
+    if (doc.url.endsWith(".pdf")) {
+      const urlParts = doc.url.split("/");
+      const docId = urlParts[urlParts.length - 1].replace(".pdf", "");
+      const folder = urlParts[urlParts.length - 2];
+      const viewUrl = `https://res.cloudinary.com/db7z9hknv/image/upload/f_auto,q_auto/v1/${folder}/${docId}`;
+      window.open(viewUrl, "_blank");
+    } else {
+      window.open(doc.url, "_blank");
+    }
+  };
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
+    setShowOrganizationForm(false);
+    if (!showForm) {
+      resetForm();
+    }
+  };
+
+  const toggleOrganizationForm = () => {
+    setShowForm(false);
+    setShowOrganizationForm(!showOrganizationForm);
+  };
+
+  return {
+    showForm,
+    showOrganizationForm,
+    documents,
+    formData,
+    isEditing,
+    loading,
+    organizationList,
+
+    handleChange,
+    handleSubmit,
+    handleEdit,
+    handleDelete,
+    handleView,
+    toggleForm,
+    toggleOrganizationForm,
+    handleEditOrganization,
+    resetForm,
+  };
 };

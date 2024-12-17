@@ -215,7 +215,7 @@ export default function ProvidersDashboard() {
               ) : (
                 <tr>
                   <td
-                    colSpan="5"
+                    colSpan="9"
                     className="px-4 py-2 text-center text-gray-500"
                   >
                     No providers found.

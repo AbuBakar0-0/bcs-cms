@@ -30,19 +30,20 @@ export default function AdminDashboard() {
   const [docsExpiringWeek, setDocsExpiringWeek] = useState(0);
   const [loading, setLoading] = useState(false);
   const [payersData, setPayersData] = useState([]);
-  const [expiringWeek,setExpiringWeek]=useState([]);
+  const [expiringWeek, setExpiringWeek] = useState([]);
 
   function formatNotification(data) {
     let notifications = [];
-    data.forEach((item) => {
-      const { name, type, days } = item;
-      let notificationMessage = "";
-      let isExpiringToday = false;
-      let isExpiringWeek = false;
-      if (days === 0) {
-        notificationMessage = `${name}'s ${type} is expiring today.`;
-        isExpiringToday = true; // Mark as expiring today
-      } else if (days > 0) {
+    if(data.length!=0){
+      data.forEach((item) => {
+        const { name, type, days } = item;
+        let notificationMessage = "";
+        let isExpiringToday = false;
+        let isExpiringWeek = false;
+        if (days === 0) {
+          notificationMessage = `${name}'s ${type} is expiring today.`;
+          isExpiringToday = true; // Mark as expiring today
+        } else if (days > 0) {
         if (days <= 7) {
           isExpiringWeek = true;
           setDocsExpiringWeek((prev) => prev + 1);
@@ -53,7 +54,7 @@ export default function AdminDashboard() {
           days
         )} days ago.`;
       }
-
+      
       if (notificationMessage != "") {
         notifications.push({
           message: notificationMessage,
@@ -62,38 +63,40 @@ export default function AdminDashboard() {
         });
       }
     });
-
+    
+  }
     return notifications;
   }
 
   function formatTasks(data) {
     let tasks = [];
-    data.forEach((item) => {
-      const { name, type, days } = item;
-      let taskMessage = "";
-      let isExpiringToday = false;
-      let isExpiringWeek = false;
+    if (data.length != 0) {
+      data.forEach((item) => {
+        const { name, type, days } = item;
+        let taskMessage = "";
+        let isExpiringToday = false;
+        let isExpiringWeek = false;
 
-      if (days === 0) {
-        taskMessage = `Update ${name}'s ${type}`;
-        isExpiringToday = true; // Mark as expiring today
-      } else if (days > 0) {
-        if (days <= 7) {
-          isExpiringWeek = true;
+        if (days === 0) {
+          taskMessage = `Update ${name}'s ${type}`;
+          isExpiringToday = true; // Mark as expiring today
+        } else if (days > 0) {
+          if (days <= 7) {
+            isExpiringWeek = true;
+          }
+          taskMessage = `Update ${name}'s ${type}`;
+        } else if (days < 31 && days > -31) {
+          taskMessage = `Update ${name}'s ${type}`;
         }
-        taskMessage = `Update ${name}'s ${type}`;
-      } else if (days < 31 && days > -31) {
-        taskMessage = `Update ${name}'s ${type}`;
-      }
-      if (taskMessage != "") {
-        tasks.push({
-          message: taskMessage,
-          isExpiringToday,
-          isExpiringWeek,
-        });
-      }
-    });
-
+        if (taskMessage != "") {
+          tasks.push({
+            message: taskMessage,
+            isExpiringToday,
+            isExpiringWeek,
+          });
+        }
+      });
+    }
     return tasks;
   }
 
@@ -104,6 +107,7 @@ export default function AdminDashboard() {
       try {
         setLoading(true);
         const response = await axios.get(`/api/admin-dashboard?uuid=${uuid}`);
+        console.log("RESPONSE : ", response.data);
         setDocumentData(response.data);
         setLoading(false);
       } catch (error) {
@@ -153,6 +157,7 @@ export default function AdminDashboard() {
         const response = await axios.get(
           `/api/admin-dashboard/get-expired-documents?uuid=${uuid}`
         );
+        console.log("RESPONSE DASTATAS",response.data);
         const formattedNotifications = formatNotification(response.data);
         setNotifications((prevNotifications) => [
           ...prevNotifications,
@@ -183,7 +188,6 @@ export default function AdminDashboard() {
     fetchExpiredIds();
     fetchExpiredLicense();
     fetchPayers();
-
   }, []);
 
   return (
@@ -295,7 +299,9 @@ export default function AdminDashboard() {
           </div>
           <div className="w-[48%] flex flex-col justify-start items-center gap-4">
             <div className="w-full h-auto border-4 border-primary flex flex-col justify-center items-center gap-4 rounded-lg p-4">
-              <span className="text-lg font-semibold">Payers Credentialing Status</span>
+              <span className="text-lg font-semibold">
+                Payers Credentialing Status
+              </span>
               {loading ? (
                 <div className="w-full flex justify-center">
                   <ClipLoader />

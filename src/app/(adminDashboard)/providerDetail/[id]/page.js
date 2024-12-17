@@ -76,17 +76,22 @@ const ProviderDetail = () => {
   const DisplayExpiry = () => {
     const expiryDate = new Date(caqhExpiry?.expiry_date);
     const currentDate = new Date();
-    const timeDifference = expiryDate - currentDate;
-
-    // Calculate the difference in days
+  
+    // Add 3 months to the expiry date
+    const extendedDate = new Date(expiryDate);
+    extendedDate.setMonth(extendedDate.getMonth() + 3);
+  
+    // Calculate differences
+    const timeDifference = extendedDate - currentDate;
     const daysLeft = Math.ceil(timeDifference / (1000 * 3600 * 24));
-
+  
     if (daysLeft < 0) {
-      return `CAQH Expired ${daysLeft * -1} days ago`;
+      return `Extended CAQH Expired ${daysLeft * -1} days ago`;
     } else {
-      return `${daysLeft} days left until CAQH expiry`;
+      return `${daysLeft} days left until Extended CAQH Expiry`;
     }
   };
+  
 
   return (
     <AdminDashboardLayout>

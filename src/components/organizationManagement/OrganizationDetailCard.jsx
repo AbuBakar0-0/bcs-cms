@@ -58,9 +58,9 @@ export default function OrganizationDetailCard() {
 
             <div className="w-1/3 flex flex-col justify-start items-start gap-2">
               <p>
-                Address:{" "}
-                {organizationDetail?.service_address?.address_line_1 || "N/A"},{" "}
-                {organizationDetail?.service_address?.city || "N/A"},{" "}
+                Address:
+                {organizationDetail?.service_address?.address_line_1 || "N/A"},
+                {organizationDetail?.service_address?.city || "N/A"},
                 {organizationDetail?.service_address?.state || "N/A"}
               </p>
               <p>
@@ -71,7 +71,7 @@ export default function OrganizationDetailCard() {
                 State: {organizationDetail?.service_address?.state || "N/A"}
               </p>
               <p>
-                Zip Code:{" "}
+                Zip Code:
                 {organizationDetail?.service_address?.zip_code || "N/A"}
               </p>
               <p>

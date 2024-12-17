@@ -38,7 +38,8 @@ export async function GET(request) {
         correspondance_address_id,
         service_contact_id,
         mailing_contact_id,
-        correspondance_contact_id
+        correspondance_contact_id,
+		practice_contact_id
       `)
       .eq("provider_id", provider_id);
 
@@ -62,11 +63,13 @@ export async function GET(request) {
       supabase.from("contacts").select("*").eq("uuid", profile.service_contact_id),
       supabase.from("contacts").select("*").eq("uuid", profile.mailing_contact_id),
       supabase.from("contacts").select("*").eq("uuid", profile.correspondance_contact_id),
+	  supabase.from("contacts").select("*").eq("uuid", profile.practice_contact_id),
     ];
+
 
     // Execute all address and contact queries in parallel
     const [serviceAddress, mailingAddress, correspondenceAddress] = await Promise.all(addressQueries);
-    const [serviceContact, mailingContact, correspondenceContact] = await Promise.all(contactQueries);
+    const [serviceContact, mailingContact, correspondenceContact, practiceContact] = await Promise.all(contactQueries);
 
     if (serviceAddress.error || mailingAddress.error || correspondenceAddress.error) {
       throw new Error("Error fetching address data");
@@ -83,6 +86,7 @@ export async function GET(request) {
       service_contact: serviceContact.data[0] || null,
       mailing_contact: mailingContact.data[0] || null,
       correspondence_contact: correspondenceContact.data[0] || null,
+	  practice_contact:practiceContact.data[0]||null,
     };
 
     return NextResponse.json(responseData);

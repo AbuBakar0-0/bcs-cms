@@ -32,17 +32,14 @@ export async function GET(request) {
     }
 
     if (!providerInfo || providerInfo.length === 0) {
-      return new Response(
-        JSON.stringify([]),
-        {
-          headers: { "Content-Type": "application/json" },
-          status: 200,
-        }
-      );
+      return new Response(JSON.stringify([]), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
     }
 
     // Get all provider_documents associated with the provider_id
-    const { data, error } = await supabase
+    const { data: providerDocuments, error: providersError } = await supabase
       .from("provider_documents")
       .select("status, provider_id")
       .in(
@@ -51,20 +48,42 @@ export async function GET(request) {
       ) // Filter by the provider_id from providers_info
       .is("deleted_at", null);
 
-    if (error) {
+    //////////////////////////////////////////////////////////////
+
+    const { data: practiceInfo, error: practiceInfoError } = await supabase
+      .from("practice_profiles")
+      .select("uuid,providers_info(*)")
+      .eq("providers_info.added_by", addedBy);
+
+    if (practiceInfoError) {
       throw new Error(
-        `Failed to retrieve provider documents: ${error.message}`
+        `Failed to retrieve provider info: ${providerInfoError.message}`
+      );
+    }
+    
+    const { data: practiceDocuments, error: practiceError } = await supabase
+      .from("provider_documents")
+      .select("status, profile_id")
+      .in(
+        "profile_id",
+        practiceInfo.map((pi) => pi.uuid)
+      ) // Filter by the provider_id from providers_info
+      .is("deleted_at", null);
+
+
+    const data = [...providerDocuments, ...practiceDocuments];
+    console.log(data);
+    if (practiceError) {
+      throw new Error(
+        `Failed to retrieve provider documents: ${practiceError.message}`
       );
     }
 
     if (!data || data.length === 0) {
-      return new Response(
-        JSON.stringify([]),
-        {
-          headers: { "Content-Type": "application/json" },
-          status: 200,
-        }
-      );
+      return new Response(JSON.stringify([]), {
+        headers: { "Content-Type": "application/json" },
+        status: 200,
+      });
     }
 
     // Group by status and count the occurrences
@@ -78,7 +97,7 @@ export async function GET(request) {
     }, {});
 
     const result = Object.values(groupedData);
-    
+
     // Return the grouped data
     return new Response(JSON.stringify(result), {
       headers: { "Content-Type": "application/json" },

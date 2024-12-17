@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import AdminDashboardLayout from "../../../adminLayout";
-import { useParams } from "next/navigation";
+import OrganizationDetailCard from "@/components/organizationManagement/OrganizationDetailCard";
 import axios from "axios";
 import Link from "next/link";
-import OrganizationDetailCard from "@/components/organizationManagement/OrganizationDetailCard";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FaEye } from "react-icons/fa6";
-import { CiEdit } from "react-icons/ci";
 import { BarLoader } from "react-spinners";
+import AdminDashboardLayout from "../../../adminLayout";
 
 export default function OrganizationProviders() {
   const [providers, setProviders] = useState([]);
@@ -64,7 +63,7 @@ export default function OrganizationProviders() {
                     <td className="px-4 py-2">{provider.providers_info.license_id}</td>
                     <td className="px-4 py-2 flex justify-start items-center gap-2">
                       <Link
-                        href={`/providerDetail/${provider.uuid}`}
+                        href={`/providerDetail/${provider.provider_id}`}
                         className="text-green-400"
                       >
                         <FaEye />

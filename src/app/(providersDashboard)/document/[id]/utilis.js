@@ -26,6 +26,9 @@ export const documentsList = [
 export const providerOptions = [
 ];
 
+export const organizationOptions = [
+];
+
 export const statusOptions = [
 	"Active",
 	"Missing",
@@ -42,4 +45,6 @@ export const initialFormData = {
 	issueDate: "",
 	expiryDate: "",
 	file: null,
+	type:"",
+	organization:organizationOptions[0]
 };

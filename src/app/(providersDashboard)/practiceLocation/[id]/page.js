@@ -605,10 +605,12 @@ function PracticeLocations() {
                 business.practice_profile_provider.map((item,index) => (
                   <div
                   key={index}
-                  className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10"
-                >
+                  className="w-full h-24 shadow-xl rounded-lg border-l-8 border-primary flex flex-row justify-between items-center gap-4 p-10">
                   <p className="w-1/5">{business.legal_business_name}</p>
-                  <div className="w-1/2 flex flex-row justify-start items-start gap-1">
+                  <p className="w-1/5">{business.doing_business_name}</p>
+                  <p className="w-1/5">Medicare #: {business.ptan_medicare_number}</p>
+                  <p className="w-1/5">Medicaid #: {business.medicaid_number}</p>
+                  <div className="w-1/3 flex flex-row justify-start items-start gap-1">
                     <p>{item.providers_info.first_name}</p>
                     <p>{item.providers_info.middle_initial}</p>
                     <p>{item.providers_info.last_name}</p>

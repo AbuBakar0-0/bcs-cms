@@ -70,10 +70,7 @@ export async function GET(request) {
 
     if (!documents || documents.length === 0) {
       return new Response(
-        JSON.stringify({
-          success: false,
-          message: "No provider documents matching the criteria",
-        }),
+        JSON.stringify([]),
         {
           headers: { "Content-Type": "application/json" },
           status: 200,

@@ -13,6 +13,8 @@ export const sendMessageToGemini = async (userInput) => {
     ]
   };
 
+  console.log(requestPayload);
+  
   try {
     const response = await fetch(apiUrl, {
       method: 'POST',
