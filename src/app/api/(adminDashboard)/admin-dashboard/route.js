@@ -72,7 +72,6 @@ export async function GET(request) {
 
 
     const data = [...providerDocuments, ...practiceDocuments];
-    console.log(data);
     if (practiceError) {
       throw new Error(
         `Failed to retrieve provider documents: ${practiceError.message}`
