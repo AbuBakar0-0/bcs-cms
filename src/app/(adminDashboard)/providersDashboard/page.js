@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
-import { FaRegCircleUser } from "react-icons/fa6";
 import { FiTrash2, FiUser, FiUserX } from "react-icons/fi";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { LiaUser, LiaUserSlashSolid } from "react-icons/lia";
+import { LiaUserSlashSolid } from "react-icons/lia";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
+import BulkUploadButton from "@/components/adminDashboard/BulkUploadButton";
 
 const HoverExpandButton = ({ title, number, color, icon }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -116,12 +116,15 @@ export default function ProvidersDashboard() {
             <CiSearch className="size-8" />
           </div>
         </div>
-        <Link href={"/providersInformation/new_user"}>
-          <Button
-            title={"Add Provider"}
-            icon={<IoAddCircleOutline className="size-6" />}
-          />
-        </Link>
+        <div className="flex justify-center items-center">
+          <Link href={"/providersInformation/new_user"}>
+            <Button
+              title={"Add Provider"}
+              icon={<IoAddCircleOutline className="size-6" />}
+            />
+          </Link>
+          <BulkUploadButton />
+        </div>
       </div>
 
       {loading ? (
