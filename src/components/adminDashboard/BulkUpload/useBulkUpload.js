@@ -1,3 +1,5 @@
+import { supabase } from "@/lib/supabase";
+
 const useBulkUpload = () => {
   const insertAddress = async ({
     address_line_1 = "",
@@ -56,7 +58,114 @@ const useBulkUpload = () => {
     return contact;
   };
 
-  return { insertAddress, insertContact };
+  const insertInfoNumbers = async ({
+    professional_id = "",
+    type = "",
+    value = "",
+    issue_state = "",
+    effective_date = "",
+    expiry_date = "",
+  }) => {
+    const { data: infoNumberData, error: infoNumberError } = await supabase
+      .from("info_numbers")
+      .insert({
+        professional_id,
+        type,
+        value,
+        issue_state,
+        effective_date,
+        expiry_date,
+      })
+      .select()
+      .single();
+
+    if (infoNumberError) throw new Error(infoNumberError.message);
+    return infoNumberData;
+  };
+
+  const insertMalpracticeInfo = async ({
+    insurance_name = "",
+    policy_number = "",
+    effective_date = "",
+    expiry_date = "",
+    aggregate = "",
+    professional_id = "",
+    type = "",
+  }) => {
+    const { data: malpracticeData, error: malpracticeError } = await supabase
+      .from("malpractices_info")
+      .insert({
+        insurance_name,
+        policy_number,
+        effective_date,
+        expiry_date,
+        aggregate,
+      })
+      .select()
+      .single();
+
+    if (malpracticeError) throw new Error(malpracticeError.message);
+
+    if (type == "professional") {
+      const { error: professionalError } = await supabase
+        .from("professional_ids")
+        .update({
+          professional_malpractice_info: malpracticeData.uuid,
+        })
+        .eq("uuid", professional_id)
+        .select()
+        .single();
+
+      if (professionalError) throw new Error(professionalError.message);
+    } else {
+      const { error: professionalError } = await supabase
+        .from("professional_ids")
+        .update({
+          general_malpractice_info: malpracticeData.uuid,
+        })
+        .eq("uuid", professional_id)
+        .select()
+        .single();
+      if (professionalError) throw new Error(professionalError.message);
+    }
+
+    return malpracticeData;
+  };
+
+  const insertWebPortals = async ({
+    professional_id = "",
+    username = "",
+    password = "",
+    type = "",
+    platform_name = "",
+    user_id = "",
+    expiry_date = null,
+  }) => {
+    const { data: webPortalData, error: webPortalError } = await supabase
+      .from("web_portals")
+      .insert({
+        professional_id,
+        username,
+        password,
+        type,
+        platform_name,
+        user_id,
+        expiry_date,
+      })
+      .select()
+      .single();
+
+    if (webPortalError) throw new Error(webPortalError.message);
+    return webPortalData;
+  };
+
+  return {
+    insertAddress,
+    insertContact,
+    insertInfoNumbers,
+    insertMalpracticeInfo,
+    insertWebPortals,
+  };
 };
 
 export default useBulkUpload;
