@@ -46,7 +46,6 @@ export async function GET(request) {
         "provider_id",
         providerInfo.map((pi) => pi.uuid)
       ) // Filter by the provider_id from providers_info
-      .is("deleted_at", null);
 
     //////////////////////////////////////////////////////////////
 
@@ -68,7 +67,6 @@ export async function GET(request) {
         "profile_id",
         practiceInfo.map((pi) => pi.uuid)
       ) // Filter by the provider_id from providers_info
-      .is("deleted_at", null);
 
 
     const data = [...providerDocuments, ...practiceDocuments];

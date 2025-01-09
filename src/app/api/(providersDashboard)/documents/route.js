@@ -166,6 +166,7 @@ export async function DELETE(req) {
       .update({
         deleted_at: new Date().toISOString(),
         reason_to_delete: reason_to_delete,
+        status:"Deleted"
       })
       .match({ uuid });
 

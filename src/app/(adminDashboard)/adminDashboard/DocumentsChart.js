@@ -25,6 +25,8 @@ const getStatusColor = (status) => {
       return "#00be62"; // Green for Active
     case "Requested":
       return "#FF6347"; // Tomato color for Requested
+    case "Deleted":
+      return "#ff0000";
     default:
       return "#000000"; // Default color (black)
   }
@@ -40,6 +42,7 @@ function DocumentChart({ data }) {
     "On File",
     "Active",
     "Requested Provider",
+    "Deleted",
   ];
 
   const renderData = allStatuses.map((status) => {

@@ -59,6 +59,7 @@ const statusOptions = [
   "Expired",
   "On File",
   "Requested Provider",
+  "Deleted"
 ];
 
 const DocumentCenterContent = () => {
@@ -110,14 +111,16 @@ const DocumentCenterContent = () => {
 
     try {
       // Fetch documents from API
-      const response = await axios.get(`/api/documents?uuid=${userUuid}`);
+      const response = await axios.get(`/api/document-center?uuid=${userUuid}`);
 
       console.log(response.data);
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially set filtered docs to all docs
 
       const documentType = searchParams.get("type");
-
+      if(documentType=="Deleted"){
+        setActiveTab('deleted');
+      }
       if (documentType) {
         // If 'type' query parameter exists, filter the documents based on 'status'
         const filtered = response.data.filter(
@@ -165,10 +168,11 @@ const DocumentCenterContent = () => {
     // Filter documents based on the search term
     const filtered = documents.filter((doc) => {
       return (
-        doc.providers_info.first_name.toLowerCase().includes(term) ||
-        doc.providers_info.last_name.toLowerCase().includes(term) ||
-        doc.title.toLowerCase().includes(term) ||
-        doc.status.toLowerCase().includes(term)
+        doc.providers_info?.first_name.toLowerCase().includes(term) ||
+        doc.providers_info?.last_name.toLowerCase().includes(term) ||
+        doc.practice_profiles?.legal_business_name.toLowerCase().includes(term) ||
+        doc.title?.toLowerCase().includes(term) ||
+        doc.status?.toLowerCase().includes(term)
       );
     });
     setFilteredDocuments(filtered);
@@ -308,9 +312,8 @@ const DocumentCenterContent = () => {
 
   // Inside renderDocuments function
   const renderDocuments = (type) => {
-
     return filteredDocuments.map((doc, index) =>
-      doc.type == type ? (
+      doc.type == type && doc.status != "Deleted" ? (
         <tr className="border-b" key={index}>
           <td className="p-3">
             {doc.providers_info?.first_name}
@@ -337,6 +340,31 @@ const DocumentCenterContent = () => {
               className="text-red-600 hover:text-red-800"
             >
               <MdDeleteOutline className="size-5" />
+            </button>
+          </td>
+        </tr>
+      ) : (
+        <tr key={index}></tr>
+      )
+    );
+  };
+
+  const renderDeletedDocuments = () => {
+    return filteredDocuments.map((doc, index) =>
+      doc.status == "Deleted" ? (
+        <tr className="border-b" key={index}>
+          <td className="p-3">
+            {doc.providers_info?.first_name}
+            {doc.providers_info?.middle_initial}
+            {doc.providers_info?.last_name}
+            {doc.practice_profiles?.legal_business_name}
+          </td>
+          <td className="p-3">{doc.title}</td>
+          <td className="p-3">{formatDate(doc.expiry_date)}</td>
+          <td className="p-3 max-w-20 truncate" title={doc.reason_to_delete}>{doc.reason_to_delete}</td>
+          <td className="p-3 flex flex-row justify-start items-center gap-2">
+            <button onClick={() => handleView(doc)}>
+              <FaEye className="text-secondary" />
             </button>
           </td>
         </tr>
@@ -493,9 +521,9 @@ const DocumentCenterContent = () => {
         <></>
       )}
       {/* Tabs for toggling */}
-      <div className="flex mb-4">
+      <div className="flex mb-4 gap-4">
         <button
-          className={`px-4 py-2 mr-2 rounded-lg ${
+          className={`px-4 py-2 rounded-lg ${
             activeTab === "provider" ? "bg-primary text-white" : "bg-gray-200"
           }`}
           onClick={() => toggleTab("provider")}
@@ -512,6 +540,14 @@ const DocumentCenterContent = () => {
         >
           Organization Documents
         </button>
+        <button
+          className={`px-4 py-2 rounded-lg ${
+            activeTab === "deleted" ? "bg-primary text-white" : "bg-gray-200"
+          }`}
+          onClick={() => toggleTab("deleted")}
+        >
+          Deleted Documents
+        </button>
       </div>
 
       <div className="min-h-screen flex flex-col md:flex-row">
@@ -521,11 +557,15 @@ const DocumentCenterContent = () => {
               <table className="w-full table-auto">
                 <thead className="bg-gray-200 text-left">
                   <tr>
-                    <th className="p-3">Name</th>
-                    <th className="p-3">Document Type</th>
-                    <th className="p-3">Expiration Date</th>
-                    <th className="p-3">Status</th>
-                    <th className="p-3">Actions</th>
+                    <th className="w-1/6 p-3">Name</th>
+                    <th className="w-1/3 p-3">Document Type</th>
+                    <th className="w-[11%] p-3">Expiration Date</th>
+                    {activeTab == "deleted" ? (
+                      <th className="w-1/8 p-3">Reason To Delete</th>
+                    ) : (
+                      <th className="w-1/6 p-3">Status</th>
+                    )}
+                    <th className="w-1/12 p-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -541,7 +581,9 @@ const DocumentCenterContent = () => {
                     <>
                       {activeTab == "provider"
                         ? renderDocuments("provider")
-                        : renderDocuments("organization")}
+                        : activeTab == "organization"
+                        ? renderDocuments("organization")
+                        : renderDeletedDocuments()}
                     </>
                   )}
                 </tbody>
