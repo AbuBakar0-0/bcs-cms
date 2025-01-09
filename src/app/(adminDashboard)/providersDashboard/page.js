@@ -9,7 +9,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { LiaUserSlashSolid } from "react-icons/lia";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../(adminDashboard)/adminLayout";
-import BulkUploadButton from "@/components/adminDashboard/BulkUploadButton";
+import BulkUploadButton from "@/components/adminDashboard/BulkUpload/BulkUploadButton";
 
 const HoverExpandButton = ({ title, number, color, icon }) => {
   const [isHovered, setIsHovered] = useState(false);

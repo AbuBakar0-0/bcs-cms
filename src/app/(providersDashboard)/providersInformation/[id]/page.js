@@ -108,38 +108,41 @@ function ProvidersInformation() {
 	};
 
 	const handleSubmit = async () => {
-		toast.loading("Submitting");
-		console.log("handleSubmit");
 		setSubmitting(true);
-		if (
-			formData.emergencyContactRelation === "Select Relation" ||
-			!formData.emergencyContactRelation
-		) {
-			return toast.error("Please select relationship");
-		}
-		setLoading(true);
-		const addedBy = localStorage.getItem("user_uuid");
+		toast.loading("Submitting");
+
 		try {
 			const formDataObj = new FormData();
-			Object.entries({ ...formData, added_by: addedBy }).forEach(
-				([key, value]) => {
-					formDataObj.append(key, value);
-					if (key === "picture") console.log(value);
-				}
-			);
+			Object.entries({
+				...formData,
+				added_by: localStorage.getItem("user_uuid"),
+			}).forEach(([key, value]) => formDataObj.append(key, value));
 
-			const response = await axios.post("/api/providers-info", formDataObj);
+			const url =
+				uuid == "new_user"
+					? "/api/providers-info"
+					: `/api/providers-info/${uuid}`;
+
+			const method = uuid == "new_user" ? "POST" : "PUT";
+			const response = await axios({
+				method,
+				url,
+				data: formDataObj,
+			});
+
 			toast.dismiss();
-			toast.success("Successfully Added Provider");
+			toast.success(
+				uuid == "new_user"
+					? "Successfully Added Provider"
+					: "Successfully Updated Provider"
+			);
 			router.push(`/providersInformation/${response.data.provider_id}`);
 		} catch (error) {
 			toast.dismiss();
-
-			console.error("Error:", error);
-			toast.error("Failed to save provider information. Please try again.");
+			toast.error("Failed to save provider information");
+		} finally {
+			setSubmitting(false);
 		}
-		setSubmitting(false);
-		setLoading(false);
 	};
 
 	useEffect(() => {
@@ -225,7 +228,7 @@ function ProvidersInformation() {
 					<BarLoader />
 				</div>
 			) : (
-				<div className="w-full flex flex-col justify-center items-center gap-4">
+				<div className="w-full  flex flex-col justify-center items-center gap-4">
 					{/* Personal Information */}
 					<HeadingLine title={"Personal Information"} />
 
@@ -289,8 +292,6 @@ function ProvidersInformation() {
 							value={formData.dob}
 							onChange={(e) => handleChange(e)}
 						/>
-
-						
 
 						<TextInput
 							title={"Birth City"}
@@ -550,7 +551,7 @@ function ProvidersInformation() {
 								"Father",
 								"Mother",
 								"CFO",
-								"Other",								
+								"Other",
 							]}
 							title={"Relation"}
 							name={"emergencyContactRelation"}
@@ -572,9 +573,9 @@ function ProvidersInformation() {
 							onChange={handleChange}
 						/>
 					</div>
-						
+
 					{/* <Button title={"Save & Next"} onClick={handleSubmit} /> */}
-					<NavBottom onSave={handleSubmit} submitting={submitting}/>
+					<NavBottom onSave={handleSubmit} submitting={submitting} />
 				</div>
 			)}
 		</>

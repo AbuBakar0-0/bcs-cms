@@ -5,10 +5,15 @@ import Papa from "papaparse";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { IoCloseSharp } from "react-icons/io5";
+import useBulkUpload from "./useBulkUpload";
 
 export default function BulkUploadButton() {
     const [file, setFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
+
+
+    const { insertAddress, insertContact } = useBulkUpload();
+
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -88,75 +93,47 @@ export default function BulkUploadButton() {
                     } = row;
 
                     if (first_name != "") {
-                        // Insert addresses
-                        const { data: homeAddress, error: homeAddressError } = await supabase
-                            .from("addresses")
-                            .insert({
-                                address_line_1: home_address_line_1,
-                                address_line_2: home_address_line_2,
-                                city: home_address_city,
-                                state: home_address_state,
-                                zip_code: home_address_zip_code,
-                            })
-                            .select()
-                            .single();
 
-                        if (homeAddressError) throw new Error(homeAddressError.message);
+                        const homeAddress = await insertAddress({
+                            address_line_1: home_address_line_1,
+                            address_line_2: home_address_line_2,
+                            city: home_address_city,
+                            state: home_address_state,
+                            zip_code: home_address_zip_code
+                        });
 
-                        const { data: serviceLocationAddress, error: serviceLocationError } = await supabase
-                            .from("addresses")
-                            .insert({
-                                address_line_1: service_location_address_line_1,
-                                address_line_2: service_location_address_line_2,
-                                city: service_location_address_city,
-                                state: service_location_address_state,
-                                zip_code: service_location_address_zip_code,
-                            })
-                            .select()
-                            .single();
 
-                        if (serviceLocationError) throw new Error(serviceLocationError.message);
+                        const serviceLocationAddress = await insertAddress({
+                            address_line_1: service_location_address_line_1,
+                            address_line_2: service_location_address_line_2,
+                            city: service_location_address_city,
+                            state: service_location_address_state,
+                            zip_code: service_location_address_zip_code,
+                        })
 
-                        const { data: mailingAddress, error: mailingAddressError } = await supabase
-                            .from("addresses")
-                            .insert({
-                                address_line_1: mailing_address_line_1,
-                                address_line_2: mailing_address_line_2,
-                                city: mailing_address_city,
-                                state: mailing_address_state,
-                                zip_code: mailing_address_zip_code,
-                            })
-                            .select()
-                            .single();
+                        const mailingAddress = await insertAddress({
+                            address_line_1: mailing_address_line_1,
+                            address_line_2: mailing_address_line_2,
+                            city: mailing_address_city,
+                            state: mailing_address_state,
+                            zip_code: mailing_address_zip_code,
+                        })
 
-                        if (mailingAddressError) throw new Error(mailingAddressError.message);
 
-                        // Insert contacts
-                        const { data: personalContact, error: personalContactError } = await supabase
-                            .from("contacts")
-                            .insert({
-                                home_phone: personal_home_phone,
-                                cell_phone: personal_cell_phone,
-                                email: personal_email,
-                                work_email: personal_work_email,
-                            })
-                            .select()
-                            .single();
+                        const personalContact = await insertContact({
+                            home_phone: personal_home_phone,
+                            cell_phone: personal_cell_phone,
+                            email: personal_email,
+                            work_email: personal_work_email,
+                        })
 
-                        if (personalContactError) throw new Error(personalContactError.message);
-
-                        const { data: emergencyContact, error: emergencyContactError } = await supabase
-                            .from("contacts")
-                            .insert({
-                                cell_phone: emergency_contact_name,
-                                relation: emergency_contact_relation,
-                                email: emergency_contact_cell_phone,
-                                work_email: emergency_contact_email,
-                            })
-                            .select()
-                            .single();
-
-                        if (emergencyContactError) throw new Error(emergencyContactError.message);
+                        const emergencyContact = await insertContact({
+                            contact_name: emergency_contact_name,
+                            cell_phone: emergency_contact_name,
+                            relation: emergency_contact_relation,
+                            email: emergency_contact_cell_phone,
+                            work_email: emergency_contact_email,
+                        });
 
                         // Insert provider info with references to other tables
                         const { error: providerError } = await supabase.from("providers_info").insert({
@@ -216,7 +193,7 @@ export default function BulkUploadButton() {
                         <div className="flex justify-between items-center">
                             <h2 className="text-lg font-semibold">Upload CSV</h2>
                             <button onClick={() => setIsModalOpen(false)}>
-                            <IoCloseSharp />
+                                <IoCloseSharp />
 
                             </button>
                         </div>
@@ -232,7 +209,7 @@ export default function BulkUploadButton() {
                         >
                             Upload Data
                         </button>
-                        
+
                     </div>
                 </div>
             )}
