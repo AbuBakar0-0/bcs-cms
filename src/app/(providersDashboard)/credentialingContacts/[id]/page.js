@@ -16,6 +16,7 @@ import { validateCredsContactForm } from "./utilis";
 import { useParams } from "next/navigation";
 import { BarLoader } from "react-spinners";
 import NavBottom from "@/components/ui/NavBottom";
+
 const initialFormData = {
   credentialingTitle: "Select Title",
   firstName: "",
@@ -30,10 +31,6 @@ const initialFormData = {
   cellPhone: "",
   fax: "",
   workEmail: "",
-  // emergencyContactName: "",
-  // emergencyContactRelation: "Select Relationship",
-  // emergencyContactPhone: "",
-  // emergencyContactEmail: "",
 };
 
 const relationshipOptions = [
@@ -163,9 +160,9 @@ export default function CredentialingContacts() {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/credential-contacts");
+      const res = await fetch(`/api/credential-contacts?uuid=${provider_id}`);
       const { data, error } = await res.json();
-     
+
       if (error) {
         toast.error("Failed to fetch contacts");
         return;

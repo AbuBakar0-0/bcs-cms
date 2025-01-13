@@ -1,18 +1,11 @@
 import { supabase } from "@/lib/supabase";
 import useBulkUpload from "./useBulkUpload";
 
-export const InsertProfessionalIds = async ({ providerData, row }) => {
-  const {
-    insertInfoNumbers,
-    insertMalpracticeInfo,
-    insertWebPortals,
-  } = useBulkUpload();
+export const InsertProfessionalIds = async ({ professionalId, row }) => {
+  const { insertInfoNumbers, insertMalpracticeInfo, insertWebPortals } =
+    useBulkUpload();
 
   const {
-    npi_1,
-    npi_2,
-    tax_id,
-    upin,
 
     //medicare and other numbers
     medicare_ptan_no,
@@ -84,188 +77,217 @@ export const InsertProfessionalIds = async ({ providerData, row }) => {
     bank_password,
   } = row;
 
-  const { data: professionalData, error: professionalError } = await supabase
-    .from("professional_ids")
-    .insert({
-      provider_id: providerData.uuid,
-      npi_1: npi_1 || "",
-      npi_2: npi_2 || "",
-      tax_id: tax_id,
-      upin: upin,
-    })
-    .select()
-    .single();
-
-  if (professionalError) throw new Error(professionalError.message);
   //MEDICARE AND OTHER NUMBERS
 
-  const medicareInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "medicare",
-    value: medicare_ptan_no,
-    issue_state: medicare_issue_state,
-    effective_date: medicare_effective_date,
-    expiry_date: medicare_expiry_date,
-  });
+  if (medicare_ptan_no != "") {
+    const medicareInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "medicare",
+      value: medicare_ptan_no,
+      issue_state: medicare_issue_state,
+      effective_date: medicare_effective_date,
+      expiry_date: medicare_expiry_date,
+    });
+  }
 
-  const medicaidInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "medicaid",
-    value: medicaid_no,
-    issue_state: medicaid_issue_state,
-    effective_date: medicaid_effective_date,
-    expiry_date: medicaid_expiry_date,
-  });
+  if (medicaid_no != "") {
+    const medicaidInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "medicaid",
+      value: medicaid_no,
+      issue_state: medicaid_issue_state,
+      effective_date: medicaid_effective_date,
+      expiry_date: medicaid_expiry_date,
+    });
+  }
 
-  const stateLicenseInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "state_license",
-    value: state_license_no,
-    issue_state: state_license_issue_state,
-    effective_date: state_license_effective_date,
-    expiry_date: state_license_expiry_date,
-  });
+  if (state_license_no != "") {
+    const stateLicenseInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "state_license",
+      value: state_license_no,
+      issue_state: state_license_issue_state,
+      effective_date: state_license_effective_date,
+      expiry_date: state_license_expiry_date,
+    });
+  }
 
-  const cliaInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "clia",
-    value: clia_no,
-    issue_state: clia_issue_state,
-    effective_date: clia_effective_date,
-    expiry_date: clia_expiry_date,
-  });
+  if (clia_no != "") {
+    const cliaInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "clia",
+      value: clia_no,
+      issue_state: clia_issue_state,
+      effective_date: clia_effective_date,
+      expiry_date: clia_expiry_date,
+    });
+  }
 
-  const deaInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "dea",
-    value: dea_no,
-    issue_state: dea_issue_state,
-    effective_date: dea_effective_date,
-    expiry_date: dea_expiry_date,
-  });
+  if (dea_no != "") {
+    const deaInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "dea",
+      value: dea_no,
+      issue_state: dea_issue_state,
+      effective_date: dea_effective_date,
+      expiry_date: dea_expiry_date,
+    });
+  }
 
-  const cdsInfo = await insertInfoNumbers({
-    professional_id: professionalData.uuid,
-    type: "cds",
-    value: cds_no,
-    issue_state: cds_issue_state,
-    effective_date: cds_effective_date,
-    expiry_date: cds_expiry_date,
-  });
+  if (cds_no != "") {
+    const cdsInfo = await insertInfoNumbers({
+      professional_id: professionalId,
+      type: "cds",
+      value: cds_no,
+      issue_state: cds_issue_state,
+      effective_date: cds_effective_date,
+      expiry_date: cds_expiry_date,
+    });
+  }
 
   //MALPRACTICE INFO INSERTION
 
-  const professionalMalpractice = await insertMalpracticeInfo({
-    insurance_name: professional_insurance_name,
-    policy_number: professional_policy_number,
-    effective_date: professional_policy_effective_date,
-    expiry_date: professional_policy_expiry_date,
-    aggregate: professional_policy_aggregate,
-    professional_id: professionalData.uuid,
-    type: "professional",
-  });
+  if (professional_insurance_name != "") {
+    const professionalMalpractice = await insertMalpracticeInfo({
+      insurance_name: professional_insurance_name,
+      policy_number: professional_policy_number,
+      effective_date: professional_policy_effective_date,
+      expiry_date: professional_policy_expiry_date,
+      aggregate: professional_policy_aggregate,
+      professional_id: professionalId,
+      type: "professional",
+    });
+  }
 
-  const generalMalpractice = await insertMalpracticeInfo({
-    insurance_name: general_insurance_name,
-    policy_number: general_policy_number,
-    effective_date: general_policy_effective_date,
-    expiry_date: general_policy_expiry_date,
-    aggregate: general_policy_aggregate,
-    professional_id: professionalData.uuid,
-    type: "general",
-  });
+  if (general_insurance_name != "") {
+    const generalMalpractice = await insertMalpracticeInfo({
+      insurance_name: general_insurance_name,
+      policy_number: general_policy_number,
+      effective_date: general_policy_effective_date,
+      expiry_date: general_policy_expiry_date,
+      aggregate: general_policy_aggregate,
+      professional_id: professionalId,
+      type: "general",
+    });
+  }
 
-  const pecosPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: pecos_username,
-    password: pecos_password,
-    type: "pecos",
-  });
+  if (pecos_username != "") {
+    const pecosPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: pecos_username,
+      password: pecos_password,
+      type: "pecos",
+    });
+  }
 
-  const uhcPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: uhc_username,
-    password: uhc_password,
-    type: "uhc",
-  });
+  if (uhc_username != "") {
+    const uhcPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: uhc_username,
+      password: uhc_password,
+      type: "uhc",
+    });
+  }
 
-  const optumPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: optum_username,
-    password: optum_password,
-    type: "optum",
-  });
+  if (optum_username != "") {
+    const optumPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: optum_username,
+      password: optum_password,
+      type: "optum",
+    });
+  }
 
-  const availityPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: availity_username,
-    password: availity_password,
-    type: "availity",
-  });
+  if (availity_username != "") {
+    const availityPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: availity_username,
+      password: availity_password,
+      type: "availity",
+    });
+  }
 
-  const medicaidPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: medicaid_username,
-    password: medicaid_password,
-    type: "medicaid",
-  });
+  if (medicaid_username != "") {
+    const medicaidPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: medicaid_username,
+      password: medicaid_password,
+      type: "medicaid",
+    });
+  }
 
-  const echoPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: echo_username,
-    password: echo_password,
-    type: "echo",
-  });
+  if (echo_username != "") {
+    const echoPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: echo_username,
+      password: echo_password,
+      type: "echo",
+    });
+  }
 
-  const payspanPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: payspan_username,
-    password: payspan_password,
-    type: "payspan",
-  });
+  if (payspan_username != "") {
+    const payspanPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: payspan_username,
+      password: payspan_password,
+      type: "payspan",
+    });
+  }
 
-  const billingPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: billing_software_username,
-    password: billing_software_password,
-    type: "billing",
-  });
+  if (billing_software_username != "") {
+    const billingPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: billing_software_username,
+      password: billing_software_password,
+      type: "billing",
+    });
+  }
 
-  const ediPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: edi_username,
-    password: edi_password,
-    type: "edi",
-  });
+  if (edi_username != "") {
+    const ediPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: edi_username,
+      password: edi_password,
+      type: "edi",
+    });
+  }
 
-  const faxPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: fax_username,
-    password: fax_password,
-    type: "fax",
-  });
+  if (fax_username != "") {
+    const faxPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: fax_username,
+      password: fax_password,
+      type: "fax",
+    });
+  }
 
-  const molinaPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    username: molina_username,
-    password: molina_password,
-    type: "molina",
-  });
+  if (molina_username != "") {
+    const molinaPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      username: molina_username,
+      password: molina_password,
+      type: "molina",
+    });
+  }
 
-  const caqhPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    user_id: caqh_user_id,
-    username: caqh_username,
-    password: caqh_password,
-    expiry_date: caqh_reattestation_date,
-    type: "caqh",
-  });
+  if (caqh_user_id != "") {
+    const caqhPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      user_id: caqh_user_id,
+      username: caqh_username,
+      password: caqh_password,
+      expiry_date: caqh_reattestation_date,
+      type: "caqh",
+    });
+  }
 
-  const bankPortalData = await insertWebPortals({
-    professional_id: professionalData.uuid,
-    platform_name: bank_name,
-    username: bank_username,
-    password: bank_password,
-    type: "bankLogin",
-  });
+  if (bank_username != "") {
+    const bankPortalData = await insertWebPortals({
+      professional_id: professionalId,
+      platform_name: bank_name,
+      username: bank_username,
+      password: bank_password,
+      type: "bankLogin",
+    });
+  }
 };

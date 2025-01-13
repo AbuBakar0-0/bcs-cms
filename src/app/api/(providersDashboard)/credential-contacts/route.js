@@ -1,8 +1,11 @@
 import { supabase } from "@/lib/supabase";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request) {
   try {
+    const searchParams = request.nextUrl.searchParams;
+    const addedBy = searchParams.get("uuid"); // Filter based on added_by
+
     const { data: credentialingContacts, error: credentialingError } =
       await supabase
         .from("credentialing_contacts")
@@ -19,6 +22,7 @@ export async function GET() {
 		  provider_id
 		`
         )
+        .eq("provider_id", addedBy)
         .is("deleted_at", null);
 
     if (credentialingError) throw credentialingError;
