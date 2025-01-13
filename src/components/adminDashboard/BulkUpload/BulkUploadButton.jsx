@@ -254,18 +254,21 @@ export default function BulkUploadButton() {
         onClick={() => setIsModalOpen(true)}
         className={`px-4 py-3 flex flex-row justify-center items-center gap-4 bg-secondary text-white rounded-lg`}
       >
-        Bulk Upload
+        Bulk Upload Providers
       </button>
 
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded">
-            <div className="flex justify-between items-center">
-              <h2 className="text-lg font-semibold">Upload CSV</h2>
+            <div className="flex justify-end items-center">
               <button onClick={() => setIsModalOpen(false)}>
                 <IoCloseSharp />
               </button>
+            </div>
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold">Upload CSV</h2>
+              <a href="/assets/Providers Sample.csv" className="" >Download Sample File</a>
             </div>
             <input
               type="file"
