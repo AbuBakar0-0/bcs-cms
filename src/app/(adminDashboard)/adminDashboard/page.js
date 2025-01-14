@@ -34,7 +34,7 @@ export default function AdminDashboard() {
 
   function formatNotification(data) {
     let notifications = [];
-    if(data.length!=0){
+    if (data.length != 0) {
       data.forEach((item) => {
         const { name, type, days } = item;
         let notificationMessage = "";
@@ -44,27 +44,26 @@ export default function AdminDashboard() {
           notificationMessage = `${name}'s ${type} is expiring today.`;
           isExpiringToday = true; // Mark as expiring today
         } else if (days > 0) {
-        if (days <= 7) {
-          isExpiringWeek = true;
-          setDocsExpiringWeek((prev) => prev + 1);
+          if (days <= 7) {
+            isExpiringWeek = true;
+            setDocsExpiringWeek((prev) => prev + 1);
+          }
+          notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
+        } else if (days < 31 && days > -31) {
+          notificationMessage = `${name}'s ${type} expired ${Math.abs(
+            days
+          )} days ago.`;
         }
-        notificationMessage = `${name}'s ${type} is expiring in ${days} days.`;
-      } else if (days < 31 && days > -31) {
-        notificationMessage = `${name}'s ${type} expired ${Math.abs(
-          days
-        )} days ago.`;
-      }
-      
-      if (notificationMessage != "") {
-        notifications.push({
-          message: notificationMessage,
-          isExpiringToday,
-          isExpiringWeek, // Add this property to track if it's expiring today
-        });
-      }
-    });
-    
-  }
+
+        if (notificationMessage != "") {
+          notifications.push({
+            message: notificationMessage,
+            isExpiringToday,
+            isExpiringWeek, // Add this property to track if it's expiring today
+          });
+        }
+      });
+    }
     return notifications;
   }
 
@@ -107,7 +106,6 @@ export default function AdminDashboard() {
       try {
         setLoading(true);
         const response = await axios.get(`/api/admin-dashboard?uuid=${uuid}`);
-        console.log("RESPONSE : ", response.data);
         setDocumentData(response.data);
         setLoading(false);
       } catch (error) {
@@ -120,15 +118,17 @@ export default function AdminDashboard() {
         const response = await axios.get(
           `/api/admin-dashboard/get-expired-license?uuid=${uuid}`
         );
-        const formattedNotifications = formatNotification(response.data);
+        if (response.data.message == undefined) {
+          const formattedNotifications = formatNotification(response.data);
 
-        setNotifications((prevNotifications) => [
-          ...prevNotifications,
-          ...formattedNotifications,
-        ]);
+          setNotifications((prevNotifications) => [
+            ...prevNotifications,
+            ...formattedNotifications,
+          ]);
 
-        const formattedTasks = formatTasks(response.data);
-        setTasks((prevTasks) => [...prevTasks, ...formattedTasks]);
+          const formattedTasks = formatTasks(response.data);
+          setTasks((prevTasks) => [...prevTasks, ...formattedTasks]);
+        }
       } catch (error) {
         console.error("Error fetching expired licenses:", error);
       }
@@ -157,7 +157,6 @@ export default function AdminDashboard() {
         const response = await axios.get(
           `/api/admin-dashboard/get-expired-documents?uuid=${uuid}`
         );
-        console.log("RESPONSE DASTATAS",response.data);
         const formattedNotifications = formatNotification(response.data);
         setNotifications((prevNotifications) => [
           ...prevNotifications,

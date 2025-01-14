@@ -108,9 +108,6 @@ export async function POST(req) {
     const title = formData.get("title");
     const status = formData.get("status");
 
-    console.log(formData);
-    console.log("PROVIDER ID",provider_id);
-    console.log("PROVILE ID: ",profile_id);
 
     const { error } = await supabase.from("provider_documents").insert({
       title,

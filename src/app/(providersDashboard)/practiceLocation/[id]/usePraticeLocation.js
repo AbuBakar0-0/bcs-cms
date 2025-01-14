@@ -225,7 +225,6 @@ export const usePracticeLocations = () => {
           item.first_name + " " + item.middle_initial + " " + item.last_name,
         uuid: item.uuid,
       }));
-      console.log("FORMATTED FULL PROVIDERS: ",formattedFullProviders);
       setFullProviders(formattedFullProviders);
 
       const res = await axios.get(

@@ -1,22 +1,22 @@
 "use client";
 
 import Button from "@/components/ui/Button";
+import BaseInput from "@/components/ui/inputFields/BaseInput";
+import DateInput from "@/components/ui/inputFields/DateInput";
+import Dropdown from "@/components/ui/inputFields/DropDown";
+import TextInput from "@/components/ui/inputFields/TextInput";
+import { useProviders } from "@/hooks/useProvider";
 import axios from "axios"; // Import axios for HTTP requests
 import Link from "next/link";
-import { useEffect, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation"; // Import the correct hooks
+import { Suspense, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { CiEdit, CiSearch } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { MdDeleteOutline } from "react-icons/md";
 import { BarLoader } from "react-spinners";
 import AdminDashboardLayout from "../../adminLayout";
-import { useRouter, useSearchParams } from "next/navigation"; // Import the correct hooks
-import Dropdown from "@/components/ui/inputFields/DropDown";
-import DateInput from "@/components/ui/inputFields/DateInput";
-import BaseInput from "@/components/ui/inputFields/BaseInput";
-import { useProviders } from "@/hooks/useProvider";
-import toast from "react-hot-toast";
-import TextInput from "@/components/ui/inputFields/TextInput";
 
 const documentsList = [
   "IRS Letter (It could be your SS-4, CP 575 or 147C)",
@@ -112,11 +112,8 @@ const DocumentCenterContent = () => {
     try {
       // Fetch documents from API
       const response = await axios.get(`/api/document-center?uuid=${userUuid}`);
-
-      console.log(response.data);
       setDocuments(response.data);
       setFilteredDocuments(response.data); // Initially set filtered docs to all docs
-
       const documentType = searchParams.get("type");
       if(documentType=="Deleted"){
         setActiveTab('deleted');
@@ -190,7 +187,6 @@ const DocumentCenterContent = () => {
     } else {
       setIsProvider(false);
     }
-    console.log(doc);
     setFormData({
       title: doc.title || "",
       provider:

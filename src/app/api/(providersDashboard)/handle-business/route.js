@@ -5,7 +5,6 @@ export async function POST(request) {
     // Parse the request body
     const body = await request.json();
     const { business_id, provider_id } = body;
-    console.log(body);
 
     // Validate the required fields
     if (!business_id || !provider_id) {

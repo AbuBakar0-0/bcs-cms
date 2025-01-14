@@ -73,8 +73,6 @@ function UserManagement() {
   };
 
   const handleDropDownChange = (e) => {
-    
-
     switch (e.target.value) {
       case "Administrator":
         setFormData({
@@ -212,6 +210,7 @@ function UserManagement() {
 
   const fetchUserData = async () => {
     try {
+      toast.loading("Please Wait");
       if (user_id == "new_user") {
         return;
       }
@@ -246,6 +245,7 @@ function UserManagement() {
         professional_references: response.data.professional_references,
         documents: response.data.documents,
       });
+      toast.dismiss();
     } catch (error) {
       console.error("Error fetching user data:", error);
       toast.error("Error fetching user data");
@@ -258,6 +258,23 @@ function UserManagement() {
 
   // Validate form data before submission
 
+  const sendEmail = async ({ first_name, last_name, email, password }) => {
+    toast.loading("Sending User Details on Email");
+    try {
+      const emailPayload = {
+        first_name,
+        last_name,
+        email,
+        password,
+      };
+      await axios.post("/api/sendEmail", emailPayload);
+      toast.dismiss();
+      toast.success("Sent Successfully");
+    } catch (e) {
+      toast.dismiss();
+      toast.error(e.message);
+    }
+  };
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
@@ -272,7 +289,12 @@ function UserManagement() {
       toast.dismiss();
       const response = await axios.post("/api/user-management", requestData);
       toast.success("User added successfully");
-
+      await sendEmail({
+        first_name: requestData.firstName,
+        last_name: requestData.lastName,
+        email: requestData.email,
+        password: requestData.password,
+      });
       router.push("/usersDashboard");
     } catch (e) {
       toast.error("Error Adding User");
@@ -297,8 +319,13 @@ function UserManagement() {
       });
 
       const data = await response.json();
-      console.log("User updated successfully:", data);
       toast.success("User updated successfully");
+      await sendEmail({
+        first_name: requestData.firstName,
+        last_name: requestData.lastName,
+        email: requestData.email,
+        password: requestData.password,
+      });
       router.push("/usersDashboard");
     } catch (error) {
       console.error("Error updating user:", error);

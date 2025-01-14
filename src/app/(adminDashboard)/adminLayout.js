@@ -1,19 +1,44 @@
 "use client";
 
 import { useUserData } from "@/context/UserContext";
+import { deleteCookie } from "cookies-next";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FaArrowCircleRight } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 
 const sidenavLinks = [
-  { title: "Admin Dashboard", link: "/adminDashboard", permission: "admin_dashboard" },
-  { title: "Providers Dashboard", link: "/providersDashboard", permission: "provider_dashboard" },
-  { title: "Organization Management", link: "/organizationManagement", permission: "organization_management" },
-  { title: "Document Center", link: "/documentCenter", permission: "document_center" },
-  { title: "Credentialing Status", link: "/credentialingStatus", permission: "credentialing_status" },
+  {
+    title: "Admin Dashboard",
+    link: "/adminDashboard",
+    permission: "admin_dashboard",
+  },
+  {
+    title: "Providers Dashboard",
+    link: "/providersDashboard",
+    permission: "provider_dashboard",
+  },
+  {
+    title: "Organization Management",
+    link: "/organizationManagement",
+    permission: "organization_management",
+  },
+  {
+    title: "Document Center",
+    link: "/documentCenter",
+    permission: "document_center",
+  },
+  {
+    title: "Credentialing Status",
+    link: "/credentialingStatus",
+    permission: "credentialing_status",
+  },
   { title: "Payers", link: "/payers", permission: "payers" },
-  { title: "User Management", link: "/usersDashboard", permission: "user_management" },
+  {
+    title: "User Management",
+    link: "/usersDashboard",
+    permission: "user_management",
+  },
   { title: "HR Hiring", link: "/hrHiring", permission: "hr_hiring" },
   { title: "Reporting", link: "/reporting", permission: "reporting" },
   { title: "Help Center", link: "/helpCenter", permission: "help_center" },
@@ -29,6 +54,10 @@ export default function AdminDashboardLayout({
 
   const handleLogout = () => {
     localStorage.removeItem("userData");
+    localStorage.removeItem("user_uuid");
+    deleteCookie("auth_token", {
+      path: "/", // Optional, ensure it's deleted across the entire domain
+    });
     router.push("/signin");
   };
 

@@ -65,7 +65,6 @@ export const useDocuments = () => {
       );
       if (!response.ok) throw new Error("Failed to fetch documents");
       const data = await response.json();
-      console.log(data);
       setDocuments(data);
     } catch (error) {
       console.error("Error fetching documents:", error);
@@ -82,7 +81,6 @@ export const useDocuments = () => {
       );
       if (!response.ok) throw new Error("Failed to fetch documents");
       const data = await response.json();
-      console.log(data);
       const orgList = [];
       data.map((item) => orgList.push(item.legal_business_name));
       setOrganizationList(orgList);
@@ -139,7 +137,6 @@ export const useDocuments = () => {
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        // console.log("KEY :",key," =======> VALUE: ",value);
         if (value !== null && value !== "") {
           if (key === "provider" && value != undefined) {
             const provider = getProviderByName(value);
@@ -179,7 +176,6 @@ export const useDocuments = () => {
   };
 
   const handleEdit = (doc) => {
-    console.log(doc);
     setFormData({
       title: doc.title || "",
       provider:

@@ -5,7 +5,6 @@ export async function GET(request) {
 	try {
 		const { searchParams } = new URL(request.url);
 		const provider_id = searchParams.get("provider_id");
-		console.log("pprovider_id---", provider_id);
 
 		// Validate providerId
 		if (!provider_id) {
