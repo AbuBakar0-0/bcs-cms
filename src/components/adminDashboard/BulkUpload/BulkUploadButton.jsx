@@ -19,8 +19,8 @@ import { InsertProfessionalReferences } from "./insertProfessionalReferences";
 
 export default function BulkUploadButton() {
   const [file, setFile] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [progress, setProgress] = useState(0); // Track progress
   const { insertAddress, insertContact } = useBulkUpload();
 
   const handleFileChange = (e) => {
@@ -39,31 +39,34 @@ export default function BulkUploadButton() {
       // Parse CSV data
       if (file.name.endsWith(".csv")) {
         Papa.parse(resultData, {
-          header: true, // Ensure keys are mapped
+          header: true,
           complete: (result) => {
             rows = result.data;
           },
         });
       } else {
         alert("Unsupported file type. Please upload a .csv file.");
-        setIsLoading(false);
+        setProgress(0);
         return;
       }
 
       const userUuid = localStorage.getItem("user_uuid");
       if (!userUuid) {
         alert("User UUID not found in local storage.");
-        setIsLoading(false);
+        setProgress(0);
         return;
       }
+
       toast.loading("Please Wait");
       try {
         var providerId = null;
         var professionalId = null;
+        const totalRows = rows.length;
+
         // Split the rows into related tables
-        for (let row of rows) {
+        for (let i = 0; i < totalRows; i++) {
+          const row = rows[i];
           const {
-            //providers_info
             first_name,
             middle_initial,
             last_name,
@@ -79,61 +82,53 @@ export default function BulkUploadButton() {
             issue_date,
             expiry_date,
 
-            //home_address
+            // home_address
             home_address_line_1,
             home_address_line_2,
             home_address_city,
             home_address_state,
             home_address_zip_code,
 
-            //service_location_address
+            // service_location_address
             service_location_address_line_1,
             service_location_address_line_2,
             service_location_address_city,
             service_location_address_state,
             service_location_address_zip_code,
 
-            //mailing_address
+            // mailing_address
             mailing_address_line_1,
             mailing_address_line_2,
             mailing_address_city,
             mailing_address_state,
             mailing_address_zip_code,
 
-            //contact info
+            // contact info
             personal_home_phone,
             personal_cell_phone,
             personal_email,
             personal_work_email,
 
-            //emergency_contact_info
+            // emergency_contact_info
             emergency_contact_name,
             emergency_contact_relation,
             emergency_contact_cell_phone,
             emergency_contact_email,
 
-            //professional+ID
-
+            // professional+ID
             npi_1,
             npi_2,
             tax_id,
             upin,
-
           } = row;
 
-          console.log(JSON.stringify(row));
-          if (last_name != undefined) {
-            // STATES END OF FILE (CSV)
-
+          if (last_name !== undefined) {
             if (
-              first_name != "" &&
-              middle_initial != "" &&
-              last_name != "" &&
-              provider_title != ""
+              first_name !== "" &&
+              middle_initial !== "" &&
+              last_name !== "" &&
+              provider_title !== ""
             ) {
-              // CHECK FOR SAME PROVIDER
-
-              //==========================================PROVIDERS INFO ALL DATA INSERTION
               const homeAddress = await insertAddress({
                 address_line_1: home_address_line_1,
                 address_line_2: home_address_line_2,
@@ -173,35 +168,32 @@ export default function BulkUploadButton() {
                 work_email: emergency_contact_email,
               });
 
-              // Insert provider info with references to other tables
-
-              const { data: providerData, error: providerError } =
-                await supabase
-                  .from("providers_info")
-                  .insert({
-                    added_by: userUuid,
-                    first_name: first_name,
-                    middle_initial: middle_initial,
-                    last_name: last_name,
-                    provider_title: provider_title,
-                    ssn: ssn,
-                    gender: gender,
-                    dob: dob,
-                    birth_city: birth_city,
-                    birth_state: birth_state,
-                    birth_country: birth_country,
-                    license_id: license_id,
-                    state_issued: state_issued,
-                    issue_date: issue_date,
-                    expiry_date: expiry_date,
-                    home_address_id: homeAddress.uuid,
-                    service_location_address_id: serviceLocationAddress.uuid,
-                    mailing_address_id: mailingAddress.uuid,
-                    contact_id: personalContact.uuid,
-                    emergency_contact_id: emergencyContact.uuid,
-                  })
-                  .select()
-                  .single();
+              const { data: providerData, error: providerError } = await supabase
+                .from("providers_info")
+                .insert({
+                  added_by: userUuid,
+                  first_name: first_name,
+                  middle_initial: middle_initial,
+                  last_name: last_name,
+                  provider_title: provider_title,
+                  ssn: ssn,
+                  gender: gender,
+                  dob: dob,
+                  birth_city: birth_city,
+                  birth_state: birth_state,
+                  birth_country: birth_country,
+                  license_id: license_id,
+                  state_issued: state_issued,
+                  issue_date: issue_date,
+                  expiry_date: expiry_date,
+                  home_address_id: homeAddress.uuid,
+                  service_location_address_id: serviceLocationAddress.uuid,
+                  mailing_address_id: mailingAddress.uuid,
+                  contact_id: personalContact.uuid,
+                  emergency_contact_id: emergencyContact.uuid,
+                })
+                .select()
+                .single();
               providerId = providerData.uuid;
               if (providerError) throw new Error(providerError.message);
 
@@ -218,9 +210,9 @@ export default function BulkUploadButton() {
                 .single();
               professionalId = professionalData.uuid;
               if (professionalError) throw new Error(professionalError.message);
-
             }
 
+            // Insert data into related tables
             await InsertProfessionalIds({ professionalId: professionalId, row: row });
             await InsertEducation({ providerId: providerId, row: row });
             await InsertTraining({ providerId: providerId, row: row });
@@ -231,9 +223,12 @@ export default function BulkUploadButton() {
             await InsertCredentialingContacts({ providerId: providerId, row: row });
             await InsertEmployment({ providerId: providerId, row: row });
             await InsertProfessionalReferences({ providerId: providerId, row: row });
-
           }
+
+          // Update progress
+          setProgress(((i + 1) / totalRows) * 100);
         }
+
         toast.dismiss();
         toast.success("Data inserted successfully!");
         window.location.reload();
@@ -241,7 +236,9 @@ export default function BulkUploadButton() {
         toast.dismiss();
         toast.error(`Error inserting data: ${error.message}`);
       }
+
       setIsModalOpen(false);
+      setProgress(0); // Reset progress after upload
     };
 
     reader.readAsText(file);
@@ -252,7 +249,7 @@ export default function BulkUploadButton() {
       {/* Button to trigger modal */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className={`px-4 py-3 flex flex-row justify-center items-center gap-4 bg-secondary text-white rounded-lg`}
+        className="px-4 py-3 flex flex-row justify-center items-center gap-4 bg-secondary text-white rounded-lg"
       >
         Bulk Upload Providers
       </button>
@@ -268,7 +265,9 @@ export default function BulkUploadButton() {
             </div>
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-semibold">Upload CSV</h2>
-              <a href="/assets/Providers Sample.csv" className="" >Download Sample File</a>
+              <a href="/assets/Providers Sample.csv" className="">
+                Download Sample File
+              </a>
             </div>
             <input
               type="file"
@@ -278,10 +277,21 @@ export default function BulkUploadButton() {
             />
             <button
               onClick={handleUpload}
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white py-2 px-4 rounded mt-4"
             >
-              Upload Data
+              Start Upload
             </button>
+            {progress > 0 && (
+              <div className="mt-4">
+                <div className="bg-gray-200 w-full h-2 rounded">
+                  <div
+                    className="bg-blue-500 h-2 rounded"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <p className="text-center">{Math.round(progress)}% Uploaded</p>
+              </div>
+            )}
           </div>
         </div>
       )}

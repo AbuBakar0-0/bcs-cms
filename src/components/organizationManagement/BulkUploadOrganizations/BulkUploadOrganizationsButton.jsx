@@ -10,6 +10,7 @@ import { IoCloseSharp } from "react-icons/io5";
 
 export default function BulkUploadOrganizationButton() {
     const { id: provider_id } = useParams();
+    const [progress, setProgress] = useState(0); // Track progress
 
     const [file, setFile] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
@@ -40,6 +41,7 @@ export default function BulkUploadOrganizationButton() {
             } else {
                 alert("Unsupported file type. Please upload a .csv file.");
                 setIsLoading(false);
+                setProgress(0);
                 return;
             }
 
@@ -47,6 +49,7 @@ export default function BulkUploadOrganizationButton() {
             if (!userUuid) {
                 alert("User UUID not found in local storage.");
                 setIsLoading(false);
+                setProgress(0);
                 return;
             }
             toast.loading("Please Wait");
@@ -54,8 +57,11 @@ export default function BulkUploadOrganizationButton() {
 
                 var legal_business_name = "";
                 var practice_id = "";
+                const totalRows = rows.length;
+
                 // Split the rows into related tables
-                for (let row of rows) {
+                for (let i = 0; i < totalRows; i++) {
+                    const row = rows[i];
                     const {
                         practice_profile_practice_type,
                         practice_profile_type_of_service_provided,
@@ -191,7 +197,7 @@ export default function BulkUploadOrganizationButton() {
                             if (practiceProfileError) throw new Error(practiceProfileError.message);
 
                             legal_business_name = practice_profile_legal_business_name;
-                            practice_id=practiceProfileData.uuid;
+                            practice_id = practiceProfileData.uuid;
                         }
 
 
@@ -268,7 +274,7 @@ export default function BulkUploadOrganizationButton() {
                                 ptan_medicare_number: practice_location_medicare_number,
                                 medicaid_number: practice_location_medicaid_number,
                                 practice_contact_id: profileContact.uuid,
-                                practice_id:practice_id
+                                practice_id: practice_id
                             })
                             .select()
                             .single();
@@ -278,6 +284,7 @@ export default function BulkUploadOrganizationButton() {
 
 
 
+                    setProgress(((i + 1) / totalRows) * 100);
 
 
                 }
@@ -289,6 +296,8 @@ export default function BulkUploadOrganizationButton() {
                 toast.error(`Error inserting data: ${error.message}`);
             }
             setIsModalOpen(false);
+            setProgress(0); // Reset progress after upload
+
         };
 
         reader.readAsText(file);
@@ -329,6 +338,17 @@ export default function BulkUploadOrganizationButton() {
                         >
                             Upload Data
                         </button>
+                        {progress > 0 && (
+                            <div className="mt-4">
+                                <div className="bg-gray-200 w-full h-2 rounded">
+                                    <div
+                                        className="bg-blue-500 h-2 rounded"
+                                        style={{ width: `${progress}%` }}
+                                    ></div>
+                                </div>
+                                <p className="text-center">{Math.round(progress)}% Uploaded</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

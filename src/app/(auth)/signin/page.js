@@ -3,6 +3,7 @@
 import Checkbox from "@/components/ui/inputFields/CheckBox";
 import EmailInput from "@/components/ui/inputFields/EmailInput";
 import PasswordInput from "@/components/ui/inputFields/PasswordInput";
+import { useUserData } from "@/context/UserContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -10,6 +11,7 @@ import toast from "react-hot-toast";
 
 export default function Page() {
 	const router = useRouter();
+	const { setUserData } = useUserData();
 
 	const [formData, setFormData] = useState({
 		email: "",
@@ -37,6 +39,8 @@ export default function Page() {
 			const data = await res.json();
 			if (!res.ok) throw new Error(data.error);
 
+			console.log(data.user);
+			setUserData(data.user);
 			// Assuming the UUID is in data.user.uuid
 			const userUuid = data.user.uuid;
 

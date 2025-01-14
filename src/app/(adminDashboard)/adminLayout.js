@@ -1,26 +1,37 @@
+"use client";
+
+import { useUserData } from "@/context/UserContext";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaArrowCircleRight } from "react-icons/fa";
-import { CiSearch } from "react-icons/ci";
 import { IoLogOutOutline } from "react-icons/io5";
 
 const sidenavLinks = [
-  { title: "Admin Dashboard", link: "/adminDashboard" },
-  { title: "Providers Dashboard", link: "/providersDashboard" },
-  { title: "Organization Management", link: "/organizationManagement" },
-  { title: "Document Center", link: "/documentCenter" },
-  { title: "Credentialing Status", link: "/credentialingStatus" },
-  { title: "Payers", link: "/payers" },
-  { title: "User Management", link: "/usersDashboard" },
-  { title: "HR Hiring", link: "/hrHiring" },
-  { title: "Reporting", link: "/reporting" },
-  // { title: "Incident Reporting Configuration", link: "" },
-  { title: "Help Center", link: "/helpCenter" },
+  { title: "Admin Dashboard", link: "/adminDashboard", permission: "admin_dashboard" },
+  { title: "Providers Dashboard", link: "/providersDashboard", permission: "provider_dashboard" },
+  { title: "Organization Management", link: "/organizationManagement", permission: "organization_management" },
+  { title: "Document Center", link: "/documentCenter", permission: "document_center" },
+  { title: "Credentialing Status", link: "/credentialingStatus", permission: "credentialing_status" },
+  { title: "Payers", link: "/payers", permission: "payers" },
+  { title: "User Management", link: "/usersDashboard", permission: "user_management" },
+  { title: "HR Hiring", link: "/hrHiring", permission: "hr_hiring" },
+  { title: "Reporting", link: "/reporting", permission: "reporting" },
+  { title: "Help Center", link: "/helpCenter", permission: "help_center" },
 ];
 
 export default function AdminDashboardLayout({
   children,
   barTitle = "Providers Dashboard",
 }) {
+  const router = useRouter();
+
+  const { userData } = useUserData();
+
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    router.push("/signin");
+  };
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -34,21 +45,26 @@ export default function AdminDashboardLayout({
             />
           </Link>
           <div className="px-5">
-            {sidenavLinks.map((item, index) => (
-              <Link
-                href={item.link}
-                key={index}
-                className="flex flex-row justify-start items-center gap-2"
-              >
-                <div className="w-full flex flex-col justify-center items-center gap-3">
-                  <div className="w-full flex flex-row justify-start items-center gap-2 pt-2">
-                    <FaArrowCircleRight />
-                    <span>{item.title}</span>
-                  </div>
-                  <div className="bg-primary w-full h-[2px]"></div>
-                </div>
-              </Link>
-            ))}
+            {sidenavLinks.map((link) => {
+              if (userData[link.permission]) {
+                return (
+                  <Link
+                    key={link.title}
+                    href={link.link}
+                    className="flex flex-row justify-start items-center gap-2"
+                  >
+                    <div className="w-full flex flex-col justify-center items-center gap-3">
+                      <div className="w-full flex flex-row justify-start items-center gap-2 pt-2">
+                        <FaArrowCircleRight />
+                        <span>{link.title}</span>
+                      </div>
+                      <div className="bg-primary w-full h-[2px]"></div>
+                    </div>
+                  </Link>
+                );
+              }
+              return null;
+            })}
           </div>
         </div>
       </aside>
@@ -71,9 +87,9 @@ export default function AdminDashboardLayout({
             <div className="size-10 bg-primary text-white p-2 rounded-full flex justify-center items-center">
               <CiSearch className="size-8" />
             </div> */}
-            <Link href={"/signin"}>
+            <button onClick={() => handleLogout()}>
               <IoLogOutOutline className="size-7" />
-            </Link>
+            </button>
           </div>
         </header>
 

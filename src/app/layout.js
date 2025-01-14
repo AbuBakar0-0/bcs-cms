@@ -1,5 +1,6 @@
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { UserProvider } from "../context/UserContext";
 
 export const metadata = {
   title: "BCS CMS",
@@ -9,10 +10,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="font-custom">
-        <Toaster position="top-center" />
-        {children}
-      </body>
+      <UserProvider>
+        <body className="font-custom">
+          <Toaster position="top-center" />
+          {children}
+        </body>
+      </UserProvider>
     </html>
   );
 }
