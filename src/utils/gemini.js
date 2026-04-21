@@ -1,7 +1,7 @@
 "use server";
 
 export const sendMessageToGemini = async (userInput) => {
-  const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyB0UUL-dn5odqb_7X10RgYhWwROcaADUM0';
+  const apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}';
   
   const requestPayload = {
     contents: [
